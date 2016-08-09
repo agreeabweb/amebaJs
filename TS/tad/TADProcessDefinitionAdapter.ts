@@ -5,15 +5,21 @@ import {MPTFile} from "../mpt/define/MPTFile";
 import {LFCFile} from "../mpt/define/LFCFile";
 import {UIFile} from "../mpt/define/UIFile";
 import {SedaStep} from "../mpt/define/SedaStep";
+import {UIStep} from "../mpt/define/UIStep";
 import {IProcessDefinitionAdapter} from "../engine/process/IProcessDefinitionAdapter";
 import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
 import {TradeAssemblyDefine} from "./define/TradeAssemblyDefine";
 import {MainProcessTemplate} from "../mpt/define/MainProcessTemplate";
 import {HashMap} from "../lib/HashMap";
 import {AbstractSedaEntry} from "../alr/define/AbstractSedaEntry";
+import {UIStepLogiclet} from "../trade/logiclet/UIStepLogiclet";
 
 class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
-    public constructor() {};
+    private uiStepLogiclet: UIStepLogiclet;
+    
+    public constructor() {
+        this.uiStepLogiclet = new UIStepLogiclet();
+    };
 
     public parse(path: string, inputStream: string, callback: Function): void {
         
@@ -64,6 +70,8 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
             this.performSedaStep(pits, tadBean, mptBean, node);
         } else if(node instanceof UIFile) {
             this.performUI(pits, mptBean, node);
+        } else if(node instanceof UIStep) {
+            this.performUIStep(pits, tadBean, mptBean, node);
         }
     };
 
@@ -202,13 +210,80 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
 
     public performUI(pits: ProcessInstanceThreadSegment, mptBean: MainProcessTemplate, step: MPTStep): void {
         console.log("此节点为UIStep");
-        var currentTask;
+        var uiFile, path, inArgExprMap, inArgMap, inArgExprMapKeySet, 
+            mapping, target, currentTask;
+
+        uiFile = <UIFile> step;
+
+        inArgExprMap = uiFile.getInArgMap();
+        inArgMap = new HashMap();
+        inArgExprMapKeySet = inArgExprMap.keySet();
+        for(var i = 0; i < inArgExprMapKeySet.length; i++) {
+            let name, expr, value;
+            name = inArgExprMapKeySet[i];
+            expr = inArgExprMap.get(name);
+            value = Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+            if(value == null) {
+                continue;
+            }
+            inArgMap.put(name, value);
+        }
+
+        mapping = uiFile.getMapping();
+        path = uiFile.getPath();
+        inArgMap.put("path", path);
+        inArgMap.put("mapping", mapping);
+
+        target = Context.getCurrent().get("DefaultExpressionEngine").evaluate(uiFile.getTarget());
+        inArgMap.put("target", target);
 
         var pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
-        // currentTask.setSuspend(true);
-        currentTask.end("正常出口");
+            
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
+
+        this.uiStepLogiclet.call(pits, inArgMap, function(processResult) {
+            currentTask.setSuspend(false);
+            currentTask.end(processResult.getEnd());
+        });
+
+        
     };
+
+    public performUIStep(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep): void {
+        var inArgExprMap, inArgExprMapKeySet, inArgMap, mapping, currentTask;
+
+        inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
+        inArgMap = new HashMap();
+        inArgExprMapKeySet = inArgExprMap.keySet();
+        for(var i = 0; i < inArgExprMapKeySet.length; i++) {
+            let name, expr, value;
+            name = inArgExprMapKeySet[i];
+            expr = inArgExprMap.get(name);
+            value = Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+            if(value == null) {
+                continue;
+            }
+            inArgMap.put(name, value);
+        }
+        
+        mapping = tadBean.getNodeMapping(step.getId());
+        if(mapping != null) {
+            inArgMap.put("mapping", mapping);
+        }
+
+        var pit = pits.getProcessInstanceThread();
+        currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+            
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
+
+        this.uiStepLogiclet.call(pits, inArgMap, function(processResult) {
+            currentTask.setSuspend(false);
+            currentTask.end(processResult.getEnd());
+        });
+    }
     
     //-----------------------------------------------getter-----------------------------------------------------
     public getStartNodeId(definitionBean: Object): string {

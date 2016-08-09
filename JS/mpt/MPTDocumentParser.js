@@ -1,11 +1,11 @@
-define(["require", "exports", "../lib/HashMap", "./define/MainProcessTemplate", "./define/MPTFile", "./define/LFCFile", "./define/UIFile", "./define/LogicStep", "./define/SedaStep"], function (require, exports, HashMap_1, MainProcessTemplate_1, MPTFile_1, LFCFile_1, UIFile_1, LogicStep_1, SedaStep_1) {
+define(["require", "exports", "../lib/HashMap", "./define/MainProcessTemplate", "./define/MPTFile", "./define/LFCFile", "./define/UIFile", "./define/UIStep", "./define/LogicStep", "./define/SedaStep"], function (require, exports, HashMap_1, MainProcessTemplate_1, MPTFile_1, LFCFile_1, UIFile_1, UIStep_1, LogicStep_1, SedaStep_1) {
     "use strict";
     var MPTDocumentParser = (function () {
         function MPTDocumentParser() {
         }
         ;
         MPTDocumentParser.prototype.parse = function (path, input, callback) {
-            var MPTDP, doc, mpt, root, startNodeId, lfcs, logicsteps, sedasteps, uisteps, xml2json;
+            var MPTDP, doc, mpt, root, startNodeId, lfcs, logicsteps, sedasteps, uisteps, uis, xml2json;
             MPTDP = this;
             // 把xml转化为json
             xml2json = new X2JS();
@@ -56,11 +56,22 @@ define(["require", "exports", "../lib/HashMap", "./define/MainProcessTemplate", 
             if (uisteps != undefined) {
                 if (uisteps instanceof Array) {
                     for (var i = 0; i < uisteps.length; i++) {
-                        mpt.addStep(MPTDP.parseStepElement(new UIFile_1.UIFile(), uisteps[i]));
+                        mpt.addStep(MPTDP.parseStepElement(new UIStep_1.UIStep(), uisteps[i]));
                     }
                 }
                 else {
-                    mpt.addStep(MPTDP.parseStepElement(new UIFile_1.UIFile(), uisteps));
+                    mpt.addStep(MPTDP.parseStepElement(new UIStep_1.UIStep(), uisteps));
+                }
+            }
+            uis = root.UI;
+            if (uis != undefined) {
+                if (uis instanceof Array) {
+                    for (var i = 0; i < uis.length; i++) {
+                        mpt.addStep(MPTDP.parseStepElement(new UIFile_1.UIFile(), uis[i]));
+                    }
+                }
+                else {
+                    mpt.addStep(MPTDP.parseStepElement(new UIFile_1.UIFile(), uis));
                 }
             }
             // 处理内部变量

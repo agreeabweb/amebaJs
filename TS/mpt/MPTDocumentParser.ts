@@ -4,6 +4,7 @@ import {MPTStep} from "./define/MPTStep";
 import {MPTFile} from "./define/MPTFile";
 import {LFCFile} from "./define/LFCFile";
 import {UIFile} from "./define/UIFile";
+import {UIStep} from "./define/UIStep";
 import {LogicStep} from "./define/LogicStep";
 import {SedaStep} from "./define/SedaStep";
 import {IDocumentParser} from "../resource/IDocumentParser";
@@ -15,7 +16,7 @@ class MPTDocumentParser implements IDocumentParser {
     public constructor() {};
 
     public parse(path: string, input: string, callback: Function): void {
-        var MPTDP, doc, mpt, root, startNodeId, lfcs, logicsteps, sedasteps, uisteps, xml2json;
+        var MPTDP, doc, mpt, root, startNodeId, lfcs, logicsteps, sedasteps, uisteps, uis, xml2json;
         
         MPTDP = this;
         
@@ -70,13 +71,24 @@ class MPTDocumentParser implements IDocumentParser {
         if(uisteps != undefined) {
             if(uisteps instanceof Array) {
                 for(var i = 0; i < uisteps.length; i++) {
-                    mpt.addStep(MPTDP.parseStepElement(new UIFile(), uisteps[i]));
+                    mpt.addStep(MPTDP.parseStepElement(new UIStep(), uisteps[i]));
                 }
             } else {
-                mpt.addStep(MPTDP.parseStepElement(new UIFile(), uisteps));
+                mpt.addStep(MPTDP.parseStepElement(new UIStep(), uisteps));
             }
         }
         
+        uis = root.UI;
+        if(uis != undefined) {
+            if(uis instanceof Array) {
+                for(var i = 0; i < uis.length; i++) {
+                    mpt.addStep(MPTDP.parseStepElement(new UIFile(), uis[i]));
+                }
+            } else {
+                mpt.addStep(MPTDP.parseStepElement(new UIFile(), uis));
+            }
+        }
+
         // 处理内部变量
         if(root.InternalVars != undefined && root.InternalVars != "") {
             var vars = root.InternalVars.Var;

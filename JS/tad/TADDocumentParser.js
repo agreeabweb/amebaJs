@@ -28,29 +28,75 @@ define(["require", "exports", "./define/TradeAssemblyDefine"], function (require
                 tad.setMPTPath(mpt._path);
                 nodes = mpt.Node;
                 if (nodes != undefined) {
-                    for (var i = 0; i < nodes.length; i++) {
-                        nodeId = nodes[i]._id;
-                        nodeType = nodes[i]._type;
+                    if (nodes instanceof Array) {
+                        for (var i = 0; i < nodes.length; i++) {
+                            nodeId = nodes[i]._id;
+                            nodeType = nodes[i]._type;
+                            // node inArg
+                            nodeInArgs = nodes[i].InArg;
+                            if (nodeInArgs != undefined && nodeInArgs != "") {
+                                for (var j = 0; j < nodeInArgs.length; j++) {
+                                    argName = nodeInArgs[j]._name;
+                                    argExpression = nodeInArgs[j].__text;
+                                    if (argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
+                                        argExpression = argExpression.substring(1, argExpression.length - 1);
+                                    }
+                                    tad.addNodeInArg(nodeId, argName, argExpression);
+                                }
+                            }
+                            // node outArg
+                            nodeOutArgs = nodes[i].OutArg;
+                            if (nodeOutArgs != undefined && nodeOutArgs != "") {
+                                for (var j = 0; j < nodeOutArgs.length; j++) {
+                                    argName = nodeOutArgs[j]._name;
+                                    argExpression = nodeOutArgs[j].__text;
+                                    if (argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
+                                        argExpression = argExpression.substring(1, argExpression.length - 1);
+                                    }
+                                    tad.addNodeOutArg(nodeId, argName, argExpression);
+                                }
+                            }
+                            // mappings
+                            mappings = nodes[i].Mappings;
+                            if (mappings != undefined && mappings != "") {
+                                mapping = mappings.Mapping;
+                                if (mapping != undefined) {
+                                    source = mapping._source;
+                                    target = mapping._target;
+                                    tad.addNodeMapping(nodeId, target, source);
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        nodeId = nodes._id;
+                        nodeType = nodes._type;
                         // node inArg
-                        nodeInArgs = nodes[i].InArg;
+                        nodeInArgs = nodes.InArg;
                         if (nodeInArgs != undefined && nodeInArgs != "") {
                             for (var j = 0; j < nodeInArgs.length; j++) {
                                 argName = nodeInArgs[j]._name;
                                 argExpression = nodeInArgs[j].__text;
+                                if (argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
+                                    argExpression = argExpression.substring(1, argExpression.length - 1);
+                                }
                                 tad.addNodeInArg(nodeId, argName, argExpression);
                             }
                         }
                         // node outArg
-                        nodeOutArgs = nodes[i].OutArg;
+                        nodeOutArgs = nodes.OutArg;
                         if (nodeOutArgs != undefined && nodeOutArgs != "") {
                             for (var j = 0; j < nodeOutArgs.length; j++) {
                                 argName = nodeOutArgs[j]._name;
                                 argExpression = nodeOutArgs[j].__text;
+                                if (argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
+                                    argExpression = argExpression.substring(1, argExpression.length - 1);
+                                }
                                 tad.addNodeOutArg(nodeId, argName, argExpression);
                             }
                         }
                         // mappings
-                        mappings = nodes[i].Mappings;
+                        mappings = nodes.Mappings;
                         if (mappings != undefined && mappings != "") {
                             mapping = mappings.Mapping;
                             if (mapping != undefined) {

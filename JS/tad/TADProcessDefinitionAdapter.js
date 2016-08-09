@@ -1,7 +1,8 @@
-define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "../mpt/define/LFCFile", "../mpt/define/UIFile", "../mpt/define/SedaStep", "../lib/HashMap"], function (require, exports, Context_1, LogicStep_1, LFCFile_1, UIFile_1, SedaStep_1, HashMap_1) {
+define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "../mpt/define/LFCFile", "../mpt/define/UIFile", "../mpt/define/SedaStep", "../mpt/define/UIStep", "../lib/HashMap", "../trade/logiclet/UIStepLogiclet"], function (require, exports, Context_1, LogicStep_1, LFCFile_1, UIFile_1, SedaStep_1, UIStep_1, HashMap_1, UIStepLogiclet_1) {
     "use strict";
     var TADProcessDefinitionAdapter = (function () {
         function TADProcessDefinitionAdapter() {
+            this.uiStepLogiclet = new UIStepLogiclet_1.UIStepLogiclet();
         }
         ;
         TADProcessDefinitionAdapter.prototype.parse = function (path, inputStream, callback) {
@@ -53,6 +54,9 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
             }
             else if (node instanceof UIFile_1.UIFile) {
                 this.performUI(pits, mptBean, node);
+            }
+            else if (node instanceof UIStep_1.UIStep) {
+                this.performUIStep(pits, tadBean, mptBean, node);
             }
         };
         ;
@@ -170,13 +174,65 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
         ;
         TADProcessDefinitionAdapter.prototype.performUI = function (pits, mptBean, step) {
             console.log("此节点为UIStep");
-            var currentTask;
+            var uiFile, path, inArgExprMap, inArgMap, inArgExprMapKeySet, mapping, target, currentTask;
+            uiFile = step;
+            inArgExprMap = uiFile.getInArgMap();
+            inArgMap = new HashMap_1.HashMap();
+            inArgExprMapKeySet = inArgExprMap.keySet();
+            for (var i = 0; i < inArgExprMapKeySet.length; i++) {
+                var name_1 = void 0, expr = void 0, value = void 0;
+                name_1 = inArgExprMapKeySet[i];
+                expr = inArgExprMap.get(name_1);
+                value = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+                if (value == null) {
+                    continue;
+                }
+                inArgMap.put(name_1, value);
+            }
+            mapping = uiFile.getMapping();
+            path = uiFile.getPath();
+            inArgMap.put("path", path);
+            inArgMap.put("mapping", mapping);
+            target = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(uiFile.getTarget());
+            inArgMap.put("target", target);
             var pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
-            // currentTask.setSuspend(true);
-            currentTask.end("正常出口");
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
+            this.uiStepLogiclet.call(pits, inArgMap, function (processResult) {
+                currentTask.setSuspend(false);
+                currentTask.end(processResult.getEnd());
+            });
         };
         ;
+        TADProcessDefinitionAdapter.prototype.performUIStep = function (pits, tadBean, mptBean, step) {
+            var inArgExprMap, inArgExprMapKeySet, inArgMap, mapping, currentTask;
+            inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
+            inArgMap = new HashMap_1.HashMap();
+            inArgExprMapKeySet = inArgExprMap.keySet();
+            for (var i = 0; i < inArgExprMapKeySet.length; i++) {
+                var name_2 = void 0, expr = void 0, value = void 0;
+                name_2 = inArgExprMapKeySet[i];
+                expr = inArgExprMap.get(name_2);
+                value = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+                if (value == null) {
+                    continue;
+                }
+                inArgMap.put(name_2, value);
+            }
+            mapping = tadBean.getNodeMapping(step.getId());
+            if (mapping != null) {
+                inArgMap.put("mapping", mapping);
+            }
+            var pit = pits.getProcessInstanceThread();
+            currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
+            this.uiStepLogiclet.call(pits, inArgMap, function (processResult) {
+                currentTask.setSuspend(false);
+                currentTask.end(processResult.getEnd());
+            });
+        };
         //-----------------------------------------------getter-----------------------------------------------------
         TADProcessDefinitionAdapter.prototype.getStartNodeId = function (definitionBean) {
             return this.getMPT(definitionBean).getStartNodeId();

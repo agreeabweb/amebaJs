@@ -63,8 +63,10 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
             pif = context.get("ProcessInstanceFactory");
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             pif.pitsByGettingPIT(pit.getLogicRealm(), path, function (newpits) {
-                currentTask.suspendFlag = false;
+                currentTask.setSuspend(false);
                 // 启动新的PITS
                 newpits.start(inArgMap, function (processResult) {
                     currentTask.end(processResult.getEnd()); // 完结父流程的当前节点
@@ -72,7 +74,6 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                     console.log("结束PITS：" + newpits.getId());
                 });
             });
-            currentTask.suspendFlag = true;
         };
         ;
         TADProcessDefinitionAdapter.prototype.performLogicStep = function (pits, tadBean, mptBean, step) {
@@ -93,6 +94,8 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
             pif = context.get("ProcessInstanceFactory");
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             pif.pitsByGettingPIT(pit.getLogicRealm(), path, function (newpits) {
                 currentTask.setSuspend(false);
                 // 启动新的PITS
@@ -102,7 +105,6 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                     console.log("结束PITS：" + newpits.getId());
                 });
             });
-            currentTask.setSuspend(true);
         };
         ;
         TADProcessDefinitionAdapter.prototype.performSedaStep = function (pits, tadBean, mptBean, step) {
@@ -116,6 +118,8 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
             sedaPath += "seda.conf";
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             Context_1.Context.getCurrent().get("ResourceDocumentTable").getDocument(sedaPath, "SedaEntry", function (sedaEntry) {
                 currentTask.setSuspend(false);
                 if (sedaEntry == null) {
@@ -145,6 +149,8 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                                     mapping = listDataMapping[k].getMapping();
                                 }
                             }
+                            pit.getLogicRealm().setState("suspended");
+                            currentTask.setSuspend(true);
                             Context_1.Context.getCurrent().get("ProcessInstanceFactory").pitsByGettingPIT(pit.getLogicRealm(), alrPath, function (newpits) {
                                 currentTask.setSuspend(false);
                                 newpits.start(null, function (processResult) {
@@ -153,7 +159,6 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                                     console.log("结束PITS：" + newpits.getId());
                                 });
                             });
-                            currentTask.setSuspend(true);
                         }
                     }
                 }
@@ -161,7 +166,6 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                     currentTask.end("pass");
                 }
             });
-            currentTask.setSuspend(true);
         };
         ;
         TADProcessDefinitionAdapter.prototype.performUI = function (pits, mptBean, step) {

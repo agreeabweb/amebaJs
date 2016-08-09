@@ -57,6 +57,9 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
         name = ce.getName();
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+        
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
         // 调用组件
         Command.call(ce, function(result) {
             // 出参处理
@@ -85,6 +88,10 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
         pif = context.get("ProcessInstanceFactory");
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
+
         pif.pitsByGettingPIT(pit.getLogicRealm(), path, function(newpits) { // 创建新的PITS
             currentTask.setSuspend(false);
             // 启动新的PITS
@@ -94,7 +101,6 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
                 console.log("结束PITS：" + newpits.getId());
             });
         });
-        currentTask.setSuspend(true);
     }
 
     public performAftComponentElement(pits: ProcessInstanceThreadSegment, bean: AgreeLogicRule, nodeId: string, ace: AftComponentElement): void {
@@ -106,6 +112,10 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
         pif = context.get("ProcessInstanceFactory");
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
+
         pif.pitsByGettingPIT(pit.getLogicRealm(), path, function(newpits) { // 创建新的PITS
             currentTask.setSuspend(false);
             // 启动新的PITS
@@ -115,7 +125,6 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
                 console.log("结束PITS：" + newpits.getId());
             });
         });
-        currentTask.setSuspend(true);
         
     }
 

@@ -76,8 +76,12 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         pif = context.get("ProcessInstanceFactory");
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
+
         pif.pitsByGettingPIT(pit.getLogicRealm(), path, function(newpits) {  // 创建新的PITS
-            currentTask.suspendFlag = false;
+            currentTask.setSuspend(false);
             // 启动新的PITS
             newpits.start(inArgMap, function(processResult) {
                 
@@ -87,7 +91,6 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
                 console.log("结束PITS：" + newpits.getId());
             });
         });
-        currentTask.suspendFlag = true;
     };
 
     public performLogicStep(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep): void {
@@ -111,6 +114,10 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         pif = context.get("ProcessInstanceFactory");
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
+
         pif.pitsByGettingPIT(pit.getLogicRealm(), path, function(newpits) {  // 创建新的PITS
             currentTask.setSuspend(false);
             // 启动新的PITS
@@ -122,7 +129,6 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
                 console.log("结束PITS：" + newpits.getId());
             });
         });
-        currentTask.setSuspend(true);
     };
 
     public performSedaStep(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep) {
@@ -138,6 +144,9 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
 
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
+
+        pit.getLogicRealm().setState("suspended");
+        currentTask.setSuspend(true);
 
         Context.getCurrent().get("ResourceDocumentTable").getDocument(sedaPath, "SedaEntry", function(sedaEntry) {
             currentTask.setSuspend(false);
@@ -169,6 +178,9 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
                                 mapping = listDataMapping[k].getMapping();
                             }
                         }
+                        
+                        pit.getLogicRealm().setState("suspended");
+                        currentTask.setSuspend(true);
 
                         Context.getCurrent().get("ProcessInstanceFactory").pitsByGettingPIT(pit.getLogicRealm(), alrPath, function(newpits) {
                             currentTask.setSuspend(false);
@@ -179,7 +191,6 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
                                 console.log("结束PITS：" + newpits.getId());
                             });
                         });
-                        currentTask.setSuspend(true);
                     } 
                 }
             }
@@ -187,7 +198,6 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
                 currentTask.end("pass");
             }
         });
-        currentTask.setSuspend(true);
     };
 
     public performUI(pits: ProcessInstanceThreadSegment, mptBean: MainProcessTemplate, step: MPTStep): void {

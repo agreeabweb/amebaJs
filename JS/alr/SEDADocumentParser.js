@@ -26,13 +26,17 @@ define(["require", "exports", "./define/SedaEntry", "./define/SedaMptTargetEntry
             ase.setNodeId(element._nodeId);
             ase.setPath(element._path);
             ase.setCaption(element._caption);
-            state = new SedaAlrTargetEntry_1.SedaAlrTargetEntry();
             alrs = element.ALR;
             if (alrs instanceof Array) {
                 for (var i = 0; i < alrs.length; i++) {
+                    state = new SedaAlrTargetEntry_1.SedaAlrTargetEntry();
+                    state.setPath(alrs[i]._path);
+                    state.setCaption(alrs[i]._caption);
+                    listState.push(state);
                 }
             }
             else {
+                state = new SedaAlrTargetEntry_1.SedaAlrTargetEntry();
                 state.setPath(alrs._path);
                 state.setCaption(alrs._caption);
                 listState.push(state);

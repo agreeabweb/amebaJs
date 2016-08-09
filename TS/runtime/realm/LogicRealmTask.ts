@@ -91,20 +91,17 @@ class LogicRealmTask {
         console.log(this.getName()+"LRT end任务: "+endId);
         if(endId != null) {
             this.selectedEnd = endId;  // 标记结束出口
-        } else {
-            if(this.checkAlreadyEnd()) {
-                return;
-            }
-            var current = this.realm.getCurrentTask();
-            this.endFlag = true;
-            // if(this.realm.isSuspended()) {  realm是否有suspended状态？？
-                // 激活下一个任务
-                console.log("contine Exec")
-                this.realm.continueExec();
-            // }
+        } 
+        if(this.checkAlreadyEnd()) {
+            return;
         }
-        
-
+        var current = this.realm.getCurrentTask();
+        this.endFlag = true;
+        if(this.realm.isSuspended()) {
+            // 激活下一个任务
+            console.log("contine Exec")
+            this.realm.continueExec();
+        }
     };
 
     /**

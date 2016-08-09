@@ -51,8 +51,11 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
             var outArgMap, currentTask, pit;
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             // 调用组件
             Command.call(componentElement, function (result) {
+                currentTask.setSuspend(false);
                 // 出参处理
                 console.log("执行callback：" + result.end);
                 outArgMap = componentElement.getOutArgMap();
@@ -79,8 +82,10 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
             pif = context.get("ProcessInstanceFactory");
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             pif.pitsByGettingPIT(pit.getLogicRealm(), path, function (newpits) {
-                currentTask.suspendFlag = false;
+                currentTask.setSuspend(false);
                 // 启动新的PITS
                 newpits.start(inArgMap, function (processResult) {
                     currentTask.end(processResult.getEnd()); // 完结父流程的当前节点
@@ -88,7 +93,6 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
                     console.log("结束PITS：" + newpits.getId());
                 });
             });
-            currentTask.suspendFlag = true;
         };
         ;
         //----------------------------------------------------getter------------------------------------------------------

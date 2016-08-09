@@ -101,7 +101,7 @@ define(["require", "exports", "../Context"], function (require, exports, Context
                 // checkDisposeHook();
                 // 注意，由于移花接木原因，task调用后，此时的currentTask未必就是task
                 var currentTaskRef = this.currentTask;
-                if (currentTaskRef == null || currentTaskRef.isEnded() || currentTaskRef.isSuspended()) {
+                if (currentTaskRef == null || currentTaskRef.isSuspended()) {
                     return false;
                 }
                 // 注意，由于可能出现子任务移花接木的状况，因此需要通过currentTask获取下一个任务
@@ -123,10 +123,9 @@ define(["require", "exports", "../Context"], function (require, exports, Context
                 console.log("没有当前任务！");
                 return;
             }
-            // if(this.state === "suspended") {  // 是否有suspended状态
-            //     this.state = 'resuming';
-            //     return;
-            // }
+            if (this.state === "suspended") {
+                this.state = 'running';
+            }
             this.configCurrentContext();
             //找到结束的任务，未必是currentTask，如果是它的父任务结束，那就回到父一级调度
             var endTask = this.currentTask;
@@ -166,6 +165,9 @@ define(["require", "exports", "../Context"], function (require, exports, Context
             }
         };
         ;
+        LogicRealm.prototype.setState = function (state) {
+            this.state = state;
+        };
         //-------------------------------------------getter-------------------------------------------------
         /**
          * 获取当前任务

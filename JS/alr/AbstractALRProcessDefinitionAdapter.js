@@ -46,6 +46,8 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
             name = ce.getName();
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             // 调用组件
             Command.call(ce, function (result) {
                 // 出参处理
@@ -69,6 +71,8 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
             pif = context.get("ProcessInstanceFactory");
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             pif.pitsByGettingPIT(pit.getLogicRealm(), path, function (newpits) {
                 currentTask.setSuspend(false);
                 // 启动新的PITS
@@ -78,7 +82,6 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
                     console.log("结束PITS：" + newpits.getId());
                 });
             });
-            currentTask.setSuspend(true);
         };
         AbstractALRProcessDefinitionAdapter.prototype.performAftComponentElement = function (pits, bean, nodeId, ace) {
             var pit, currentTask, path, context, pif, inArgMap;
@@ -87,6 +90,8 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
             pif = context.get("ProcessInstanceFactory");
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
             pif.pitsByGettingPIT(pit.getLogicRealm(), path, function (newpits) {
                 currentTask.setSuspend(false);
                 // 启动新的PITS
@@ -96,7 +101,6 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
                     console.log("结束PITS：" + newpits.getId());
                 });
             });
-            currentTask.setSuspend(true);
         };
         AbstractALRProcessDefinitionAdapter.prototype.getExceptionNext = function (definitionBean, nodeId) {
             var bean, node, ce;

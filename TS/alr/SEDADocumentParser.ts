@@ -41,13 +41,17 @@ class SEDADocumentParser implements IDocumentParser {
         ase.setPath(element._path);
         ase.setCaption(element._caption);
         
-        state = new SedaAlrTargetEntry();
         alrs = element.ALR;
         if(alrs instanceof Array) {
             for(var i = 0; i < alrs.length; i++) {
-
+                state = new SedaAlrTargetEntry();
+                state.setPath(alrs[i]._path);
+                state.setCaption(alrs[i]._caption);
+                
+                listState.push(state);
             }
         } else {
+            state = new SedaAlrTargetEntry();
             state.setPath(alrs._path);
             state.setCaption(alrs._caption);
             

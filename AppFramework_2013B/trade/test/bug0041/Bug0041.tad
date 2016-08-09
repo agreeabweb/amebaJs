@@ -5,11 +5,11 @@
     <CanEditSdb value="false"/>
     <MainProcess path="/AppFramework_2013B/trade/test/bug0041/TestControls.mpt">
         <Node caption="" id="3" type="UIStep">
-            <InArg name="path"/>
+            <InArg name="path">"/AppFramework_2013B/trade/test/bug0041/ABF.abf"</InArg>
             <InArg name="target"/>
             <InArg name="targetArgMap"/>
             <InArg name="mapping"/>
-            <Mappings path=""/>
+            <Mappings path="/AppFramework_2013B/trade/test/bug0041/ABF.abf"/>
         </Node>
     </MainProcess>
     <InternalVars>

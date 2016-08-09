@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Content caption="">
-    <Entry key="layout#layout" type="String" value="xy"/>
-    <Entry key="constraints#xy_location" type="String" value="0,0"/>
-    <Entry key="constraints#xy_size" type="String" value="640,480"/>
+    <entry key="layout#layout" type="String" value="xy"/>
+    <entry key="constraints#xy_location" type="String" value="0,0"/>
+    <entry key="constraints#xy_size" type="String" value="640,480"/>
     <Ends>
         <Out caption="关闭出口" name="Close"/>
         <Out caption="正常出口" name="正常出口"/>
         <Out caption="正常出口" name="正常出口"/>
     </Ends>
-    <Entry key="OnClose" type="Close" value="Close"/>
-    <Bean feature="Button">
-        <Entry key="constraints#xy_location" type="String" value="230,175"/>
-        <Entry key="constraints#xy_size" type="String" value="90,28"/>
-        <Entry key="id" type="String" value="button1"/>
-        <Entry key="text" type="String" value="test"/>
-    </Bean>
+    <entry key="OnClose" type="Close" value="Close"/>
 </Content>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MainProcessTemplate caption="测试自定义控件" idCount="12" start="4">
+<MainProcessTemplate caption="测试自定义控件" idCount="12" start="11">
     <SedaStep id="11">
         <Entry id="xy_location" value="159,147"/>
         <Entry id="xy_size" value="180,80"/>

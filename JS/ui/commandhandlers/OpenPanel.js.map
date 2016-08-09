@@ -1,1 +1,1 @@
-{"version":3,"file":"OpenPanel.js","sourceRoot":"","sources":["../../../TS/ui/commandhandlers/OpenPanel.ts"],"names":[],"mappings":";;IAEA;;OAEG;IACH;QAAA;QAMA,CAAC;QAJG,iCAAa,GAAb,UAAc,OAAe,EAAE,OAAW;YACvC,KAAK,CAAC,cAAc,CAAC,CAAC;QAEzB,CAAC;QACL,gBAAC;IAAD,CAAC,AAND,IAMC;IANY,iBAAS,YAMrB,CAAA"}
+{"version":3,"file":"OpenPanel.js","sourceRoot":"","sources":["../../../TS/ui/commandhandlers/OpenPanel.ts"],"names":[],"mappings":";;IAEA;;OAEG;IACH;QAAA;QAQA,CAAC;QANG,iCAAa,GAAb,UAAc,OAAe,EAAE,OAAW;QAK1C,CAAC;QACL,gBAAC;IAAD,CAAC,AARD,IAQC;IARY,iBAAS,YAQrB,CAAA"}

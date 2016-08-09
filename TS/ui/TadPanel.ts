@@ -7,15 +7,17 @@ export class TadPanel {
     private widgetRegistry : HashMap = new HashMap();
     private id:string = "";
     private parentId :string = "";
-    private tadId:string ="";
+    private host:Tad;
     private entryToViews :HashMap = new HashMap();
+    private path:string;
 
 
-    constructor(tadId: string, parentId: string, id:string) {
-
-        this.tadId =tadId;
+    constructor(host: Tad, parentId: string, id:string,path:string) {
+        this.host = host;
         this.parentId=parentId;
         this.id = id;
+        this.host.addPanel(id,this);
+        this.path = path;
     }
 
     public registerEntryView(name:string,view:any){
@@ -34,7 +36,11 @@ export class TadPanel {
     }
 
     public start():void{
-        
+        // 0.获取html
+
+        // 1.解析出view
+
+        // 2.展现
     }
 
     public getViewsByEntry(name:string):IView[]{

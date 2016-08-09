@@ -4,15 +4,16 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
      * Created by Oliver on 2016-08-03 0003.
      */
     var TadPanel = (function () {
-        function TadPanel(tadId, parentId, id) {
+        function TadPanel(host, parentId, id, path) {
             this.widgetRegistry = new HashMap_1.HashMap();
             this.id = "";
             this.parentId = "";
-            this.tadId = "";
             this.entryToViews = new HashMap_1.HashMap();
-            this.tadId = tadId;
+            this.host = host;
             this.parentId = parentId;
             this.id = id;
+            this.host.addPanel(id, this);
+            this.path = path;
         }
         TadPanel.prototype.registerEntryView = function (name, view) {
             var views = this.entryToViews.get(name);
@@ -28,6 +29,9 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
             return this.widgetRegistry.get(id);
         };
         TadPanel.prototype.start = function () {
+            // 0.获取html
+            // 1.解析出view
+            // 2.展现
         };
         TadPanel.prototype.getViewsByEntry = function (name) {
             return this.entryToViews.get(name);

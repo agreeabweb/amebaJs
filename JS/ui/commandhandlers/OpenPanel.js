@@ -7,7 +7,6 @@ define(["require", "exports"], function (require, exports) {
         function OpenPanel() {
         }
         OpenPanel.prototype.handleCommand = function (command, callack) {
-            alert("OpenPanel处理！");
         };
         return OpenPanel;
     }());

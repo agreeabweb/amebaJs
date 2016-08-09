@@ -40,7 +40,7 @@ export class Tad {
         let pif = this.tadContext.get(ServiceObj.ProcessInstanceFactory);
 
         // var tadPath = "/AppFramework_2013B/trade/test/bug0041/Bug0041.tad";
-
+        
         pif.pitsByCreatingPI(this.tadContext, this.path, function(segment) {
             segment.start(null, function(processResult) {
                 console.log("执行PITS回调");

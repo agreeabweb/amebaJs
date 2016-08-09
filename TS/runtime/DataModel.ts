@@ -3,7 +3,6 @@ import {Context} from "../runtime/Context";
 
 //import {BindValue} from 
 
-
 class DataModel extends AbstractObservable{
 
 	result: Array<string>;

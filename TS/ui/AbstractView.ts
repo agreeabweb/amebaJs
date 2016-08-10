@@ -52,6 +52,6 @@ export abstract class AbstractView implements IView{
 
     updateModel(key:string, val:any):void {
         let dm:DataModel = this.host.getContext().get(UIConst.DataModel);
-        dm.set(key, val);
+        dm.doSetWithNotify(key,val,false);
     }
 }

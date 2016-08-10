@@ -1,103 +1,107 @@
+/**
+ * Created by Oliver on 2016-08-10 0010.
+ */
 import {HashMap} from "../lib/HashMap";
-//import {Context} from "../runtime/Context";
 
+export class DataModel {
 
-class DataModel{
+    private memberMap:HashMap = new HashMap();
 
-    
-    private  memberMap:HashMap = new HashMap();
+    private doSetMemeber(memberName:string, memberContent:any):void {
 
+        let dotIndex:number = memberName.indexOf('.');
 
-    public constructor()
-    { 
+        if (dotIndex > 0) {
+            let prefix:string = memberName.substring(0, memberName.lastIndexOf("."));
+            let suffix:string = memberName.substring(memberName.lastIndexOf(".") + 1);
+
+            let subModel:DataModel = this.getLastDataModel(prefix);
+            subModel.setLocalValue(suffix, memberContent);
+        } else {
+            this.setLocalValue(memberName, memberContent);
+        }
     }
-    
-    protected createSimpleMember(memberName: string): Object
-    {
-        // 1. create
-        var result = new Object();
-        memberMap.put(memberName, result);
-        //
-        return result;
+
+    private setLocalValue(memberName:string, memberContent:any):void {
+        this.memberMap.put(memberName, memberContent);
     }
-   
-    protected createSubModelMember(memberName: string): DataModel 
-    {
-        
-        subModel:DataModel = (DataModel) createSimpleMember(memberName);
+
+    private getLocalValue(memberName:string):any {
+        return this.memberMap.get(memberName);
+    }
+
+
+    public  set(memberName:string, memberContent:any):void {
+        this.doSetMemeber(memberName, memberContent);
+    }
+
+    private getLastDataModel(memberName:string):any {
+        let dotIndex:number = memberName.indexOf('.');
+
+        if (dotIndex > 0) {
+            let prefix:string = memberName.substring(0, dotIndex);
+
+            let suffix:string = memberName.substring(dotIndex + 1);
+
+            let subModel:DataModel = this.get(prefix);
+            if (subModel == null) {
+                // if (!create)
+                // {
+                //     return null;
+                // }
+                subModel = this.createSubModelMember(prefix);
+            }
+            return subModel.getLastDataModel(suffix);
+        } else {
+            let subModel:DataModel = this.get(memberName);
+            if (subModel == null) {
+                subModel = this.createSubModelMember(memberName);
+            }
+            return subModel;
+        }
+
+    }
+
+    private doGetMember(memberName:string):any {
+        let dotIndex:number = memberName.indexOf('.');
+
+        if (dotIndex > 0) {
+            let prefix:string = memberName.substring(0, dotIndex);
+
+            let suffix:string = memberName.substring(dotIndex + 1);
+            let subModel:DataModel = this.get(prefix);
+            if (subModel == null) {
+                // if (!create) {
+                //     return null;
+                // }
+                subModel = this.createSubModelMember(prefix);
+            }
+            return subModel.getMember(suffix);
+        }
+        return this.getLocalValue(memberName);
+    }
+
+    protected createSubModelMember(memberName:string):DataModel {
+        let subModel:DataModel = new DataModel();
+        this.setLocalValue(memberName, subModel)
         return subModel;
     }
-    
-    
-     private doGet(memberName:string): Object 
-    {
-        candidate:Object = getMember(memberName);
-        if (candidate == null)
-        {
-            return null;
-        }
-        return candidate;
-    }
-    
-    
-    private doGetMember(memberName: string,
-            create: boolean): Object
-    {
-        dotIndex: number = memberName.indexOf('.');
-        if (dotIndex > 0)
-        {
-            prefix: string = memberName.substring(0, dotIndex);
-            suffix: string = memberName.substring(dotIndex + 1);
-            subModel: DataModel = (DataModel) get(prefix);
-            if (subModel == null)
-            {
-                if (!create)
-                {
-                    return null;
-                }
-                subModel = createSubModelMember(prefix);
-            }
-            return subModel.getMember(suffix, create);
-        }
-        result:Object = memberMap.get(memberName);
-        if (create && result == null)
-        {
-            return this;
-        }
-        return result;
-    }
-    
-     private doSet(memberName: string,memberContent: Object): void
-    {
-        dm: DataModel  = (DataModel)getMember(memberName, true);
-        dm.memberMap.put(memberName, memberContent);
 
-    }
-    
-    public get(final memberName: string): Object
-    {
-        
-        return doGet(memberName);
-        
-    }
-    
-    public getMember(memberName:string ): Object
-    {
-        return getMember(memberName, false);
+    protected createSimpleMember(memberName:string) {
+        // let result = new Object();
+        this.memberMap.put(memberName, null);
     }
 
-    public getMember(final memberName: string,
-            final create: boolean): Object
-    {
-        return doGetMember(memberName, create);
-     
+    public getMember(memberName:string):any {
+        return this.doGetMember(memberName);
     }
-    
-    public set(final memberName: string, final memberContent: Object): void
-    {
-        doSet(memberName, memberContent);
+
+
+    private doGet(memberName:string):any {
+        return this.doGetMember(memberName);
     }
-    
+
+    public get(memberName:string):any {
+        return this.doGet(memberName);
+    }
 }
-
-export {DataModel};

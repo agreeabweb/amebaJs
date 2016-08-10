@@ -59,15 +59,12 @@ export class TadPanel {
 
     public doUpdateViews(name:string, val:any) {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-
-        // let views = this.entryToViews.get(name);
-        // views.forEach((v, i, a) => function (v) {
-        //     let v1:IView = v;
-        //     v1.modelChanged(val);
-        // });
-
-        console.log("收到模型变化消息.."+this.id);
-
+        console.log("dm变化，刷新UI..."+name);
+        let views = this.entryToViews.get(name);
+        views.forEach((v, i, a) => function (v) {
+            let v1:IView = v;
+            v1.modelChanged(val);
+        });
     }
 
 }

@@ -43,12 +43,12 @@ define(["require", "exports", "../lib/HashMap", "../runtime/EventHub"], function
         };
         TadPanel.prototype.doUpdateViews = function (name, val) {
             //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-            // let views = this.entryToViews.get(name);
-            // views.forEach((v, i, a) => function (v) {
-            //     let v1:IView = v;
-            //     v1.modelChanged(val);
-            // });
-            console.log("收到模型变化消息.." + this.id);
+            console.log("dm变化，刷新UI..." + name);
+            var views = this.entryToViews.get(name);
+            views.forEach(function (v, i, a) { return function (v) {
+                var v1 = v;
+                v1.modelChanged(val);
+            }; });
         };
         return TadPanel;
     }());

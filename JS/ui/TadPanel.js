@@ -4,19 +4,38 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
      * Created by Oliver on 2016-08-03 0003.
      */
     var TadPanel = (function () {
+        /*busy,idle*/
         function TadPanel(host, parentId, id, path) {
             this.widgetRegistry = new HashMap_1.HashMap();
             this.id = "";
             this.parentId = "";
             this.entryToViews = new HashMap_1.HashMap();
+            this.taskQueue = new Array();
+            this.state = "idle";
             this.host = host;
             this.parentId = parentId;
             this.id = id;
             this.host.addPanel(id, this);
             this.path = path;
+            this.panelContext = this.host.getContext().createChild(this.id);
             var dm = this.host.getDataModel();
             dm.notifyThis(this.doUpdateViews, this);
         }
+        TadPanel.prototype.getContext = function () {
+            return this.panelContext;
+        };
+        TadPanel.prototype.getHost = function () {
+            return this.host;
+        };
+        TadPanel.prototype.isBusy = function () {
+            return this.state === "busy";
+        };
+        TadPanel.prototype.idle = function () {
+            this.state = "idle";
+        };
+        TadPanel.prototype.busy = function () {
+            this.state = "busy";
+        };
         TadPanel.prototype.registerEntryView = function (name, view) {
             var views = this.entryToViews.get(name);
             if (views == null) {
@@ -83,8 +102,19 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             return this.entryToViews.get(name);
         };
         TadPanel.prototype.queueTaskPack = function (mission) {
-            mission.execute(function () {
-            });
+            if (this.isBusy()) {
+                this.taskQueue.push(mission);
+                return;
+            }
+            this.state = "busy";
+            var current = this.taskQueue.shift();
+            while (current != null) {
+                // 这里同步还是异步看具体情况
+                setTimeout(current.execute(function () {
+                }), 0);
+                current = this.taskQueue.shift();
+            }
+            this.state = "idle";
         };
         TadPanel.prototype.doUpdateViews = function (key, old, now) {
             //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))

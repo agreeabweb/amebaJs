@@ -14,7 +14,7 @@ export interface IView {
      * 视图的变化更新到dm
      * @param val
      */
-     updateModel(val:any):void;
+     updateModel(key:string,val:any):void;
 
 
 
@@ -30,5 +30,5 @@ export interface IView {
      * @param name
      * @param path
      */
-    bindEvent(type:string,event:string,path:string):void;
+    bindEvent(eventType:string, flowType:string, path:string):void;
 }

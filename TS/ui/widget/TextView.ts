@@ -1,5 +1,7 @@
 import {AbstractView} from "../AbstractView";
 import {TadPanel} from "../TadPanel";
+import {UIConst}from "../../const/UIConst";
+
 /**
  * Created by Oliver on 2016-08-09 0009.
  */
@@ -23,14 +25,5 @@ export class TextView extends AbstractView {
                 view.getHost().queueTaskPack(view.getMission(flowType, path));
             });
         }
-    }
-
-
-    modelChanged(val:any):void {
-
-    }
-
-    updateModel(val:any):void {
-
     }
 }

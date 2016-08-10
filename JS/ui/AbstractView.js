@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap", "./mission/FlowMission"], function (require, exports, HashMap_1, FlowMission_1) {
+define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../const/UIConst"], function (require, exports, HashMap_1, FlowMission_1, UIConst_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-09 0009.
@@ -8,7 +8,7 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission"], functi
             this.missions = new HashMap_1.HashMap();
             this.id = id;
             this.host = host;
-            this.thisNode = thisNode;
+            this.$thisNode = thisNode;
         }
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);
@@ -22,7 +22,14 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission"], functi
             return this.host;
         };
         AbstractView.prototype.getNode = function () {
-            return this.thisNode;
+            return this.$thisNode;
+        };
+        AbstractView.prototype.modelChanged = function (val) {
+            this.$thisNode.val(val);
+        };
+        AbstractView.prototype.updateModel = function (key, val) {
+            var dm = this.host.getContext().get(UIConst_1.UIConst.DataModel);
+            dm.set(key, val);
         };
         return AbstractView;
     }());

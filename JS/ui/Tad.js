@@ -1,4 +1,4 @@
-define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/ServiceObj", "../lib/HashMap", "../runtime/DataModel"], function (require, exports, Context_1, GUID_1, ServiceObj_1, HashMap_1, DataModel_1) {
+define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/ServiceObj", "../lib/HashMap", "../runtime/DataModel", "../const/UIConst"], function (require, exports, Context_1, GUID_1, ServiceObj_1, HashMap_1, DataModel_1, UIConst_1) {
     "use strict";
     var Tad = (function () {
         function Tad(id, host, path) {
@@ -9,6 +9,9 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/Ser
             this.host = host;
             this.path = path;
         }
+        Tad.prototype.getContext = function () {
+            return this.tadContext;
+        };
         Tad.prototype.addPanel = function (id, panel) {
             this.panels[id] = panel;
         };
@@ -24,7 +27,7 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/Ser
             this.tadContext = this.host.getContext().createChild("tadContext_" + contextId);
             this.tadContext.set("Tad", this);
             //1.DM
-            this.tadContext.set("DataModel", this.dm);
+            this.tadContext.set(UIConst_1.UIConst.DataModel, this.dm);
             //3.启动流程
             Context_1.Context.prototype.setCurrent(this.tadContext);
             var pif = this.tadContext.get(ServiceObj_1.ServiceObj.ProcessInstanceFactory);

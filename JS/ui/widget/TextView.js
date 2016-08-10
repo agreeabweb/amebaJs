@@ -28,10 +28,6 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
                 });
             }
         };
-        TextView.prototype.modelChanged = function (val) {
-        };
-        TextView.prototype.updateModel = function (val) {
-        };
         return TextView;
     }(AbstractView_1.AbstractView));
     exports.TextView = TextView;

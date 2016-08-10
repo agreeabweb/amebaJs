@@ -4,6 +4,7 @@ import {Tad} from "./Tad";
 import {IView}from "./IView";
 import {IMission}from "./mission/IMission";
 import {DataModel} from "../runtime/DataModel";
+import {Context} from "../runtime/Context";
 import {ResourceManager} from "../resource/ResourceManager";
 import {TextView} from "./widget/TextView";
 import {ButtonView} from "./widget/ButtonView";
@@ -19,7 +20,10 @@ export class TadPanel {
     private host:Tad;
     private entryToViews:HashMap = new HashMap();
     private path:string;
-
+    private taskQueue:Array<IMission> = new Array<IMission>();
+    private state:string = "idle";
+    private panelContext:Context;
+    /*busy,idle*/
 
     constructor(host:Tad, parentId:string, id:string, path:string) {
         this.host = host;
@@ -27,10 +31,31 @@ export class TadPanel {
         this.id = id;
         this.host.addPanel(id, this);
         this.path = path;
+        this.panelContext = this.host.getContext().createChild(this.id);
         let dm:DataModel = this.host.getDataModel();
         dm.notifyThis(this.doUpdateViews,this);
     }
 
+    public getContext():Context {
+        return this.panelContext;
+    }
+
+    public  getHost():Tad {
+        return this.host;
+    }
+
+    public isBusy():boolean {
+        return this.state === "busy";
+    }
+
+    public idle():void {
+        this.state = "idle";
+    }
+
+    public busy():void {
+        this.state = "busy";
+    }
+    
     public registerEntryView(name:string, view:any) {
         let views = this.entryToViews.get(name);
         if (views == null) {
@@ -104,16 +129,27 @@ export class TadPanel {
             }
         }
     }
-
+    
     public getViewsByEntry(name:string):IView[] {
         return this.entryToViews.get(name);
     }
 
     public queueTaskPack(mission:IMission) {
 
-        mission.execute(function () {
+        if (this.isBusy()) {
+            this.taskQueue.push(mission);
+            return;
+        }
+        this.state = "busy";
+        let current:IMission = this.taskQueue.shift();
+        while (current != null) {
+            // 这里同步还是异步看具体情况
+            setTimeout(current.execute(function () {
 
-        });
+            }), 0);
+            current = this.taskQueue.shift();
+        }
+        this.state = "idle";
     }
 
     public doUpdateViews(key,old,now) {

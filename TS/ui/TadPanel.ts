@@ -62,6 +62,7 @@ export class TadPanel {
             views = new Array();
         }
         views.push(view);
+        this.entryToViews.put(name,views);
     }
 
     public registerWidget(id:string, view:any):void {

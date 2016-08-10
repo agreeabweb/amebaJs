@@ -42,6 +42,7 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                 views = new Array();
             }
             views.push(view);
+            this.entryToViews.put(name, views);
         };
         TadPanel.prototype.registerWidget = function (id, view) {
             this.widgetRegistry.put(id, view);

@@ -9,16 +9,18 @@ import {UIConst}from "../const/UIConst";
  */
 export abstract class AbstractView implements IView{
 
-    private host:TadPanel;
-    private id:string;
-    public $thisNode: JQuery;
-    private missions:HashMap = new HashMap();
+    protected host:TadPanel;
+    protected id:string;
+    protected $thisNode: JQuery;
+    protected missions:HashMap = new HashMap();
+    protected dmEntry:string;
 
-    constructor(id:string,host:TadPanel,thisNode:JQuery)
+    constructor(id:string,host:TadPanel,dmEntry:string,thisNode:JQuery)
     {
         this.id = id;
         this.host =host;
         this.$thisNode=thisNode;
+        this.dmEntry = dmEntry;
     }
 
     bindModel(name:string):void{

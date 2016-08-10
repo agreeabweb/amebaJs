@@ -4,11 +4,12 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
      * Created by Oliver on 2016-08-09 0009.
      */
     var AbstractView = (function () {
-        function AbstractView(id, host, thisNode) {
+        function AbstractView(id, host, dmEntry, thisNode) {
             this.missions = new HashMap_1.HashMap();
             this.id = id;
             this.host = host;
             this.$thisNode = thisNode;
+            this.dmEntry = dmEntry;
         }
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);

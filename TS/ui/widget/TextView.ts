@@ -7,8 +7,14 @@ import {UIConst}from "../../const/UIConst";
  */
 export class TextView extends AbstractView {
 
-    constructor(id:string, host:TadPanel, thisNode:JQuery) {
-        super(id, host, thisNode);
+    constructor(id:string, host:TadPanel,dmEntry:string, thisNode:JQuery) {
+        super(id, host,dmEntry, thisNode);
+        if(this.dmEntry!=null)
+        {
+            this.$thisNode.on("change",function(){
+                this.updateModel(this.dmEntry,this.$thisNode.val());
+            });
+        }
     }
 
     bindEvent(eventType:string, flowType:string, path:string):void {

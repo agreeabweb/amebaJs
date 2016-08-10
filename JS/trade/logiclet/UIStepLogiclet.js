@@ -16,9 +16,21 @@ define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub",
             else if (check === "auf") {
                 this.callAUF(pits, path, inputParams.get("mapping"), inputParams, callback);
             }
+            else if (check === "html") {
+                this.callHTML(pits, inputParams, callback);
+            }
             else {
                 throw "Not Supported UI: " + path;
             }
+        };
+        UIStepLogiclet.prototype.callHTML = function (pits, inputParams, callback) {
+            var data = {
+                msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel",
+                param: inputParams,
+                callback: callback,
+                context: Context_1.Context.getCurrent()
+            };
+            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel", data);
         };
         UIStepLogiclet.prototype.callABF = function (pits, inputParams, callback) {
             var data = {

@@ -1,5 +1,7 @@
 import {AbstractView} from "../AbstractView";
 import {TadPanel} from "../TadPanel";
+import {UIConst}from "../../const/UIConst";
+
 /**
  * Created by Oliver on 2016-08-09 0009.
  */
@@ -9,20 +11,19 @@ export class TextView extends AbstractView {
         super(id, host, thisNode);
     }
 
-    bindEvent(type:string, event:string, path:string):void {
-        if (event === "click") {
-            this.$thisNode.on("click", function () {
-                this.host.queueTaskPack(this.getMission(type, path));
+    bindEvent(eventType:string, flowType:string, path:string):void {
+        var view = this;
+        if (eventType === "click") {
+            view.getNode().on("click", function () {
+                alert("click");
+                view.getHost().queueTaskPack(view.getMission(flowType, path));
             });
         }
-    }
-
-
-    modelChanged(val:any):void {
-
-    }
-
-    updateModel(val:any):void {
-
+        if(eventType === "change") {
+            view.getNode().on("change", function () {
+                alert("change");
+                view.getHost().queueTaskPack(view.getMission(flowType, path));
+            });
+        }
     }
 }

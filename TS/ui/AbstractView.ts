@@ -2,6 +2,8 @@ import {TadPanel} from "./TadPanel";
 import {HashMap} from "../lib/HashMap";
 import {IView} from "./IView";
 import {FlowMission} from "./mission/FlowMission";
+import {DataModel} from "../runtime/DataModel";
+import {UIConst}from "../const/UIConst";
 /**
  * Created by Oliver on 2016-08-09 0009.
  */
@@ -24,12 +26,27 @@ export abstract class AbstractView implements IView{
     }
 
     protected getMission(type:string,path:string){
-        if(type === "Flow")
+        if(type === "Flow" || type === "flow")
         {
             return new FlowMission();
         }
     }
-    abstract bindEvent(type:string,name:string,path:string):void;
-    abstract modelChanged(val:any):void;
-    abstract updateModel(val:any):void;
+    
+    public getHost(): TadPanel {
+        return this.host;
+    }
+    public getNode(): JQuery {
+        return this.$thisNode;
+    }
+    
+    abstract bindEvent(type:string, name:string, path:string):void;
+
+    modelChanged(val:any):void {
+        this.$thisNode.val(val);
+    }
+
+    updateModel(key:string, val:any):void {
+        let dm:DataModel = this.host.getContext().get(UIConst.DataModel);
+        dm.set(key, val);
+    }
 }

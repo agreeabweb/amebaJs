@@ -54,8 +54,8 @@ export class TadPanel {
             var div;
             div = $("<div>");
             div.html(html);
-            // 1.解析出view
 
+            // 1.解析出view
             panel.translateHTML($(div).find("#contentPanel"));
 
             // 2.展现
@@ -90,9 +90,13 @@ export class TadPanel {
                     view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
                 }
             }
-            // 处理dm
+            // 注册dm
+            if(dm != undefined) {
+                this.registerEntryView(dm, view);
+            }
         }
 
+        // 解析该元素的孩子节点
         children = $(dom).children();
         if(children.length != 0) {
             for(let i = 0; i < children.length; i++) {

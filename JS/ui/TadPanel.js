@@ -66,7 +66,12 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                         view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
                     }
                 }
+                // 注册dm
+                if (dm != undefined) {
+                    this.registerEntryView(dm, view);
+                }
             }
+            // 解析该元素的孩子节点
             children = $(dom).children();
             if (children.length != 0) {
                 for (var i = 0; i < children.length; i++) {

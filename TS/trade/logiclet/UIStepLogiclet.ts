@@ -25,6 +25,7 @@ class UIStepLogiclet implements ILogiclet {
 
     public callABF(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
         let data = {
+            msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
             param: inputParams,
             callback: callback,
             context: Context.getCurrent()

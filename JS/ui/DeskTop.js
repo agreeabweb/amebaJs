@@ -25,7 +25,7 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashM
             // 2.注册事件模块
             var commandExecutor = new CommandHandlerExecutor_1.CommandHandlerExecutor();
             Context_1.Context.baseContext.set(ServiceObj_1.ServiceObj.CommandHandlerExecutor, commandExecutor);
-            EngineEventManager_1.EngineEventManager.init(commandExecutor.handleEvent);
+            EngineEventManager_1.EngineEventManager.init(commandExecutor, commandExecutor.handleEvent);
             // 3.资源
             var resourceDocumentTable = new ResourceDocumentTable_1.ResourceDocumentTable();
             Context_1.Context.baseContext.set(ServiceObj_1.ServiceObj.ResourceDocumentTable, resourceDocumentTable);

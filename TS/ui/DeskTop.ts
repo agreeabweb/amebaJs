@@ -44,7 +44,7 @@ export class DeskTop {
         // 2.注册事件模块
         let commandExecutor = new CommandHandlerExecutor();
         Context.baseContext.set(ServiceObj.CommandHandlerExecutor,commandExecutor);
-        EngineEventManager.init(commandExecutor.handleEvent);
+        EngineEventManager.init(commandExecutor,commandExecutor.handleEvent);
         // 3.资源
         var resourceDocumentTable = new ResourceDocumentTable();
         Context.baseContext.set(ServiceObj.ResourceDocumentTable, resourceDocumentTable);

@@ -9,6 +9,7 @@ define(["require", "exports", "./component/ControllerCallMethod_1.0", "./compone
             //     callback(result);
             // });
             var data = {
+                msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + name,
                 param: inArg,
                 callback: callback,
                 context: Context_1.Context.getCurrent()

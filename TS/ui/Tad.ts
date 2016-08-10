@@ -6,12 +6,13 @@ import {DeskTop} from "./DeskTop";
 import {Context} from "../runtime/Context";
 import GUID from "../lib/GUID";
 import {ServiceObj}from　"../const/ServiceObj";
+import {HashMap} from "../lib/HashMap";
 
 export class Tad {
 
     private id:string = "";
     private host:DeskTop;
-    private panels = {};
+    private panels:HashMap = new HashMap();
     private tadContext:Context;
     private path:string;
 

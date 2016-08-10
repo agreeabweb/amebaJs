@@ -3,25 +3,30 @@ define(["require", "exports"], function (require, exports) {
     /**
      * Created by Oliver on 2016-08-04 0004.
      */
-    /// <reference path="../lib/pubsub.d.ts" />
+    /// <reference path="../lib/amplify.d.ts" />
     var EventHub = (function () {
         function EventHub() {
         }
         /*
         * engine.command.*：订阅流程中的Command
-        *
+        * model.change.*: 订阅dm变化
         * */
-        EventHub.subscribe = function (topic, subscriber) {
-            PubSub.subscribe(topic, subscriber);
+        EventHub.subscribe = function (topic, context, callback, priority) {
+            if (context == null) {
+                amplify.subscribe(topic, callback);
+            }
+            else {
+                amplify.subscribe(topic, context, callback);
+            }
         };
-        EventHub.unsubscribe = function (subscriber) {
-            PubSub.unsubscribe(subscriber);
+        EventHub.unsubscribe = function (topic, context, callback) {
+            amplify.unsubscribe(topic, context, callback);
         };
-        EventHub.clearAllSubscriptions = function () {
-            PubSub.clearAllSubscriptions();
-        };
+        // public static clearAllSubscriptions():void{
+        //     PubSub.clearAllSubscriptions();
+        // }
         EventHub.publish = function (topic, data) {
-            PubSub.publish(topic, data);
+            amplify.publish(topic, data);
         };
         return EventHub;
     }());

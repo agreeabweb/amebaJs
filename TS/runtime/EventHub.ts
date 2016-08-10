@@ -1,26 +1,32 @@
 /**
  * Created by Oliver on 2016-08-04 0004.
  */
-/// <reference path="../lib/pubsub.d.ts" />
+/// <reference path="../lib/amplify.d.ts" />
 export class EventHub {
 
     /*
     * engine.command.*：订阅流程中的Command
-    *
+    * model.change.*: 订阅dm变化
     * */
-    public static subscribe(topic :string,subscriber:any){
-        PubSub.subscribe(topic,subscriber);
+    public static subscribe(topic:string, context:any, callback:any, priority:any){
+        if(context == null)
+        {
+            amplify.subscribe(topic,callback);
+        }else{
+            amplify.subscribe(topic,context,callback);
+        }
+
     }
 
-    public static unsubscribe( subscriber:any ){
-        PubSub.unsubscribe(subscriber);
+    public static unsubscribe( topic:string, context:any, callback:any ){
+        amplify.unsubscribe(topic,context,callback);
     }
 
-    public static clearAllSubscriptions():void{
-        PubSub.clearAllSubscriptions();
-    }
+    // public static clearAllSubscriptions():void{
+    //     PubSub.clearAllSubscriptions();
+    // }
 
     public static publish(topic:string,data:any){
-        PubSub.publish(topic,data);
+        amplify.publish(topic,data);
     }
 }

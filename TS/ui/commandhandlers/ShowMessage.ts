@@ -1,5 +1,7 @@
 import {ICommandHandler} from "../ICommandHandler";
 import {Command} from "../Command";
+import {TadPanel} from "../TadPanel";
+import {EventHub} from "../../runtime/EventHub";
 /**
  * Created by Oliver on 2016-08-04 0004.
  */

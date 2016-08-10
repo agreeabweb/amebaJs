@@ -19,11 +19,10 @@ export class CommandHandlerExecutor {
         this.registerCommandHandler(EngineEvent.COMMAND_ShowMessage,new ShowMessage());
     }
 
-    public handleEvent = function(msg,data){
+    public handleEvent = function(data){
         var ctx : Context = data.context;
         let executor :CommandHandlerExecutor = ctx.get(ServiceObj.CommandHandlerExecutor);
-
-        let command = new Command(msg,data);
+        let command = new Command(data.msg,data);
         executor.execute(command,data.callback);
     }
 

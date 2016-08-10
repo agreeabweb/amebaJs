@@ -22,6 +22,7 @@ define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub",
         };
         UIStepLogiclet.prototype.callABF = function (pits, inputParams, callback) {
             var data = {
+                msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel",
                 param: inputParams,
                 callback: callback,
                 context: Context_1.Context.getCurrent()

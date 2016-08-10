@@ -20,11 +20,12 @@ import {EngineEvent} from "../const/EngineEvent";
         //     callback(result);
         // });
         let data = {
+            msg:EngineEvent.ENGINE_EVENT + name,
             param: inArg,
             callback: callback,
             context: Context.getCurrent()
         };
-        EventHub.publish(EngineEvent.ENGINE_EVENT + name, data);
+        EventHub.publish(EngineEvent.ENGINE_EVENT + name,data);
     } else if(name === "ControllerCallMethod") {
         ControllerCallMethod.execute(inArg, function(result) {
             callback(result);

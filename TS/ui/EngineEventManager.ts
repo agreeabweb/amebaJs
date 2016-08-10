@@ -8,9 +8,9 @@ import {EngineEvent} from "../const/EngineEvent";
  */
 export class EngineEventManager {
 
-    public static init(subscriber:any){
-        EventHub.subscribe(EngineEvent.COMMAND_OpenPanel,subscriber);
-        EventHub.subscribe(EngineEvent.COMMAND_ShowMessage,subscriber);
+    public static init(context:any,subscriber:any){
+        EventHub.subscribe(EngineEvent.COMMAND_OpenPanel,context,subscriber);
+        EventHub.subscribe(EngineEvent.COMMAND_ShowMessage,context,subscriber);
     }
 
 }

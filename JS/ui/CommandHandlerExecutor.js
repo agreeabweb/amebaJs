@@ -3,10 +3,10 @@ define(["require", "exports", "./Command", "../lib/HashMap", "./commandhandlers/
     var CommandHandlerExecutor = (function () {
         function CommandHandlerExecutor() {
             this.handlers = new HashMap_1.HashMap();
-            this.handleEvent = function (msg, data) {
+            this.handleEvent = function (data) {
                 var ctx = data.context;
                 var executor = ctx.get(ServiceObj_1.ServiceObj.CommandHandlerExecutor);
-                var command = new Command_1.Command(msg, data);
+                var command = new Command_1.Command(data.msg, data);
                 executor.execute(command, data.callback);
             };
             this.registerCommandHandler(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, new OpenPanel_1.OpenPanel());

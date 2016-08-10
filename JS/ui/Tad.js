@@ -1,9 +1,9 @@
-define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/ServiceObj"], function (require, exports, Context_1, GUID_1, ServiceObj_1) {
+define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/ServiceObj", "../lib/HashMap"], function (require, exports, Context_1, GUID_1, ServiceObj_1, HashMap_1) {
     "use strict";
     var Tad = (function () {
         function Tad(id, host, path) {
             this.id = "";
-            this.panels = {};
+            this.panels = new HashMap_1.HashMap();
             this.id = id;
             this.host = host;
             this.path = path;

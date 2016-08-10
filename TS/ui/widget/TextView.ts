@@ -9,10 +9,12 @@ export class TextView extends AbstractView {
 
     constructor(id:string, host:TadPanel,dmEntry:string, thisNode:JQuery) {
         super(id, host,dmEntry, thisNode);
+
+        var view = this;
         if(this.dmEntry!=null)
         {
             this.$thisNode.on("change",function(){
-                this.updateModel(this.dmEntry,this.$thisNode.val());
+                view.updateModel(view.dmEntry,view.$thisNode.val());
             });
         }
     }

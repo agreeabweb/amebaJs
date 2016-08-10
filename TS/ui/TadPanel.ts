@@ -105,7 +105,7 @@ export class TadPanel {
 
             //判断view类型
             if(feature === "Text") {
-                view = new TextView(id, this, $(dom));
+                view = new TextView(id, this, dm, $(dom));
             } else if(feature === "Button") {
                 view = new ButtonView(id, this, $(dom));
             }
@@ -155,8 +155,8 @@ export class TadPanel {
 
     public doUpdateViews(key,old,now) {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-        console.log("dm变化，刷新UI..." + name);
-        let views = this.entryToViews.get(name);
+        console.log("dm变化，刷新UI..." + key);
+        let views = this.entryToViews.get(key);
         let i:number;
         let size:number = views.length;
         for(i=0;i<size;i++)

@@ -12,9 +12,10 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
         __extends(TextView, _super);
         function TextView(id, host, dmEntry, thisNode) {
             _super.call(this, id, host, dmEntry, thisNode);
+            var view = this;
             if (this.dmEntry != null) {
                 this.$thisNode.on("change", function () {
-                    this.updateModel(this.dmEntry, this.$thisNode.val());
+                    view.updateModel(view.dmEntry, view.$thisNode.val());
                 });
             }
         }

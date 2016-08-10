@@ -40,6 +40,7 @@ export class Tad {
         // 0.Context
         var contextId = GUID();
         this.tadContext = this.host.getContext().createChild("tadContext_" + contextId);
+        this.tadContext.set("Tad", this);
         //1.DM
         this.tadContext.set("DataModel",this.dm);
 
@@ -60,5 +61,9 @@ export class Tad {
                 console.log("结束PITS: " + segment.getId());
             });
         });
+    }
+
+    public getId(): string {
+        return this.id;
     }
 }

@@ -4,7 +4,7 @@ define(["require", "exports", "../configure/config", "../lib/cache-1.0.js"], fun
         function ResourceManager() {
         }
         ;
-        ResourceManager.prototype.getResourceFile = function (path, callback) {
+        ResourceManager.getResourceFile = function (path, callback) {
             // cache.clear();
             // get file from cache
             cache.getItem(path, function (file) {

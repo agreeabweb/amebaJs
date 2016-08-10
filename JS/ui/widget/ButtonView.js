@@ -8,32 +8,28 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
     /**
      * Created by Oliver on 2016-08-09 0009.
      */
-    var TextView = (function (_super) {
-        __extends(TextView, _super);
-        function TextView(id, host, thisNode) {
+    var ButtonView = (function (_super) {
+        __extends(ButtonView, _super);
+        function ButtonView(id, host, thisNode) {
             _super.call(this, id, host, thisNode);
         }
-        TextView.prototype.bindEvent = function (eventType, flowType, path) {
-            var view = this;
+        ButtonView.prototype.bindEvent = function (eventType, flowType, path) {
+            var view = this; //避免this指代错误
             if (eventType === "click") {
                 view.getNode().on("click", function () {
                     alert("click");
                     view.getHost().queueTaskPack(view.getMission(flowType, path));
                 });
             }
-            if (eventType === "change") {
-                view.getNode().on("change", function () {
-                    alert("change");
-                    view.getHost().queueTaskPack(view.getMission(flowType, path));
-                });
-            }
         };
-        TextView.prototype.modelChanged = function (val) {
+        ButtonView.prototype.modelChanged = function (val) {
         };
-        TextView.prototype.updateModel = function (val) {
+        ;
+        ButtonView.prototype.updateModel = function (val) {
         };
-        return TextView;
+        ;
+        return ButtonView;
     }(AbstractView_1.AbstractView));
-    exports.TextView = TextView;
+    exports.ButtonView = ButtonView;
 });
-//# sourceMappingURL=TextView.js.map
+//# sourceMappingURL=ButtonView.js.map

@@ -9,14 +9,14 @@ export abstract class AbstractView implements IView{
 
     private host:TadPanel;
     private id:string;
-    public $thisNode: JQuery;
+    private thisNode: JQuery;
     private missions:HashMap = new HashMap();
 
     constructor(id:string,host:TadPanel,thisNode:JQuery)
     {
         this.id = id;
         this.host =host;
-        this.$thisNode=thisNode;
+        this.thisNode=thisNode;
     }
 
     bindModel(name:string):void{
@@ -24,11 +24,19 @@ export abstract class AbstractView implements IView{
     }
 
     protected getMission(type:string,path:string){
-        if(type === "Flow")
+        if(type === "Flow" || type === "flow")
         {
             return new FlowMission();
         }
     }
+
+    public getHost(): TadPanel {
+        return this.host;
+    }
+    public getNode(): JQuery {
+        return this.thisNode;
+    }
+
     abstract bindEvent(type:string,name:string,path:string):void;
     abstract modelChanged(val:any):void;
     abstract updateModel(val:any):void;

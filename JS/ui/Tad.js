@@ -22,6 +22,7 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/Ser
             // 0.Context
             var contextId = GUID_1.default();
             this.tadContext = this.host.getContext().createChild("tadContext_" + contextId);
+            this.tadContext.set("Tad", this);
             //1.DM
             this.tadContext.set("DataModel", this.dm);
             //3.启动流程
@@ -37,6 +38,9 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/Ser
                     console.log("结束PITS: " + segment.getId());
                 });
             });
+        };
+        Tad.prototype.getId = function () {
+            return this.id;
         };
         return Tad;
     }());

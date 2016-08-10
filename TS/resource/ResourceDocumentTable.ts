@@ -14,7 +14,7 @@ class ResourceDocumentTable {
 
     //--------------------------------------------------------getter------------------------------------------
     public getDocument(path: string, clazz: string, callback: Function): void {
-        ResourceManager.prototype.getResourceFile(path, function(file) {
+        ResourceManager.getResourceFile(path, function(file) {
             var parser;
         
             if(clazz === "ProcessDefinition") {

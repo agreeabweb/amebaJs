@@ -18,9 +18,21 @@ class UIStepLogiclet implements ILogiclet {
             this.callABF(pits, inputParams, callback);
         } else if(check === "auf") {
             this.callAUF(pits, path, inputParams.get("mapping"), inputParams, callback);
+        } else if(check === "html") {
+            this.callHTML(pits, inputParams, callback);
         } else {
             throw "Not Supported UI: " + path;
         }
+    }
+
+    public callHTML(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
+        let data = {
+            msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
+            param: inputParams,
+            callback: callback,
+            context: Context.getCurrent()
+        };
+        EventHub.publish(EngineEvent.ENGINE_EVENT + "OpenPanel", data);
     }
 
     public callABF(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {

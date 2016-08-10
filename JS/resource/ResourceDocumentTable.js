@@ -9,7 +9,7 @@ define(["require", "exports", "./ResourceManager", "../engine/process/ProcessDef
         ;
         //--------------------------------------------------------getter------------------------------------------
         ResourceDocumentTable.prototype.getDocument = function (path, clazz, callback) {
-            ResourceManager_1.ResourceManager.prototype.getResourceFile(path, function (file) {
+            ResourceManager_1.ResourceManager.getResourceFile(path, function (file) {
                 var parser;
                 if (clazz === "ProcessDefinition") {
                     parser = new ProcessDefinitionParser_1.ProcessDefinitionParser();

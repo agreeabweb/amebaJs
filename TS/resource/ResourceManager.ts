@@ -6,7 +6,7 @@ declare var cache;
 class ResourceManager {
     public constructor() {};
 
-    public getResourceFile(path: string, callback: Function): void {
+    public static getResourceFile(path: string, callback: Function): void {
         // cache.clear();
         // get file from cache
         cache.getItem(path, function(file) {

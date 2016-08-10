@@ -4,6 +4,9 @@ import {Tad} from "./Tad";
 import {IView}from "./IView";
 import {IMission}from "./mission/IMission";
 import {DataModel} from "../runtime/DataModel";
+import {ResourceManager} from "../resource/ResourceManager";
+import {TextView} from "./widget/TextView";
+import {ButtonView} from "./widget/ButtonView";
 
 /**
  * Created by Oliver on 2016-08-03 0003.
@@ -45,11 +48,57 @@ export class TadPanel {
     }
 
     public start():void {
+        var panel = this;
         // 0.获取html
+        ResourceManager.getResourceFile(this.path, function(html) {
+            var div;
+            div = $("<div>");
+            div.html(html);
+            // 1.解析出view
 
-        // 1.解析出view
+            panel.translateHTML($(div).find("#contentPanel"));
 
-        // 2.展现
+            // 2.展现
+            $("body").append(div);
+        });
+    }
+
+    public translateHTML(dom: JQuery) {
+        var id, prop, children, view;
+
+        id = $(dom).attr("id");
+        prop = $(dom).attr("prop");
+
+        if(prop != undefined) {
+            let feature, dm, events;
+
+            prop = JSON.parse(prop);
+            feature = prop.feature;
+            dm = prop.dm;
+            events = prop.event;
+
+            //判断view类型
+            if(feature === "Text") {
+                view = new TextView(id, this, $(dom));
+            } else if(feature === "Button") {
+                view = new ButtonView(id, this, $(dom));
+            }
+
+            // 处理event
+            if(events != undefined && events.length != 0) {
+                for(let i = 0; i < events.length; i++) {
+                    view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
+                }
+            }
+            // 处理dm
+        }
+
+        children = $(dom).children();
+        if(children.length != 0) {
+            for(let i = 0; i < children.length; i++) {
+                this.translateHTML(children[i]);
+            }
+        }
     }
 
     public getViewsByEntry(name:string):IView[] {

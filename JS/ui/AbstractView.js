@@ -8,15 +8,21 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission"], functi
             this.missions = new HashMap_1.HashMap();
             this.id = id;
             this.host = host;
-            this.$thisNode = thisNode;
+            this.thisNode = thisNode;
         }
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);
         };
         AbstractView.prototype.getMission = function (type, path) {
-            if (type === "Flow") {
+            if (type === "Flow" || type === "flow") {
                 return new FlowMission_1.FlowMission();
             }
+        };
+        AbstractView.prototype.getHost = function () {
+            return this.host;
+        };
+        AbstractView.prototype.getNode = function () {
+            return this.thisNode;
         };
         return AbstractView;
     }());

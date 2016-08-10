@@ -5,18 +5,24 @@ import {TadPanel} from "../TadPanel";
  */
 export class TextView extends AbstractView {
 
-    constructor(id:string,host:TadPanel)
-    {
-        super(id,host);
+    constructor(id:string, host:TadPanel, thisNode:JQuery) {
+        super(id, host, thisNode);
     }
 
-    bindEvent(type:string,event:string,path:string):void{
-        if(evemt === "click")
-        {
-            this.$thisNode.on("click",function(){
-                this.host.queueTaskPack(this.getMission(type,path));
+    bindEvent(type:string, event:string, path:string):void {
+        if (event === "click") {
+            this.$thisNode.on("click", function () {
+                this.host.queueTaskPack(this.getMission(type, path));
             });
         }
+    }
+
+
+    modelChanged(val:any):void {
+
+    }
+
+    updateModel(val:any):void {
 
     }
 }

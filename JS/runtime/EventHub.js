@@ -11,13 +11,13 @@ define(["require", "exports"], function (require, exports) {
         * engine.command.*：订阅流程中的Command
         * model.change.*: 订阅dm变化
         * */
-        EventHub.subscribe = function (topic, context, callback, priority) {
-            if (context == null) {
-                amplify.subscribe(topic, callback);
-            }
-            else {
-                amplify.subscribe(topic, context, callback);
-            }
+        EventHub.subscribe = function (topic, context, callback) {
+            // if(context == null)
+            // {
+            //     amplify.subscribe(topic,callback);
+            // }else{
+            amplify.subscribe(topic, context, callback);
+            // }
         };
         EventHub.unsubscribe = function (topic, context, callback) {
             amplify.unsubscribe(topic, context, callback);

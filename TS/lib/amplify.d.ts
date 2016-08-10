@@ -3,9 +3,9 @@
  */
 interface amplify {
 
-    subscribe( topic:string, callback:any):amplify;
+    // subscribe( topic:string, callback:any):amplify;
 
-    subscribe( topic:string, context:any, callback:any, priority:any):amplify;
+    subscribe( topic:string, context:any, callback:any):amplify;
 
     unsubscribe( topic:string, context:any, callback:any ):amplify;
 

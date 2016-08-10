@@ -1,5 +1,10 @@
 import {HashMap} from "../lib/HashMap";
 import {EventHub} from "../runtime/EventHub";
+import {Tad} from "./Tad";
+import {IView}from "./IView";
+import {IMission}from "./mission/IMission";
+import {DataModel} from "../runtime/DataModel";
+
 /**
  * Created by Oliver on 2016-08-03 0003.
  */
@@ -17,9 +22,10 @@ export class TadPanel {
         this.host = host;
         this.parentId = parentId;
         this.id = id;
-        // this.host.addPanel(id, this);
+        this.host.addPanel(id, this);
         this.path = path;
-        EventHub.subscribe("model.change",this,this.doUpdateViews);
+        let dm:DataModel = this.host.getDataModel();
+        dm.notifyThis(this.doUpdateViews,this);
     }
 
     public registerEntryView(name:string, view:any) {
@@ -57,13 +63,13 @@ export class TadPanel {
         });
     }
 
-    public doUpdateViews(name:string, val:any) {
+    public doUpdateViews(key,old,now) {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-        console.log("dm变化，刷新UI..."+name);
+        console.log("dm变化，刷新UI..." + name);
         let views = this.entryToViews.get(name);
         views.forEach((v, i, a) => function (v) {
             let v1:IView = v;
-            v1.modelChanged(val);
+            v1.modelChanged(now);
         });
     }
 

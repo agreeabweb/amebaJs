@@ -41,6 +41,14 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashM
             var tadPath = "/AppFramework_2013B/trade/test/bug0041/Bug0041.tad";
             var defaultTad = new Tad_1.Tad(id, this, tadPath);
             defaultTad.start();
+            //DM测试
+            // let dm:DataModel = new DataModel();
+            //
+            // dm.notifyThis(this.modelchanged,this);
+            // dm.set("a.b.c","wer");
+            // dm.set("t1","aaa");
+            // console.log("DM取值: "+dm.get("a.b"));
+            // console.log("DM取值: "+dm.get("t1"));
         };
         DeskTop.PANEL_FACTORY_DEFAULT = "";
         DeskTop.PANEL_FACTORY_WINDOW = "window";
@@ -50,14 +58,4 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashM
     var desktop = new DeskTop();
     desktop.init();
 });
-/*
-let callback = function () {
-    alert("callback");
-}
-let data = {
-    param:{"a":"b"},
-    callback:callback,
-    context:Context.baseContext
-};
-EventHub.publish(EngineEvent.COMMAND_OpenPanel,data);*/
 //# sourceMappingURL=DeskTop.js.map

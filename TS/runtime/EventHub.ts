@@ -8,13 +8,13 @@ export class EventHub {
     * engine.command.*：订阅流程中的Command
     * model.change.*: 订阅dm变化
     * */
-    public static subscribe(topic:string, context:any, callback:any, priority:any){
-        if(context == null)
-        {
-            amplify.subscribe(topic,callback);
-        }else{
+    public static subscribe(topic:string, context:any, callback:any){
+        // if(context == null)
+        // {
+        //     amplify.subscribe(topic,callback);
+        // }else{
             amplify.subscribe(topic,context,callback);
-        }
+        // }
 
     }
 

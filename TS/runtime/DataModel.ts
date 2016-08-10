@@ -2,10 +2,38 @@
  * Created by Oliver on 2016-08-10 0010.
  */
 import {HashMap} from "../lib/HashMap";
+import {EventHub} from "./EventHub";
 
 export class DataModel {
 
     private memberMap:HashMap = new HashMap();
+    private subscriptions:Array<any> = new Array<any>();
+
+    public notifyThis(callback:any, context:any) {
+        let subscribe:any = {
+            "callback": callback,
+            "context": context
+        };
+
+       let v = this.subscriptions.push(subscribe);
+        console.log("注册后长度: "+v);
+    }
+
+    private notifyChange(key:string, old:any, now:any):void {
+        console.log("开始通知变化..."+this.subscriptions.length);
+        let i:number;
+        for(i=0;i<this.subscriptions.length;i++)
+        {
+            let v:any = this.subscriptions[i];
+            let data:any = {
+                "key": key,
+                "old": old,
+                "new": now
+            };
+            console.log("监听器："+v.callback);
+            v.callback.apply(v.context, [key,old,now]);
+        }
+    }
 
     private doSetMemeber(memberName:string, memberContent:any):void {
 
@@ -32,7 +60,9 @@ export class DataModel {
 
 
     public  set(memberName:string, memberContent:any):void {
+        let old:any = this.getMember(memberName);
         this.doSetMemeber(memberName, memberContent);
+        setTimeout(this.notifyChange(memberName, old, memberContent), 0);
     }
 
     private getLastDataModel(memberName:string):any {

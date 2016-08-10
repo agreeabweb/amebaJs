@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap", "../runtime/EventHub"], function (require, exports, HashMap_1, EventHub_1) {
+define(["require", "exports", "../lib/HashMap"], function (require, exports, HashMap_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-03 0003.
@@ -12,9 +12,10 @@ define(["require", "exports", "../lib/HashMap", "../runtime/EventHub"], function
             this.host = host;
             this.parentId = parentId;
             this.id = id;
-            // this.host.addPanel(id, this);
+            this.host.addPanel(id, this);
             this.path = path;
-            EventHub_1.EventHub.subscribe("model.change", this, this.doUpdateViews);
+            var dm = this.host.getDataModel();
+            dm.notifyThis(this.doUpdateViews, this);
         }
         TadPanel.prototype.registerEntryView = function (name, view) {
             var views = this.entryToViews.get(name);
@@ -41,13 +42,13 @@ define(["require", "exports", "../lib/HashMap", "../runtime/EventHub"], function
             mission.execute(function () {
             });
         };
-        TadPanel.prototype.doUpdateViews = function (name, val) {
+        TadPanel.prototype.doUpdateViews = function (key, old, now) {
             //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
             console.log("dm变化，刷新UI..." + name);
             var views = this.entryToViews.get(name);
             views.forEach(function (v, i, a) { return function (v) {
                 var v1 = v;
-                v1.modelChanged(val);
+                v1.modelChanged(now);
             }; });
         };
         return TadPanel;

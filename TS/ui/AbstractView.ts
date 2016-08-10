@@ -1,5 +1,7 @@
 import {TadPanel} from "./TadPanel";
 import {HashMap} from "../lib/HashMap";
+import {IView} from "./IView";
+import {FlowMission} from "./mission/FlowMission";
 /**
  * Created by Oliver on 2016-08-09 0009.
  */
@@ -24,10 +26,10 @@ export abstract class AbstractView implements IView{
     protected getMission(type:string,path:string){
         if(type === "Flow")
         {
-            return new FlowMission
+            return new FlowMission();
         }
     }
-    abstract bindEvent(type:string,name:string,path:string):void{
-
-    }
+    abstract bindEvent(type:string,name:string,path:string):void;
+    abstract modelChanged(val:any):void;
+    abstract updateModel(val:any):void;
 }

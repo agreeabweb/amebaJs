@@ -7,6 +7,7 @@ import {Context} from "../runtime/Context";
 import GUID from "../lib/GUID";
 import {ServiceObj}from　"../const/ServiceObj";
 import {HashMap} from "../lib/HashMap";
+import {DataModel} from "../runtime/DataModel";
 
 export class Tad {
 
@@ -15,6 +16,7 @@ export class Tad {
     private panels:HashMap = new HashMap();
     private tadContext:Context;
     private path:string;
+    private dm:DataModel = new DataModel();
 
     constructor(id:string,host:DeskTop,path:string) {
         this.id = id;
@@ -30,14 +32,19 @@ export class Tad {
         return this.panels[id];
     }
 
+    public getDataModel():DataModel{
+        return this.dm;
+    }
+    
     public start():void {
-        //0.创建DM
-
-        //1.启动流程
+        // 0.Context
         var contextId = GUID();
         this.tadContext = this.host.getContext().createChild("tadContext_" + contextId);
-        Context.prototype.setCurrent(this.tadContext);
+        //1.DM
+        this.tadContext.set("DataModel",this.dm);
 
+        //3.启动流程
+        Context.prototype.setCurrent(this.tadContext);
         let pif = this.tadContext.get(ServiceObj.ProcessInstanceFactory);
 
         // var tadPath = "/AppFramework_2013B/trade/test/bug0041/Bug0041.tad";

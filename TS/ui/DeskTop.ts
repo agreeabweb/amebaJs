@@ -10,12 +10,11 @@ import {HashMap} from "../lib/HashMap";
 import {EngineEventManager} from "./EngineEventManager";
 import {CommandHandlerExecutor} from "./CommandHandlerExecutor";
 import {Tad} from "./Tad";
-import {EventHub} from "../runtime/EventHub";
-import {EngineEvent}from "../const/EngineEvent";
 import {ServiceObj} from "../const/ServiceObj";
 import {ResourceDocumentTable}from "../resource/ResourceDocumentTable";
 import {DefaultExpressionEngine} from "../engine/expression/DefaultExpressionEngine";
 import {ProcessInstanceFactory} from "../engine/process/ProcessInstanceFactory";
+import {DataModel}from"../runtime/DataModel";
 
 class DefaultPanelFactory implements IPanelCompositeFactory {
     getPanelComposite():any {
@@ -60,20 +59,25 @@ export class DeskTop {
         // let tadPath = "/AppFramework_2013B/trade/test/aa/Aa.tad";
         let tadPath = "/AppFramework_2013B/trade/test/bug0041/Bug0041.tad";
         let defaultTad = new Tad(id,this,tadPath);
-
         defaultTad.start();
+
+        //DM测试
+        // let dm:DataModel = new DataModel();
+        //
+        // dm.notifyThis(this.modelchanged,this);
+        // dm.set("a.b.c","wer");
+        // dm.set("t1","aaa");
+        // console.log("DM取值: "+dm.get("a.b"));
+        // console.log("DM取值: "+dm.get("t1"));
     }
+    //
+    // public modelchanged(key,old,now)
+    // {
+    //
+    //     console.log("DM值发生了变化: "+key);
+    // }
 }
+
+
 let desktop = new DeskTop();
 desktop.init();
-
-/*
-let callback = function () {
-    alert("callback");
-}
-let data = {
-    param:{"a":"b"},
-    callback:callback,
-    context:Context.baseContext
-};
-EventHub.publish(EngineEvent.COMMAND_OpenPanel,data);*/

@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap"], function (require, exports, HashMap_1) {
+define(["require", "exports", "../lib/HashMap", "./mission/FlowMission"], function (require, exports, HashMap_1, FlowMission_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-09 0009.
@@ -15,10 +15,8 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
         };
         AbstractView.prototype.getMission = function (type, path) {
             if (type === "Flow") {
-                return new FlowMission;
+                return new FlowMission_1.FlowMission();
             }
-        };
-        AbstractView.prototype.bindEvent = function (type, name, path) {
         };
         return AbstractView;
     }());

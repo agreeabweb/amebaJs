@@ -3,7 +3,30 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
     var DataModel = (function () {
         function DataModel() {
             this.memberMap = new HashMap_1.HashMap();
+            this.subscriptions = new Array();
         }
+        DataModel.prototype.notifyThis = function (callback, context) {
+            var subscribe = {
+                "callback": callback,
+                "context": context
+            };
+            var v = this.subscriptions.push(subscribe);
+            console.log("注册后长度: " + v);
+        };
+        DataModel.prototype.notifyChange = function (key, old, now) {
+            console.log("开始通知变化..." + this.subscriptions.length);
+            var i;
+            for (i = 0; i < this.subscriptions.length; i++) {
+                var v = this.subscriptions[i];
+                var data = {
+                    "key": key,
+                    "old": old,
+                    "new": now
+                };
+                console.log("监听器：" + v.callback);
+                v.callback.apply(v.context, [key, old, now]);
+            }
+        };
         DataModel.prototype.doSetMemeber = function (memberName, memberContent) {
             var dotIndex = memberName.indexOf('.');
             if (dotIndex > 0) {
@@ -23,7 +46,9 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
             return this.memberMap.get(memberName);
         };
         DataModel.prototype.set = function (memberName, memberContent) {
+            var old = this.getMember(memberName);
             this.doSetMemeber(memberName, memberContent);
+            setTimeout(this.notifyChange(memberName, old, memberContent), 0);
         };
         DataModel.prototype.getLastDataModel = function (memberName) {
             var dotIndex = memberName.indexOf('.');

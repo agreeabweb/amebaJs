@@ -10,15 +10,19 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
      */
     var TextView = (function (_super) {
         __extends(TextView, _super);
-        function TextView(id, host) {
-            _super.call(this, id, host);
+        function TextView(id, host, thisNode) {
+            _super.call(this, id, host, thisNode);
         }
         TextView.prototype.bindEvent = function (type, event, path) {
-            if (evemt === "click") {
+            if (event === "click") {
                 this.$thisNode.on("click", function () {
                     this.host.queueTaskPack(this.getMission(type, path));
                 });
             }
+        };
+        TextView.prototype.modelChanged = function (val) {
+        };
+        TextView.prototype.updateModel = function (val) {
         };
         return TextView;
     }(AbstractView_1.AbstractView));

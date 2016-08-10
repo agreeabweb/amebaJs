@@ -10,6 +10,9 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
             this.host = host;
             this.$thisNode = thisNode;
             this.dmEntry = dmEntry;
+            if (this.dmEntry != null) {
+                this.bindModel(this.dmEntry);
+            }
         }
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);

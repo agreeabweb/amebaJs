@@ -21,6 +21,9 @@ export abstract class AbstractView implements IView{
         this.host =host;
         this.$thisNode=thisNode;
         this.dmEntry = dmEntry;
+        if(this.dmEntry!=null){
+            this.bindModel(this.dmEntry);
+        }
     }
 
     bindModel(name:string):void{

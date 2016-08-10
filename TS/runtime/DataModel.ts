@@ -15,23 +15,22 @@ export class DataModel {
             "context": context
         };
 
-       let v = this.subscriptions.push(subscribe);
-        console.log("注册后长度: "+v);
+        let v = this.subscriptions.push(subscribe);
+        console.log("注册后长度: " + v);
     }
 
     private notifyChange(key:string, old:any, now:any):void {
-        console.log("开始通知变化..."+this.subscriptions.length);
+        console.log("开始通知变化..." + this.subscriptions.length);
         let i:number;
-        for(i=0;i<this.subscriptions.length;i++)
-        {
+        for (i = 0; i < this.subscriptions.length; i++) {
             let v:any = this.subscriptions[i];
             let data:any = {
                 "key": key,
                 "old": old,
                 "new": now
             };
-            console.log("监听器："+v.callback);
-            v.callback.apply(v.context, [key,old,now]);
+            console.log("监听器：" + v.callback);
+            v.callback.apply(v.context, [key, old, now]);
         }
     }
 
@@ -58,9 +57,11 @@ export class DataModel {
         return this.memberMap.get(memberName);
     }
 
-
     public  set(memberName:string, memberContent:any):void {
         let old:any = this.getMember(memberName);
+        if (old === memberContent) {
+            return;
+        }
         this.doSetMemeber(memberName, memberContent);
         setTimeout(this.notifyChange(memberName, old, memberContent), 0);
     }

@@ -47,6 +47,9 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
         };
         DataModel.prototype.set = function (memberName, memberContent) {
             var old = this.getMember(memberName);
+            if (old === memberContent) {
+                return;
+            }
             this.doSetMemeber(memberName, memberContent);
             setTimeout(this.notifyChange(memberName, old, memberContent), 0);
         };

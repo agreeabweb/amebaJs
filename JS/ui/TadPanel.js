@@ -120,10 +120,12 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
             console.log("dm变化，刷新UI..." + name);
             var views = this.entryToViews.get(name);
-            views.forEach(function (v, i, a) { return function (v) {
-                var v1 = v;
-                v1.modelChanged(now);
-            }; });
+            var i;
+            var size = views.length;
+            for (i = 0; i < size; i++) {
+                var v = views[i];
+                v.modelChanged(now);
+            }
         };
         return TadPanel;
     }());

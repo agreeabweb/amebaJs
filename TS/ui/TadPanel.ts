@@ -156,10 +156,13 @@ export class TadPanel {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
         console.log("dm变化，刷新UI..." + name);
         let views = this.entryToViews.get(name);
-        views.forEach((v, i, a) => function (v) {
-            let v1:IView = v;
-            v1.modelChanged(now);
-        });
+        let i:number;
+        let size:number = views.length;
+        for(i=0;i<size;i++)
+        {
+            let v:IView = views[i];
+            v.modelChanged(now);
+        }
     }
 
 }

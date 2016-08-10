@@ -45,13 +45,18 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
         DataModel.prototype.getLocalValue = function (memberName) {
             return this.memberMap.get(memberName);
         };
-        DataModel.prototype.set = function (memberName, memberContent) {
+        DataModel.prototype.doSetWithNotify = function (memberName, memberContent, notify) {
             var old = this.getMember(memberName);
             if (old === memberContent) {
                 return;
             }
             this.doSetMemeber(memberName, memberContent);
-            setTimeout(this.notifyChange(memberName, old, memberContent), 0);
+            if (notify) {
+                setTimeout(this.notifyChange(memberName, old, memberContent), 0);
+            }
+        };
+        DataModel.prototype.set = function (memberName, memberContent) {
+            this.doSetWithNotify(memberName, memberContent, true);
         };
         DataModel.prototype.getLastDataModel = function (memberName) {
             var dotIndex = memberName.indexOf('.');

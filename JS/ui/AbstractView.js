@@ -33,7 +33,7 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
         };
         AbstractView.prototype.updateModel = function (key, val) {
             var dm = this.host.getContext().get(UIConst_1.UIConst.DataModel);
-            dm.set(key, val);
+            dm.doSetWithNotify(key, val, false);
         };
         return AbstractView;
     }());

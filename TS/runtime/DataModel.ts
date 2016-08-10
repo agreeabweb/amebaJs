@@ -57,13 +57,19 @@ export class DataModel {
         return this.memberMap.get(memberName);
     }
 
-    public  set(memberName:string, memberContent:any):void {
+    public  doSetWithNotify(memberName:string, memberContent:any,notify:boolean):void {
         let old:any = this.getMember(memberName);
         if (old === memberContent) {
             return;
         }
         this.doSetMemeber(memberName, memberContent);
-        setTimeout(this.notifyChange(memberName, old, memberContent), 0);
+        if(notify){
+            setTimeout(this.notifyChange(memberName, old, memberContent), 0);
+        }
+    }
+
+    public  set(memberName:string, memberContent:any):void {
+        this.doSetWithNotify(memberName,memberContent,true);
     }
 
     private getLastDataModel(memberName:string):any {

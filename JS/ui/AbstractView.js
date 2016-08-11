@@ -4,11 +4,15 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
      * Created by Oliver on 2016-08-09 0009.
      */
     var AbstractView = (function () {
-        function AbstractView(id, host, thisNode) {
+        function AbstractView(id, host, dmEntry, thisNode) {
             this.missions = new HashMap_1.HashMap();
             this.id = id;
             this.host = host;
             this.$thisNode = thisNode;
+            this.dmEntry = dmEntry;
+            if (this.dmEntry != null) {
+                this.bindModel(this.dmEntry);
+            }
         }
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);
@@ -29,7 +33,7 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
         };
         AbstractView.prototype.updateModel = function (key, val) {
             var dm = this.host.getContext().get(UIConst_1.UIConst.DataModel);
-            dm.set(key, val);
+            dm.doSetWithNotify(key, val, false);
         };
         return AbstractView;
     }());

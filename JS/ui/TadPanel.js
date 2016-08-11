@@ -42,6 +42,7 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                 views = new Array();
             }
             views.push(view);
+            this.entryToViews.put(name, views);
         };
         TadPanel.prototype.registerWidget = function (id, view) {
             this.widgetRegistry.put(id, view);
@@ -74,7 +75,7 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                 events = prop.event;
                 //判断view类型
                 if (feature === "Text") {
-                    view = new TextView_1.TextView(id, this, $(dom));
+                    view = new TextView_1.TextView(id, this, dm, $(dom));
                 }
                 else if (feature === "Button") {
                     view = new ButtonView_1.ButtonView(id, this, $(dom));
@@ -118,12 +119,14 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         };
         TadPanel.prototype.doUpdateViews = function (key, old, now) {
             //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-            console.log("dm变化，刷新UI..." + name);
-            var views = this.entryToViews.get(name);
-            views.forEach(function (v, i, a) { return function (v) {
-                var v1 = v;
-                v1.modelChanged(now);
-            }; });
+            console.log("dm变化，刷新UI..." + key);
+            var views = this.entryToViews.get(key);
+            var i;
+            var size = views.length;
+            for (i = 0; i < size; i++) {
+                var v = views[i];
+                v.modelChanged(now);
+            }
         };
         return TadPanel;
     }());

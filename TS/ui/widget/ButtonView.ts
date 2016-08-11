@@ -7,7 +7,7 @@ export class ButtonView extends AbstractView {
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
-        super(id,host,thisNode);
+        super(id,host,null, thisNode);
     }
 
     bindEvent(eventType:string,flowType:string,path:string):void{
@@ -17,6 +17,8 @@ export class ButtonView extends AbstractView {
             view.getNode().on("click",function(){
                 alert("click");
                 view.getHost().queueTaskPack(view.getMission(flowType,path));
+
+                console.log(view.getHost().getHost().getDataModel().get("UserId"));
             });
         }
 

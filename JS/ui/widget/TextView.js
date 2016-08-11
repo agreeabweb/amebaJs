@@ -10,8 +10,14 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
      */
     var TextView = (function (_super) {
         __extends(TextView, _super);
-        function TextView(id, host, thisNode) {
-            _super.call(this, id, host, thisNode);
+        function TextView(id, host, dmEntry, thisNode) {
+            _super.call(this, id, host, dmEntry, thisNode);
+            var view = this;
+            if (this.dmEntry != null) {
+                this.$thisNode.on("change", function () {
+                    view.updateModel(view.dmEntry, view.$thisNode.val());
+                });
+            }
         }
         TextView.prototype.bindEvent = function (eventType, flowType, path) {
             var view = this;

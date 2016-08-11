@@ -11,7 +11,7 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
     var ButtonView = (function (_super) {
         __extends(ButtonView, _super);
         function ButtonView(id, host, thisNode) {
-            _super.call(this, id, host, thisNode);
+            _super.call(this, id, host, null, thisNode);
         }
         ButtonView.prototype.bindEvent = function (eventType, flowType, path) {
             var view = this; //避免this指代错误
@@ -19,6 +19,7 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
                 view.getNode().on("click", function () {
                     alert("click");
                     view.getHost().queueTaskPack(view.getMission(flowType, path));
+                    console.log(view.getHost().getHost().getDataModel().get("UserId"));
                 });
             }
         };

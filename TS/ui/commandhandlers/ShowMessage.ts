@@ -8,11 +8,11 @@ import {EventHub} from "../../runtime/EventHub";
 export class ShowMessage implements ICommandHandler {
 
     handleCommand(command:Command,callback :any):void {
-        let type = command.getData().param.get("type");
-        let content = command.getData().param.get("content");
+        let type = command.getData().param.get("type").getContent();
+        let content = command.getData().param.get("content").getContent();
 
-        if(type === "info") {
-            console.log(content);
+        if(type === "info" || type === "Info") {
+            alert(content);
         }
         let end = "success";
 

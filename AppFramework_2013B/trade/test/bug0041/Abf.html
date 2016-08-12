@@ -5,11 +5,76 @@
     <title>Insert title here</title>
 </head>
 <body>
-    <div id="Compositerhamn6qs69rj" >
-        <div id="contentPanel">
-            <input type="text" id="Textrhamn6qs69rh" prop='{"feature":"Text","dm":"UserId", "event": [{}]}'/>
-            <input type="button" id="Button1" value="click me" prop='{"feature": "Button", "event": [{"eventType": "click", "flowType": "flow", "path": "/AppFramework_2013B/trade/test/bug0041/Lfc3.lfc"}]}'>
+    <div id="contentPanel">
+        <div id="Compositerhamn6qs69rj" >
+            <!--测试UIModel的绑定-->
+            <!--<input type="text" id="Textrhamn6qs69rh" prop='{"feature":"Text","dm":"UserId", "event": [{}]}'/>
+            <input type="button" id="Button1" value="click me" prop='{"feature": "Button", "event": [{"eventType": "click", "flowType": "flow", "path": "/AppFramework_2013B/trade/test/bug0041/Lfc3.lfc"}]}'>-->
+            
+            <!--测试TreeView-->
+            <input type="button" value="add TreeNode" id="btn1" prop='{"feature":"Button", "event":[{"eventType":"click", "flowType":"flow", "path":""}]}' />
+            <input type="button" value="delete TreeNode" id="btn2" prop='{"feature":"Button", "event":[{"eventType":"click", "flowType":"flow", "path":""}]}' />
+            <nav class="navbar-default navbar-side" role="navigation" id="tree1" prop='{"feature": "Tree"}' >
+                <div id="sideNav" href=""><i class="fa fa-caret-right"></i></div>
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="main-menu">
+
+                        <li id="node1">
+                            <a class="active-menu" href="index.html"><i class="fa fa-dashboard"></i> Dashboard</a>
+                        </li>
+                        <li id="node2">
+                            <a href="ui-elements.html"><i class="fa fa-desktop"></i> UI Elements</a>
+                        </li>
+                        <li id="node3">
+                            <a href="chart.html"><i class="fa fa-bar-chart-o"></i> Charts</a>
+                        </li>
+                        <li id="node4">
+                            <a href="tab-panel.html"><i class="fa fa-qrcode"></i> Tabs & Panels</a>
+                        </li>
+                        <li id="node5">
+                            <a href="#"><i class="fa fa-table"></i> Responsive Tables</a>
+                        </li>
+                        <li id="node6">
+                            <a href="form.html"><i class="fa fa-edit"></i> Forms </a>
+                        </li>
+                        <li id="node7">
+                            <a href="#"><i class="fa fa-sitemap"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li id="node9">
+                                    <a href="#">Second Level Link</a>
+                                </li>
+                                <li id="node10">
+                                    <a href="#">Second Level Link</a>
+                                </li>
+                                <li id="nod11">
+                                    <a href="#">Second Level Link<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-third-level">
+                                        <li id="node12">
+                                            <a href="#">Third Level Link</a>
+                                        </li>
+                                        <li id="node13">
+                                            <a href="#">Third Level Link</a>
+                                        </li>
+                                        <li id="node14">
+                                            <a href="#">Third Level Link</a>
+                                        </li>
+
+                                    </ul>
+
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="node8">
+                            <a href="empty.html"><i class="fa fa-fw fa-file"></i> Empty Page</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </nav>
         </div>
     </div>
+    <script type="text/javascript" src="assets/js/jquery.metisMenu.js"></script>
+    <script type="text/javascript" src="assets/js/custom-scripts.js"></script>
 </body>
 </html>

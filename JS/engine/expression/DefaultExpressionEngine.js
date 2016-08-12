@@ -1,4 +1,4 @@
-define(["require", "exports", "../../lib/HashMap"], function (require, exports, HashMap_1) {
+define(["require", "exports", "../../lib/HashMap", "../../runtime/Context"], function (require, exports, HashMap_1, Context_1) {
     "use strict";
     var DefaultExpressionEngine = (function () {
         function DefaultExpressionEngine() {
@@ -39,6 +39,17 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
                     value = this.expression.get(expression);
                     console.log(pits.getCoreTask().getName() + " 中表达式：" + expression + " 的值为: " + value);
                     if (value == null) {
+                        return "";
+                    }
+                    else {
+                        return value;
+                    }
+                }
+                else if (expression.match(/^dm()./)) {
+                    var dm = expression.split(".")[1];
+                    var dataModel = Context_1.Context.getCurrent().get("DataModel");
+                    value = dataModel.get(dm);
+                    if (value == undefined) {
                         return "";
                     }
                     else {

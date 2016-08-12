@@ -1,6 +1,7 @@
 import {HashMap} from "../../lib/HashMap";
 import {IExpressionEngine} from "./IExpressionEngine";
 import {ProcessInstanceThreadSegment} from "../process/ProcessInstanceThreadSegment";
+import {Context} from "../../runtime/Context";
 
 class DefaultExpressionEngine implements IExpressionEngine {
     private expression: HashMap = new HashMap();
@@ -41,7 +42,16 @@ class DefaultExpressionEngine implements IExpressionEngine {
                 } else {
                     return value;
                 }
-            }else {
+            } else if(expression.match(/^dm()./)) {
+                let dm = expression.split(".")[1];
+                let dataModel = Context.getCurrent().get("DataModel");
+                value = dataModel.get(dm);
+                if(value == undefined) {
+                    return "";
+                } else {
+                    return value;
+                }
+            } else {
                 return expression;
             }
         } else {

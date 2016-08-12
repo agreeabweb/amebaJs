@@ -8,6 +8,7 @@ import {Context} from "../runtime/Context";
 import {ResourceManager} from "../resource/ResourceManager";
 import {TextView} from "./widget/TextView";
 import {ButtonView} from "./widget/ButtonView";
+import {TreeView} from "./widget/TreeView";
 
 /**
  * Created by Oliver on 2016-08-03 0003.
@@ -77,15 +78,19 @@ export class TadPanel {
         var panel = this;
         // 0.获取html
         ResourceManager.getResourceFile(this.path, function(html) {
-            var div;
+            let div, scripts;
             div = $("<div>");
             div.html(html);
 
             // 1.解析出view
             panel.translateHTML($(div).find("#contentPanel"));
-
             // 2.展现
-            $("body").append(div);
+            $("body").prepend($(div).find("#contentPanel"));
+            scripts = $(div).find("script");
+            for(let i = 0; i < scripts.length; i++) {
+                $("body").append(scripts[i]);
+            }
+
         });
     }
 
@@ -108,17 +113,23 @@ export class TadPanel {
                 view = new TextView(id, this, dm, $(dom));
             } else if(feature === "Button") {
                 view = new ButtonView(id, this, $(dom));
+            } else if(feature === "Tree") {
+                view = new TreeView(id,this, $(dom));
             }
 
-            // 处理event
-            if(events != undefined && events.length != 0) {
-                for(let i = 0; i < events.length; i++) {
-                    view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
+            if(view != undefined) {
+                // 向当前panel中注册该组件
+                this.registerWidget(id, view);
+                // 处理event
+                if(events != undefined && events.length != 0) {
+                    for(let i = 0; i < events.length; i++) {
+                        view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
+                    }
                 }
-            }
-            // 注册dm
-            if(dm != undefined) {
-                this.registerEntryView(dm, view);
+                // 注册dm
+                if(dm != undefined) {
+                    this.registerEntryView(dm, view);
+                }
             }
         }
 

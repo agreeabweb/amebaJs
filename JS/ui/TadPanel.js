@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "./widget/TextView", "./widget/ButtonView"], function (require, exports, HashMap_1, ResourceManager_1, TextView_1, ButtonView_1) {
+define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "./widget/TextView", "./widget/ButtonView", "./widget/TreeView"], function (require, exports, HashMap_1, ResourceManager_1, TextView_1, ButtonView_1, TreeView_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-03 0003.
@@ -54,13 +54,17 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             var panel = this;
             // 0.获取html
             ResourceManager_1.ResourceManager.getResourceFile(this.path, function (html) {
-                var div;
+                var div, scripts;
                 div = $("<div>");
                 div.html(html);
                 // 1.解析出view
                 panel.translateHTML($(div).find("#contentPanel"));
                 // 2.展现
-                $("body").append(div);
+                $("body").prepend($(div).find("#contentPanel"));
+                scripts = $(div).find("script");
+                for (var i = 0; i < scripts.length; i++) {
+                    $("body").append(scripts[i]);
+                }
             });
         };
         TadPanel.prototype.translateHTML = function (dom) {
@@ -80,15 +84,22 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                 else if (feature === "Button") {
                     view = new ButtonView_1.ButtonView(id, this, $(dom));
                 }
-                // 处理event
-                if (events != undefined && events.length != 0) {
-                    for (var i = 0; i < events.length; i++) {
-                        view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
-                    }
+                else if (feature === "Tree") {
+                    view = new TreeView_1.TreeView(id, this, $(dom));
                 }
-                // 注册dm
-                if (dm != undefined) {
-                    this.registerEntryView(dm, view);
+                if (view != undefined) {
+                    // 向当前panel中注册该组件
+                    this.registerWidget(id, view);
+                    // 处理event
+                    if (events != undefined && events.length != 0) {
+                        for (var i = 0; i < events.length; i++) {
+                            view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
+                        }
+                    }
+                    // 注册dm
+                    if (dm != undefined) {
+                        this.registerEntryView(dm, view);
+                    }
                 }
             }
             // 解析该元素的孩子节点

@@ -17,18 +17,17 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
             var view = this; //避免this指代错误
             if (eventType === "click") {
                 view.getNode().on("click", function () {
-                    alert("click");
                     view.getHost().queueTaskPack(view.getMission(flowType, path));
-                    console.log(view.getHost().getHost().getDataModel().get("UserId"));
+                    // console.log(view.getHost().getHost().getDataModel().get("UserId"));
+                    if (this.id === "btn1") {
+                        view.getHost().getWidget("tree1").addNode(3, "node9", "newNode", "New Node", "#", null);
+                    }
+                    else {
+                        view.getHost().getWidget("tree1").deleteNode("0");
+                    }
                 });
             }
         };
-        ButtonView.prototype.modelChanged = function (val) {
-        };
-        ;
-        ButtonView.prototype.updateModel = function (val) {
-        };
-        ;
         return ButtonView;
     }(AbstractView_1.AbstractView));
     exports.ButtonView = ButtonView;

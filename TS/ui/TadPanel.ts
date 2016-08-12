@@ -156,7 +156,7 @@ export class TadPanel {
     public queueTaskPack(mission:IMission) {
 
         // if (this.isBusy()) {
-            this.taskQueue.push(mission);
+            this.taskQueue.push(mission);   // busy和idle状态下的处理？？？
         //     return;
         // }
         this.state = "busy";

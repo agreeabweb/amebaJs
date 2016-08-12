@@ -16,9 +16,9 @@ define(["require", "exports", "../../runtime/Context"], function (require, expor
             logicRealm = pits.getProcessInstanceThread().getLogicRealm();
             currentTask = logicRealm.getCurrentTask();
             pif = Context_1.Context.getCurrent().get("ProcessInstanceFactory");
+            logicRealm.setState("suspended");
             pif.pitsByGettingPIT(logicRealm, this.missionPath, function (newpits) {
                 newpits.start(mission.inArgMap, function (processResult) {
-                    currentTask.end(processResult.getEnd()); // 完结父流程的当前节点
                     console.log("执行第PITS回调");
                     console.log("结束PITS：" + newpits.getId());
                 });

@@ -119,7 +119,7 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         };
         TadPanel.prototype.queueTaskPack = function (mission) {
             // if (this.isBusy()) {
-            this.taskQueue.push(mission);
+            this.taskQueue.push(mission); // busy和idle状态下的处理？？？
             //     return;
             // }
             this.state = "busy";

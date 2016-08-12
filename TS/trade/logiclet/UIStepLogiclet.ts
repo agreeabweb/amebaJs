@@ -26,6 +26,7 @@ class UIStepLogiclet implements ILogiclet {
     }
 
     public callHTML(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
+        inputParams.put("ProcessInstanceThreadSegment", pits);
         let data = {
             msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
             param: inputParams,

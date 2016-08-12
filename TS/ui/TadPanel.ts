@@ -9,6 +9,7 @@ import {ResourceManager} from "../resource/ResourceManager";
 import {TextView} from "./widget/TextView";
 import {ButtonView} from "./widget/ButtonView";
 import {TreeView} from "./widget/TreeView";
+import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
 
 /**
  * Created by Oliver on 2016-08-03 0003.
@@ -24,9 +25,11 @@ export class TadPanel {
     private taskQueue:Array<IMission> = new Array<IMission>();
     private state:string = "idle";
     private panelContext:Context;
+    private processInstanceThreadSegment;
     /*busy,idle*/
 
-    constructor(host:Tad, parentId:string, id:string, path:string) {
+    constructor(pits: ProcessInstanceThreadSegment, host:Tad, parentId:string, id:string, path:string) {
+        this.processInstanceThreadSegment = pits;
         this.host = host;
         this.parentId = parentId;
         this.id = id;
@@ -43,6 +46,10 @@ export class TadPanel {
 
     public  getHost():Tad {
         return this.host;
+    }
+
+    public getProcessInstanceThreadSegment(): ProcessInstanceThreadSegment {
+        return this.processInstanceThreadSegment;
     }
 
     public isBusy():boolean {
@@ -148,15 +155,15 @@ export class TadPanel {
 
     public queueTaskPack(mission:IMission) {
 
-        if (this.isBusy()) {
+        // if (this.isBusy()) {
             this.taskQueue.push(mission);
-            return;
-        }
+        //     return;
+        // }
         this.state = "busy";
         let current:IMission = this.taskQueue.shift();
         while (current != null) {
             // 这里同步还是异步看具体情况
-            setTimeout(current.execute(function () {
+            setTimeout(current.execute(this, function () {
 
             }), 0);
             current = this.taskQueue.shift();

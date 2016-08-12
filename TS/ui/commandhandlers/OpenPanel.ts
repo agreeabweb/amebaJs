@@ -8,11 +8,12 @@ import GUID from "../../lib/GUID";
 export class OpenPanel implements ICommandHandler {
 
     handleCommand(command:Command, callack:any):void {
-        var path, tad, tadPanel;
+        var path, tad, tadPanel, pits;
 
         path = command.getData().param.get("path");
         tad = command.getData().context.get("Tad");
-        tadPanel = new TadPanel(tad, tad.getId(), "Panel_" + GUID(), path);
+        pits = command.getData().param.get("ProcessInstanceThreadSegment");
+        tadPanel = new TadPanel(pits, tad, tad.getId(), "Panel_" + GUID(), path);
         tadPanel.start();
     }
 }

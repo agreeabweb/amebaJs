@@ -24,6 +24,7 @@ define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub",
             }
         };
         UIStepLogiclet.prototype.callHTML = function (pits, inputParams, callback) {
+            inputParams.put("ProcessInstanceThreadSegment", pits);
             var data = {
                 msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel",
                 param: inputParams,

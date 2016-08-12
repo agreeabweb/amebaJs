@@ -33,7 +33,7 @@ export abstract class AbstractView implements IView{
     protected getMission(type:string,path:string){
         if(type === "Flow" || type === "flow")
         {
-            return new FlowMission();
+            return new FlowMission(path, null/**inArgMap */);
         }
     }
     

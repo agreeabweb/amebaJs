@@ -19,7 +19,7 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
         };
         AbstractView.prototype.getMission = function (type, path) {
             if (type === "Flow" || type === "flow") {
-                return new FlowMission_1.FlowMission();
+                return new FlowMission_1.FlowMission(path, null /**inArgMap */);
             }
         };
         AbstractView.prototype.getHost = function () {

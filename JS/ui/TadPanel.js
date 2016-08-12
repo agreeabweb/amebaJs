@@ -5,13 +5,14 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
      */
     var TadPanel = (function () {
         /*busy,idle*/
-        function TadPanel(host, parentId, id, path) {
+        function TadPanel(pits, host, parentId, id, path) {
             this.widgetRegistry = new HashMap_1.HashMap();
             this.id = "";
             this.parentId = "";
             this.entryToViews = new HashMap_1.HashMap();
             this.taskQueue = new Array();
             this.state = "idle";
+            this.processInstanceThreadSegment = pits;
             this.host = host;
             this.parentId = parentId;
             this.id = id;
@@ -26,6 +27,9 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         };
         TadPanel.prototype.getHost = function () {
             return this.host;
+        };
+        TadPanel.prototype.getProcessInstanceThreadSegment = function () {
+            return this.processInstanceThreadSegment;
         };
         TadPanel.prototype.isBusy = function () {
             return this.state === "busy";
@@ -114,15 +118,15 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             return this.entryToViews.get(name);
         };
         TadPanel.prototype.queueTaskPack = function (mission) {
-            if (this.isBusy()) {
-                this.taskQueue.push(mission);
-                return;
-            }
+            // if (this.isBusy()) {
+            this.taskQueue.push(mission);
+            //     return;
+            // }
             this.state = "busy";
             var current = this.taskQueue.shift();
             while (current != null) {
                 // 这里同步还是异步看具体情况
-                setTimeout(current.execute(function () {
+                setTimeout(current.execute(this, function () {
                 }), 0);
                 current = this.taskQueue.shift();
             }

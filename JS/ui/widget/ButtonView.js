@@ -23,7 +23,7 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
                         view.getHost().getWidget("tree1").addNode(3, "node9", "newNode", "New Node", "#", null);
                     }
                     else {
-                        view.getHost().getWidget("tree1").deleteNode("0");
+                        view.getHost().getWidget("tree1").deleteNode("newNode");
                     }
                 });
             }

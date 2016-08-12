@@ -22,7 +22,7 @@ export class ButtonView extends AbstractView {
                 if(this.id === "btn1") {
                     view.getHost().getWidget("tree1").addNode(3, "node9", "newNode", "New Node", "#", null);
                 } else {
-                    view.getHost().getWidget("tree1").deleteNode("0");
+                    view.getHost().getWidget("tree1").deleteNode("newNode");
                 }
             });
         }

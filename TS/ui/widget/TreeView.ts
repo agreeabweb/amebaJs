@@ -25,10 +25,11 @@ export class TreeView extends AbstractView {
     }
 
     public addNode(level: number, parentId: string, id:string, title: string, href: string, icon: string): void {
-        var ul, li, a, i, span, mainMenu, parent, parentUL;
+        var node, ul, li, a, i, span, mainMenu, parent, parentUL;
 
         // 检查节点id是否已存在
-        if($("#" + this.id + " #" + id).length != 0) {
+        node = $("#" + this.id + " #" + id);
+        if(node.length != 0) {
             throw "此id已被占用！";
         } else {
             // 创建新菜单节点

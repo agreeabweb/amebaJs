@@ -25,9 +25,10 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
             // }
         };
         TreeView.prototype.addNode = function (level, parentId, id, title, href, icon) {
-            var ul, li, a, i, span, mainMenu, parent, parentUL;
+            var node, ul, li, a, i, span, mainMenu, parent, parentUL;
             // 检查节点id是否已存在
-            if ($("#" + this.id + " #" + id).length != 0) {
+            node = $("#" + this.id + " #" + id);
+            if (node.length != 0) {
                 throw "此id已被占用！";
             }
             else {

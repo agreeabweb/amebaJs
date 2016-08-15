@@ -10,16 +10,14 @@ define(["require", "exports", "../../runtime/Context"], function (require, expor
         }
         FlowMission.prototype.execute = function (panel, callback) {
             console.log("execute flow mission");
-            var mission, pits, logicRealm, currentTask, context, pif;
+            var mission, pits, logicRealm, currentTask, pif;
             mission = this;
             pits = panel.getProcessInstanceThreadSegment();
             logicRealm = pits.getProcessInstanceThread().getLogicRealm();
             currentTask = logicRealm.getCurrentTask();
-            context = Context_1.Context.getCurrent();
-            context.set("Panel", panel);
-            pif = context.get("ProcessInstanceFactory");
+            pif = Context_1.Context.getCurrent().get("ProcessInstanceFactory");
             logicRealm.setState("suspended");
-            pif.pitsByGettingPIT(logicRealm, this.missionPath, function (newpits) {
+            pif.pitsByCreatingPI(panel.getContext(), this.missionPath, function (newpits) {
                 newpits.start(mission.inArgMap, function (processResult) {
                     console.log("执行第PITS回调");
                     console.log("结束PITS：" + newpits.getId());

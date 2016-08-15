@@ -93,7 +93,6 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                 inArgMap.put(name, value);
             }
             path = inArgMap.get("path");
-            path = path.substring(1, path.length - 1);
             context = Context_1.Context.getCurrent();
             pif = context.get("ProcessInstanceFactory");
             pit = pits.getProcessInstanceThread();
@@ -142,32 +141,51 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                 }
                 for (var i = 0; i < listAse.length; i++) {
                     if (listAse[i] != null && listAse[i].getListAlr() != null && listAse[i].getListAlr().length > 0) {
-                        pass = false;
+                        pass = true;
                         var mapping = new HashMap_1.HashMap();
                         var alrList = listAse[i].getListAlr();
-                        for (var j = alrList.length - 1; j >= 0; j--) {
-                            var alrPath = alrList[j].getPath();
+                        var _loop_1 = function(j) {
+                            alrPath = alrList[j].getPath();
                             if (alrList[j].getListDataMapping() != null && alrList[i].getListDataMapping().length > 0) {
-                                var listDataMapping = alrList[i].getListDataMapping();
-                                for (var k = 0; k < listDataMapping.length; k++) {
+                                listDataMapping = alrList[i].getListDataMapping();
+                                for (k = 0; k < listDataMapping.length; k++) {
                                     mapping = listDataMapping[k].getMapping();
                                 }
                             }
                             pit.getLogicRealm().setState("suspended");
                             currentTask.setSuspend(true);
                             Context_1.Context.getCurrent().get("ProcessInstanceFactory").pitsByGettingPIT(pit.getLogicRealm(), alrPath, function (newpits) {
+                                var temp = j;
                                 currentTask.setSuspend(false);
                                 newpits.start(null, function (processResult) {
-                                    currentTask.end(processResult.getEnd()); // 完结父流程的当前节点
+                                    if (processResult.getEnd() === "pass") {
+                                        pass = pass && true;
+                                    }
+                                    else {
+                                        pass = pass && false;
+                                    }
                                     console.log("执行PITS回调");
                                     console.log("结束PITS：" + newpits.getId());
+                                    if (temp <= 0) {
+                                        if (pass) {
+                                            currentTask.end("pass");
+                                        }
+                                        else {
+                                            currentTask.end("block");
+                                        }
+                                    }
+                                    else {
+                                        pit.getLogicRealm().setState("suspended");
+                                        currentTask.setSuspend(true);
+                                    }
                                 });
                             });
+                        };
+                        var alrPath, listDataMapping, k;
+                        for (var j = alrList.length - 1; j >= 0; j--) {
+                            _loop_1(j);
                         }
                     }
-                }
-                if (pass) {
-                    currentTask.end("pass");
                 }
             });
         };

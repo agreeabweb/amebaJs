@@ -56,6 +56,7 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         };
         TadPanel.prototype.start = function () {
             var panel = this;
+            this.getContext().set("Panel", this);
             // 0.获取html
             ResourceManager_1.ResourceManager.getResourceFile(this.path, function (html) {
                 var div, scripts;

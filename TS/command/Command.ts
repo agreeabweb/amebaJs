@@ -15,7 +15,7 @@ import {EngineEvent} from "../const/EngineEvent";
     inArg = componentElement.getInArgMap();
 
 
-    if(name === "ShowMessage") {
+    if(name === "ShowMessage" || name === "ControllerCallMethod") {
         // ShowMessage.execute(inArg, function(result) {
         //     callback(result);
         // });
@@ -26,11 +26,17 @@ import {EngineEvent} from "../const/EngineEvent";
             context: Context.getCurrent()
         };
         EventHub.publish(EngineEvent.ENGINE_EVENT + name,data);
-    } else if(name === "ControllerCallMethod") {
-        ControllerCallMethod.execute(inArg, function(result) {
-            callback(result);
-        });
-    } else if(name === "StringJoint") {
+    } 
+    // else if(name === "ControllerCallMethod") {
+    //     let data = {
+    //         msg:EngineEvent.ENGINE_EVENT + name,
+    //         param: inArg,
+    //         callback: callback,
+    //         context: Context.getCurrent()
+    //     };
+    //     EventHub.publish(EngineEvent.ENGINE_EVENT + name,data);
+    // }
+     else if(name === "StringJoint") {
         StringJoint.execute(inArg, function(result) {
             callback(result);
         });

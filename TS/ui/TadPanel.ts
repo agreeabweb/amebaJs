@@ -83,6 +83,7 @@ export class TadPanel {
 
     public start():void {
         var panel = this;
+        this.getContext().set("Panel", this);
         // 0.获取html
         ResourceManager.getResourceFile(this.path, function(html) {
             let div, scripts;

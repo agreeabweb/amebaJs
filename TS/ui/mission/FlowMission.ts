@@ -16,14 +16,16 @@ export class FlowMission implements  IMission {
 
     execute(panel: TadPanel, callback:any):void{
         console.log("execute flow mission");
-        var mission, pits, logicRealm, currentTask, pif;
+        var mission, pits, logicRealm, currentTask, context, pif;
 
         mission = this;
 
         pits = panel.getProcessInstanceThreadSegment();
         logicRealm = pits.getProcessInstanceThread().getLogicRealm();
         currentTask = logicRealm.getCurrentTask();
-        pif = Context.getCurrent().get("ProcessInstanceFactory");
+        context = Context.getCurrent();
+        context.set("Panel", panel);
+        pif = context.get("ProcessInstanceFactory");
 
         logicRealm.setState("suspended");
 

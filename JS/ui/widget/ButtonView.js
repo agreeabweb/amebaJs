@@ -18,12 +18,6 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
             if (eventType === "click") {
                 view.getNode().on("click", function () {
                     view.getHost().queueTaskPack(view.getMission(flowType, path));
-                    // console.log(view.getHost().getHost().getDataModel().get("UserId"));
-                    // if(this.id === "btn1") {
-                    //     view.getHost().getWidget("tree1").addNode(3, "node9", "newNode", "New Node", "#", null);
-                    // } else {
-                    //     view.getHost().getWidget("tree1").deleteNode("newNode");
-                    // }
                 });
             }
         };

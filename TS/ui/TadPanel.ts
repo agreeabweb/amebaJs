@@ -10,6 +10,9 @@ import {TextView} from "./widget/TextView";
 import {ButtonView} from "./widget/ButtonView";
 import {TreeView} from "./widget/TreeView";
 import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
+import {ServiceObj} from "../const/ServiceObj";
+import {PanelCompositeFactoryRegistry} from "./PanelCompositeFactoryRegistry";
+import {IPanelCompositeFactory} from "./IPanelCompositeFactory";
 
 /**
  * Created by Oliver on 2016-08-03 0003.
@@ -27,6 +30,13 @@ export class TadPanel {
     private panelContext:Context;
     private processInstanceThreadSegment;
     /*busy,idle*/
+    private target:string;//根据target获取面板工厂
+    private targetArgMap:HashMap;
+
+    private configTarget(target:string,targetArgMap:HashMap){
+        this.target = target;
+        this.targetArgMap = targetArgMap;
+    }
 
     constructor(pits: ProcessInstanceThreadSegment, host:Tad, parentId:string, id:string, path:string) {
         this.processInstanceThreadSegment = pits;
@@ -84,6 +94,8 @@ export class TadPanel {
     public start():void {
         var panel = this;
         this.getContext().set("Panel", this);
+        var ctx = this.getContext();
+        var target = this.target;
         // 0.获取html
         ResourceManager.getResourceFile(this.path, function(html) {
             let div, scripts;
@@ -93,12 +105,24 @@ export class TadPanel {
             // 1.解析出view
             panel.translateHTML($(div).find("#contentPanel"));
             // 2.展现
-            $("body").prepend($(div).find("#contentPanel"));
-            scripts = $(div).find("script");
-            for(let i = 0; i < scripts.length; i++) {
-                $("body").append(scripts[i]);
-            }
+            let registry : PanelCompositeFactoryRegistry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
 
+            if(target)
+            {
+                let factory:IPanelCompositeFactory = registry.getPanelFactory(target);
+                let pane:JQuery = factory.getPanelComposite();
+                pane.prepend($(div).find("#contentPanel"));
+                scripts = $(div).find("script");
+                for(let i = 0; i < scripts.length; i++) {
+                    $("body").append(scripts[i]);
+                }
+            }else{
+                $("body").prepend($(div).find("#contentPanel"));
+                scripts = $(div).find("script");
+                for(let i = 0; i < scripts.length; i++) {
+                    $("body").append(scripts[i]);
+                }
+            }
         });
     }
 

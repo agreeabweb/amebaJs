@@ -28,12 +28,12 @@ class UIStepLogiclet implements ILogiclet {
     public callHTML(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
         inputParams.put("ProcessInstanceThreadSegment", pits);
         let data = {
-            msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
+            msg:EngineEvent.COMMAND_OpenPanel,
             param: inputParams,
             callback: callback,
             context: Context.getCurrent()
         };
-        EventHub.publish(EngineEvent.ENGINE_EVENT + "OpenPanel", data);
+        EventHub.publish(EngineEvent.COMMAND_OpenPanel, data);
     }
 
     public callABF(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {

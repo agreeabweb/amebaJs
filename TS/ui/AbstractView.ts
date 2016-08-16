@@ -1,9 +1,10 @@
 import {TadPanel} from "./TadPanel";
 import {HashMap} from "../lib/HashMap";
 import {IView} from "./IView";
-import {FlowMission} from "./mission/FlowMission";
 import {DataModel} from "../runtime/DataModel";
 import {UIConst}from "../const/UIConst";
+import {ServiceObj} from "../const/ServiceObj";
+import {IMission} from "./mission/IMission";
 /**
  * Created by Oliver on 2016-08-09 0009.
  */
@@ -30,11 +31,8 @@ export abstract class AbstractView implements IView{
         this.host.registerEntryView(name,this);
     }
 
-    protected getMission(type:string,path:string){
-        if(type === "Flow" || type === "flow")
-        {
-            return new FlowMission(path, null/**inArgMap */);
-        }
+    protected getMission(type:string,path:string):IMission{
+        return this.getHost().getContext().get(ServiceObj.MissionFactory).getMission(type,path);
     }
     
     public getHost(): TadPanel {

@@ -1,10 +1,9 @@
-define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "./widget/TextView", "./widget/ButtonView", "./widget/TreeView"], function (require, exports, HashMap_1, ResourceManager_1, TextView_1, ButtonView_1, TreeView_1) {
+define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "./widget/TextView", "./widget/ButtonView", "./widget/TreeView", "../const/ServiceObj"], function (require, exports, HashMap_1, ResourceManager_1, TextView_1, ButtonView_1, TreeView_1, ServiceObj_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-03 0003.
      */
     var TadPanel = (function () {
-        /*busy,idle*/
         function TadPanel(pits, host, parentId, id, path) {
             this.widgetRegistry = new HashMap_1.HashMap();
             this.id = "";
@@ -22,6 +21,10 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             var dm = this.host.getDataModel();
             dm.notifyThis(this.doUpdateViews, this);
         }
+        TadPanel.prototype.configTarget = function (target, targetArgMap) {
+            this.target = target;
+            this.targetArgMap = targetArgMap;
+        };
         TadPanel.prototype.getContext = function () {
             return this.panelContext;
         };
@@ -57,6 +60,8 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         TadPanel.prototype.start = function () {
             var panel = this;
             this.getContext().set("Panel", this);
+            var ctx = this.getContext();
+            var target = this.target;
             // 0.获取html
             ResourceManager_1.ResourceManager.getResourceFile(this.path, function (html) {
                 var div, scripts;
@@ -65,10 +70,22 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                 // 1.解析出view
                 panel.translateHTML($(div).find("#contentPanel"));
                 // 2.展现
-                $("body").prepend($(div).find("#contentPanel"));
-                scripts = $(div).find("script");
-                for (var i = 0; i < scripts.length; i++) {
-                    $("body").append(scripts[i]);
+                var registry = ctx.get(ServiceObj_1.ServiceObj.PanelCompositeFactoryRegistry);
+                if (target) {
+                    var factory = registry.getPanelFactory(target);
+                    var pane = factory.getPanelComposite();
+                    pane.prepend($(div).find("#contentPanel"));
+                    scripts = $(div).find("script");
+                    for (var i = 0; i < scripts.length; i++) {
+                        $("body").append(scripts[i]);
+                    }
+                }
+                else {
+                    $("body").prepend($(div).find("#contentPanel"));
+                    scripts = $(div).find("script");
+                    for (var i = 0; i < scripts.length; i++) {
+                        $("body").append(scripts[i]);
+                    }
                 }
             });
         };

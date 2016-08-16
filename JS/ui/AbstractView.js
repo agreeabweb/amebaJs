@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../const/UIConst"], function (require, exports, HashMap_1, FlowMission_1, UIConst_1) {
+define(["require", "exports", "../lib/HashMap", "../const/UIConst", "../const/ServiceObj"], function (require, exports, HashMap_1, UIConst_1, ServiceObj_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-09 0009.
@@ -18,9 +18,7 @@ define(["require", "exports", "../lib/HashMap", "./mission/FlowMission", "../con
             this.host.registerEntryView(name, this);
         };
         AbstractView.prototype.getMission = function (type, path) {
-            if (type === "Flow" || type === "flow") {
-                return new FlowMission_1.FlowMission(path, null /**inArgMap */);
-            }
+            return this.getHost().getContext().get(ServiceObj_1.ServiceObj.MissionFactory).getMission(type, path);
         };
         AbstractView.prototype.getHost = function () {
             return this.host;

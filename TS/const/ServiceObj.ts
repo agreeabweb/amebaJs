@@ -6,5 +6,6 @@ export class ServiceObj {
     public static ResourceDocumentTable:string = "ResourceDocumentTable";
     public static DefaultExpressionEngine:string = "DefaultExpressionEngine";
     public static ProcessInstanceFactory:string = "ProcessInstanceFactory";
-
+    public static PanelCompositeFactoryRegistry:string = "PanelCompositeFactoryRegistry";
+    public static MissionFactory:string = "MissionFactory";
 }

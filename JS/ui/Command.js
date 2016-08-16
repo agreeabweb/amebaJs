@@ -8,6 +8,12 @@ define(["require", "exports"], function (require, exports) {
             this.name = name;
             this.data = data;
         }
+        Command.prototype.getContext = function () {
+            return this.ctx;
+        };
+        Command.prototype.setContext = function (ctx) {
+            this.ctx = ctx;
+        };
         Command.prototype.getName = function () {
             return this.name;
         };

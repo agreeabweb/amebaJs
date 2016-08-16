@@ -15,6 +15,8 @@ import {ResourceDocumentTable}from "../resource/ResourceDocumentTable";
 import {DefaultExpressionEngine} from "../engine/expression/DefaultExpressionEngine";
 import {ProcessInstanceFactory} from "../engine/process/ProcessInstanceFactory";
 import {DataModel}from"../runtime/DataModel";
+import {PanelCompositeFactoryRegistry} from "./PanelCompositeFactoryRegistry";
+import {AxureMissionFactory} from "./mission/AxureMissionFactory";
 
 class DefaultPanelFactory implements IPanelCompositeFactory {
     getPanelComposite():any {
@@ -33,17 +35,22 @@ export class DeskTop {
         return this.sessionCtx;
     }
 
+    private createPanelFactoryRegistry() {
+        let registry:PanelCompositeFactoryRegistry= new PanelCompositeFactoryRegistry();
+        registry.addPanelFactory("",new DefaultPanelFactory());
+        this.sessionCtx.set(ServiceObj.PanelCompositeFactoryRegistry,registry);
+    }
+
     public init() {
 
         // 0.创建Context
-        this.sessionCtx = Context.baseContext.createChild("Desktop_"+GUID());
+        this.sessionCtx = Context.baseContext.createChild("Desktop_" + GUID());
         // 1.创建面板工厂
-        var defaultPanelFactory:IPanelCompositeFactory = new DefaultPanelFactory();
-        this.panelCompositeFactoryRegistry.put(DeskTop.PANEL_FACTORY_DEFAULT,defaultPanelFactory);
+        this.createPanelFactoryRegistry();
         // 2.注册事件模块
         let commandExecutor = new CommandHandlerExecutor();
-        Context.baseContext.set(ServiceObj.CommandHandlerExecutor,commandExecutor);
-        EngineEventManager.init(commandExecutor,commandExecutor.handleEvent);
+        Context.baseContext.set(ServiceObj.CommandHandlerExecutor, commandExecutor);
+        EngineEventManager.init(commandExecutor, commandExecutor.handleEvent);
         // 3.资源
         var resourceDocumentTable = new ResourceDocumentTable();
         Context.baseContext.set(ServiceObj.ResourceDocumentTable, resourceDocumentTable);
@@ -53,12 +60,15 @@ export class DeskTop {
         // 5.PI
         var pif = new ProcessInstanceFactory();
         Context.baseContext.set(ServiceObj.ProcessInstanceFactory, pif);
+        // 6.MissionFactory
+        var missionFactory = new AxureMissionFactory();
+        Context.baseContext.set(ServiceObj.MissionFactory,missionFactory);
 
         // 1.启动tad
-        let id:string = "Tad_"+GUID();
+        let id:string = "Tad_" + GUID();
         // let tadPath = "/AppFramework_2013B/trade/test/aa/Aa.tad";
         let tadPath = "/AppFramework_2013B/trade/test/bug0041/Bug0041.tad";
-        let defaultTad = new Tad(id,this,tadPath);
+        let defaultTad = new Tad(id, this, tadPath);
         defaultTad.start();
 
         //DM测试
@@ -70,6 +80,7 @@ export class DeskTop {
         // console.log("DM取值: "+dm.get("a.b"));
         // console.log("DM取值: "+dm.get("t1"));
     }
+
     //
     // public modelchanged(key,old,now)
     // {

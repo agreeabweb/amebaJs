@@ -24,7 +24,7 @@ export class AxureMissionFactory implements IMissionFactory{
                 // callback: callback,
                 // context: Context.getCurrent()
             };
-            let command:Command = new Command(EngineEvent.COMMAND_OpenPanel,data);
+            let command:Command = new Command(EngineEvent.COMMAND_OpenPanel,null,null,null,data);
             let mission = new CommandMission(command);
             return mission;
         }

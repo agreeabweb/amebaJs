@@ -8,10 +8,10 @@ define(["require", "exports", "../TadPanel", "../../lib/GUID"], function (requir
         }
         OpenPanel.prototype.handleCommand = function (command, callack) {
             var path, tad, tadPanel, pits, target;
-            path = command.getData().param.get("path");
-            target = command.getData().param.get("target");
-            tad = command.getData().context.get("Tad");
-            pits = command.getData().param.get("ProcessInstanceThreadSegment");
+            path = command.getExtraData().get("path");
+            target = command.getExtraData().get("target");
+            tad = command.getContext().get("Tad");
+            pits = command.getExtraData().get("ProcessInstanceThreadSegment");
             tadPanel = new TadPanel_1.TadPanel(pits, tad, tad.getId(), "Panel_" + GUID_1.default(), path);
             tadPanel.start();
         };

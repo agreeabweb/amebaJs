@@ -13,13 +13,13 @@ export class CommandMission implements  IMission {
     private command:Command;
 
     constructor(command:Command){
-        this.command = command;
+        this.command = command; 
     }
 
     execute(panel: TadPanel, callback:any):void{
         let commandExecutor:CommandHandlerExecutor = panel.getContext().get(ServiceObj.CommandHandlerExecutor);
-        this.command.getData().context = panel.getContext();
         this.command.setContext(panel.getContext());
-        commandExecutor.execute(this.command,callback);
+        this.command.setCallback(callback);
+        commandExecutor.execute(this.command,this.command.getCallback());
     }
 }

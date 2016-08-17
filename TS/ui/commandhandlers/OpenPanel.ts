@@ -10,10 +10,10 @@ export class OpenPanel implements ICommandHandler {
     handleCommand(command:Command, callack:any):void {
         var path, tad, tadPanel, pits,target;
 
-        path = command.getData().param.get("path");
-        target = command.getData().param.get("target");
-        tad = command.getData().context.get("Tad");
-        pits = command.getData().param.get("ProcessInstanceThreadSegment");
+        path = command.getExtraData().get("path");
+        target = command.getExtraData().get("target");
+        tad = command.getContext().get("Tad");
+        pits = command.getExtraData().get("ProcessInstanceThreadSegment");
         tadPanel = new TadPanel(pits, tad, tad.getId(), "Panel_" + GUID(), path);
         tadPanel.start();
     }

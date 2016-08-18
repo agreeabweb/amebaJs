@@ -22,11 +22,15 @@ export class CommandHandlerExecutor {
         this.registerCommandHandler(EngineEvent.COMMAND_ControllerCallMethod,new ControllerCallMethod());
     }
 
-    public handleEvent = function(data){
-        var ctx : Context = data.context;
-        let executor :CommandHandlerExecutor = ctx.get(ServiceObj.CommandHandlerExecutor);
-        let command = new Command(data.msg,data);
-        executor.execute(command,data.callback);
+    public handleEvent = function(command:Command){
+        // var ctx : Context = data.context;
+        if(command.getContext() ==null)
+        {
+            return;
+        }
+        let executor :CommandHandlerExecutor = command.getContext().get(ServiceObj.CommandHandlerExecutor);
+        // let command = new Command(data.msg,data);
+        executor.execute(command,command.getCallback());
     }
 
     public registerCommandHandler(name:string, handler:ICommandHandler) {

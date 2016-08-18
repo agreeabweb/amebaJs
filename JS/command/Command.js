@@ -1,4 +1,4 @@
-define(["require", "exports", "./component/StringJoint_1.0", "./component/SetParameter_1.0", "../runtime/Context", "../runtime/EventHub", "../const/EngineEvent"], function (require, exports, StringJoint, SetParameter, Context_1, EventHub_1, EngineEvent_1) {
+define(["require", "exports", "./component/StringJoint_1.0", "./component/SetParameter_1.0", "../runtime/Context", "../runtime/EventHub", "../const/EngineEvent", "../ui/Command"], function (require, exports, StringJoint, SetParameter, Context_1, EventHub_1, EngineEvent_1, Command_1) {
     "use strict";
     function call(componentElement, callback) {
         var name, inArg;
@@ -8,13 +8,15 @@ define(["require", "exports", "./component/StringJoint_1.0", "./component/SetPar
             // ShowMessage.execute(inArg, function(result) {
             //     callback(result);
             // });
-            var data = {
-                msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + name,
-                param: inArg,
-                callback: callback,
-                context: Context_1.Context.getCurrent()
-            };
-            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.ENGINE_EVENT + name, data);
+            var command = new Command_1.Command(EngineEvent_1.EngineEvent.ENGINE_EVENT + name, Context_1.Context.getCurrent(), null, callback, inArg);
+            //
+            // let data = {
+            //     msg:EngineEvent.ENGINE_EVENT + name,
+            //     param: inArg,
+            //     callback: callback,
+            //     context: Context.getCurrent()
+            // };
+            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.ENGINE_EVENT + name, command);
         }
         else if (name === "StringJoint") {
             StringJoint.execute(inArg, function (result) {

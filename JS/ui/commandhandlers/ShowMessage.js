@@ -7,8 +7,8 @@ define(["require", "exports"], function (require, exports) {
         function ShowMessage() {
         }
         ShowMessage.prototype.handleCommand = function (command, callback) {
-            var type = command.getData().param.get("type").getContent();
-            var content = command.getData().param.get("content").getContent();
+            var type = command.getExtraData().get("type").getContent();
+            var content = command.getExtraData().get("content").getContent();
             if (type === "info" || type === "Info") {
                 alert(content);
             }

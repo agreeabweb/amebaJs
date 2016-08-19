@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-09 0009.
@@ -33,23 +33,6 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
                     view.getHost().queueTaskPack(view.getMission(flowType, path));
                 });
             }
-        };
-        TextView.prototype.layout = function () {
-            var dom = $("#" + this.id);
-            dom.css("position", "absolute");
-            dom.css("width", this.size.width);
-            dom.css("height", this.size.height);
-            dom.css("left", this.location.x);
-            dom.css("top", this.location.y);
-            var input = $("#" + this.id + "_input");
-            input.css("width", "inherit");
-            input.css("height", "inherit");
-        };
-        TextView.prototype.setSize = function (size) {
-            this.size = size;
-        };
-        TextView.prototype.setLocation = function (location) {
-            this.location = location;
         };
         return TextView;
     }(AbstractView_1.AbstractView));

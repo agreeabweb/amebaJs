@@ -6,13 +6,14 @@ import {IMission}from "./mission/IMission";
 import {DataModel} from "../runtime/DataModel";
 import {Context} from "../runtime/Context";
 import {ResourceManager} from "../resource/ResourceManager";
-import {TextView} from "./widget/TextView";
-import {ButtonView} from "./widget/ButtonView";
-import {TreeView} from "./widget/TreeView";
 import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
 import {ServiceObj} from "../const/ServiceObj";
 import {PanelCompositeFactoryRegistry} from "./PanelCompositeFactoryRegistry";
 import {IPanelCompositeFactory} from "./IPanelCompositeFactory";
+import config from "../configure/config";
+import {ViewControl} from "./widget/ViewControl";
+
+declare var $axure;
 
 /**
  * Created by Oliver on 2016-08-03 0003.
@@ -98,35 +99,99 @@ export class TadPanel {
         var target = this.target;
         // 0.获取html
         ResourceManager.getResourceFile(this.path, function(html) {
-            let div, scripts;
+            let div, domContent;
             div = $("<div>");
             div.html(html);
 
-            // 1.解析出view
-            panel.translateHTML($(div).find("#contentPanel"));
-            // 2.展现
-            let registry : PanelCompositeFactoryRegistry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
+            // 通过Axure生成
+            if(config.UIType === "Axure" || config.UIType === "axure") {
+                domContent = $(div).find("#base");
+            } 
+            // 一体式设计
+            else {
+                domContent = $(div).find("#contentPanel");
+            }
 
+            // 展现
+            let registry : PanelCompositeFactoryRegistry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
+            var scripts;
             if(target)
             {
                 let factory:IPanelCompositeFactory = registry.getPanelFactory(target);
                 let pane:JQuery = factory.getPanelComposite();
-                pane.prepend($(div).find("#contentPanel"));
+                pane.prepend(domContent);
                 scripts = $(div).find("script");
                 for(let i = 0; i < scripts.length; i++) {
                     $("body").append(scripts[i]);
                 }
             }else{
-                $("body").prepend($(div).find("#contentPanel"));
+                console.log(domContent);
+                $("body").prepend(domContent);
                 scripts = $(div).find("script");
                 for(let i = 0; i < scripts.length; i++) {
                     $("body").append(scripts[i]);
                 }
             }
+
+            // 解析出view
+            // 要先展现再解析，否则Axure的data读不出
+            if(config.UIType === "Axure" || config.UIType === "axure") {
+                panel.translateAxureHTML($axure.data);
+            } 
+            else {
+                panel.translateNormalHTML(domContent);
+            }
+
         });
     }
 
-    public translateHTML(dom: JQuery) {
+    public translateAxureHTML(obj) {
+        var objs, objPaths;
+    
+        objs = obj.page.diagram.objects;
+        objPaths = obj.objectPaths;
+
+        for(let i = 0; i < objs.length; i++) {
+            let idMap, id, type, location, size, interactionMap, view;
+
+            idMap = objs[i].id;
+            id = objPaths[idMap].scriptId;
+            type = objs[i].type;
+            location = objs[i].style.location;
+            size = objs[i].style.size;
+            interactionMap = objs[i].interactionMap;
+
+            // 通过ViewControl类来统一创建view
+            view = ViewControl.buildView(type, id, this, null, $("#" + id));
+
+            if(view != undefined) {
+
+                view.setId(id);
+                view.setLocation(location);
+                view.setSize(size);
+
+                if(interactionMap != undefined) {
+                    for(let actionName in interactionMap) {
+                        let action = interactionMap[actionName];
+                        let cases = action.cases;
+                        for(let j = 0; j < cases.length; j++) {
+                            let actions = cases[j].actions;
+                            for(let k = 0; k < actions.length; k++) {
+                                view.bindEvent(actionName, actions[k]);
+                            }
+                        }
+                    }
+                }
+                // 组件布局控制
+                view.layout(objs[i], objPaths);
+            
+                // 向当前panel中注册该组件
+                this.registerWidget(id, view);
+            }
+        }
+    }
+
+    public translateNormalHTML(dom: JQuery) {
         var id, prop, children, view;
 
         id = $(dom).attr("id");
@@ -139,15 +204,9 @@ export class TadPanel {
             feature = prop.feature;
             dm = prop.dm;
             events = prop.event;
-
-            //判断view类型
-            if(feature === "Text") {
-                view = new TextView(id, this, dm, $(dom));
-            } else if(feature === "Button") {
-                view = new ButtonView(id, this, $(dom));
-            } else if(feature === "Tree") {
-                view = new TreeView(id,this, $(dom));
-            }
+            
+            // 通过ViewControl类来统一创建view
+            view = ViewControl.buildView(feature, id, this, dm, $(dom));
 
             if(view != undefined) {
                 // 向当前panel中注册该组件
@@ -169,7 +228,7 @@ export class TadPanel {
         children = $(dom).children();
         if(children.length != 0) {
             for(let i = 0; i < children.length; i++) {
-                this.translateHTML(children[i]);
+                this.translateNormalHTML(children[i]);
             }
         }
     }

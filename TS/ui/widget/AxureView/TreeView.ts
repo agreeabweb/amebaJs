@@ -181,19 +181,6 @@ class TreeView extends AbstractView {
                 }
             }
         } 
-
-        
-        
-        // for(var i = 0; i < objects.length; i++) {
-        //     if(objects[i].id === idMap) {
-        //         return objects[i].style.size;
-        //     }
-        // }
-        
-        // if(objects[i].objects != undefined) {
-        //     this.getObjSize(idMap, objects[i].objects);
-        // }
-        // return undefined;
     }
 
     public getIdMap(id) {
@@ -204,52 +191,6 @@ class TreeView extends AbstractView {
         }
         return undefined;
     }
-    // public layoutChild(obj) {
-    //     var idMap = obj.id;
-    //     var id = this.objPaths[idMap].scriptId;
-    //     var childDom = $("#" + id);
-    //     var size = obj.style.size;
-    //     var location = obj.style.location;
-    //     childDom.css("position", "absolute");
-    //     if(size != undefined) {
-    //         childDom.css("width", size.width).css("height", size.height);
-    //     }
-    //     if(location != undefined) {
-    //         if(!childDom.hasClass("text") && childDom.attr("selectiongroup") == undefined) {
-    //             childDom.css("top", location.y).css("left", location.x);
-    //         }
-    //     } else {
-    //         childDom.css("top", 0).css("left", 0);
-    //     }
-    //     if(childDom.attr("selectiongroup") != undefined) {
-    //         childDom.css("left", "20px");
-    //     }
-    //     if(childDom.hasClass("image")) {
-    //         var src = childDom.children().attr("src");
-    //         if(src.match(/selected.png$/)) {
-    //             childDom.addClass("selected");
-    //         } else {
-    //             childDom.addClass("mouseOver");
-    //         }
-    //     }
-
-    //     var children = $("#" + id + "_children");
-    //     if(children.length != 0) {
-    //         var visible = children.css("visibility");
-    //         if(visible === "hidden") {
-    //             children.css("display", "none");
-    //         } else {
-    //             children.css("display", "block");
-    //         }
-    //     }
-
-    //     var objects = obj.objects;
-    //     if(objects != undefined) {
-    //         for(let i = 0; i < objects.length; i++) {
-    //             this.layoutChild(objects[i]);
-    //         }
-    //     }
-    // }
 }
 
 export {TreeView};

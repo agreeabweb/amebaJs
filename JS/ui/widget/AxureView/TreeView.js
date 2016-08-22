@@ -169,15 +169,6 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                     }
                 }
             }
-            // for(var i = 0; i < objects.length; i++) {
-            //     if(objects[i].id === idMap) {
-            //         return objects[i].style.size;
-            //     }
-            // }
-            // if(objects[i].objects != undefined) {
-            //     this.getObjSize(idMap, objects[i].objects);
-            // }
-            // return undefined;
         };
         TreeView.prototype.getIdMap = function (id) {
             for (var idMap in this.objPaths) {

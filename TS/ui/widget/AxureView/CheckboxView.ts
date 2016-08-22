@@ -1,7 +1,14 @@
-class CheckboxView {
-    private id: string;
+import {AbstractView} from "../../AbstractView";
+import {TadPanel} from "../../TadPanel";
+
+class CheckboxView extends AbstractView {
     private location;
     private size;
+
+    constructor(id:string,host:TadPanel, thisNode: JQuery)
+    {
+        super(id,host,null, thisNode);
+    }
 
     public bindEvent(actionName: string, action: string): void {
         if(actionName === "onSelect" || actionName === "onUnselect") {
@@ -14,10 +21,6 @@ class CheckboxView {
                 }
             });
         }
-    }
-
-    public setId(id: string): void {
-        this.id = id;
     }
 
     public setSize(size): void {

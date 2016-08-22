@@ -1,7 +1,14 @@
-define(["require", "exports"], function (require, exports) {
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
     "use strict";
-    var CheckboxView = (function () {
-        function CheckboxView() {
+    var CheckboxView = (function (_super) {
+        __extends(CheckboxView, _super);
+        function CheckboxView(id, host, thisNode) {
+            _super.call(this, id, host, null, thisNode);
         }
         CheckboxView.prototype.bindEvent = function (actionName, action) {
             if (actionName === "onSelect" || actionName === "onUnselect") {
@@ -15,9 +22,6 @@ define(["require", "exports"], function (require, exports) {
                     }
                 });
             }
-        };
-        CheckboxView.prototype.setId = function (id) {
-            this.id = id;
         };
         CheckboxView.prototype.setSize = function (size) {
             this.size = size;
@@ -56,7 +60,7 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         return CheckboxView;
-    }());
+    }(AbstractView_1.AbstractView));
     exports.CheckboxView = CheckboxView;
 });
 //# sourceMappingURL=CheckboxView.js.map

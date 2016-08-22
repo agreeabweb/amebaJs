@@ -1,7 +1,14 @@
-class RadioButtonView {
-    private id: string;
+import {AbstractView} from "../../AbstractView";
+import {TadPanel} from "../../TadPanel";
+
+class RadioButtonView extends AbstractView {
     private location;
     private size;
+
+    constructor(id:string,host:TadPanel, thisNode: JQuery)
+    {
+        super(id,host,null, thisNode);
+    }
 
     public bindEvent(actionName: string, action: string): void {
         if(actionName === "onSelect" || actionName === "onUnselect") {
@@ -14,10 +21,6 @@ class RadioButtonView {
                 }
             });
         }
-    }
-
-    public setId(id: string): void {
-        this.id = id;
     }
 
     public setSize(size): void {
@@ -35,7 +38,7 @@ class RadioButtonView {
         dom.css("height", this.size.height);
         dom.css("left", this.location.x);
         dom.css("top", this.location.y);
-        
+
         var objects = objs.objects;
         if(objects != undefined) {
             for(let i = 0; i < objects.length; i++) {

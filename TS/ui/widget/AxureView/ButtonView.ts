@@ -1,7 +1,16 @@
-class ButtonView {
-    private id: string;
+import {AbstractView} from "../../AbstractView";
+import {TadPanel} from "../../TadPanel";
+
+class ButtonView extends AbstractView {
+
     private location;
     private size;
+
+    constructor(id:string,host:TadPanel, thisNode: JQuery)
+    {
+        super(id,host,null, thisNode);
+    }
+
 
     public bindEvent(actionName: string, action: string): void {
         if(actionName === "onClick") {
@@ -9,10 +18,6 @@ class ButtonView {
                 console.log("onClick");
             });
         }
-    }
-
-    public setId(id: string): void {
-        this.id = id;
     }
 
     public setSize(size): void {

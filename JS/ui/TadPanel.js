@@ -87,7 +87,6 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                     }
                 }
                 else {
-                    console.log(domContent);
                     $("body").prepend(domContent);
                     scripts = $(div).find("script");
                     for (var i = 0; i < scripts.length; i++) {
@@ -119,7 +118,6 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
                 // 通过ViewControl类来统一创建view
                 view = ViewControl_1.ViewControl.buildView(type, id, this, null, $("#" + id));
                 if (view != undefined) {
-                    view.setId(id);
                     view.setLocation(location_1);
                     view.setSize(size);
                     if (interactionMap != undefined) {

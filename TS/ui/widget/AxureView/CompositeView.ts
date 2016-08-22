@@ -1,13 +1,16 @@
-class CompositeView {
-    private id: string;
+import {AbstractView} from "../../AbstractView";
+import {TadPanel} from "../../TadPanel";
+
+class CompositeView extends AbstractView {
     private location;
     private size;
 
-    public bindEvent(actionName: string, action: string): void {
+    constructor(id:string,host:TadPanel, thisNode: JQuery)
+    {
+        super(id,host,null, thisNode);
     }
 
-    public setId(id: string): void {
-        this.id = id;
+    public bindEvent(actionName: string, action: string): void {
     }
 
     public setSize(size): void {

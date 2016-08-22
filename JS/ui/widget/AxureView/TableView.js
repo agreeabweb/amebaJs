@@ -1,12 +1,16 @@
-define(["require", "exports"], function (require, exports) {
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
     "use strict";
-    var TableView = (function () {
-        function TableView() {
+    var TableView = (function (_super) {
+        __extends(TableView, _super);
+        function TableView(id, host, thisNode) {
+            _super.call(this, id, host, null, thisNode);
         }
         TableView.prototype.bindEvent = function (actionName, action) {
-        };
-        TableView.prototype.setId = function (id) {
-            this.id = id;
         };
         TableView.prototype.setSize = function (size) {
             this.size = size;
@@ -56,7 +60,7 @@ define(["require", "exports"], function (require, exports) {
             }
         };
         return TableView;
-    }());
+    }(AbstractView_1.AbstractView));
     exports.TableView = TableView;
 });
 //# sourceMappingURL=TableView.js.map

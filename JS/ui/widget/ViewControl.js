@@ -7,33 +7,34 @@ define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView",
             var view;
             if (config_1.default.UIType === "Axure" || config_1.default.UIType === "axure") {
                 if (type === "textBox") {
-                    view = new TextView_2.TextView();
+                    view = new TextView_2.TextView(id, panel, dm, dom);
                 }
                 else if (type === "radioButton") {
-                    view = new RadioButtonView_1.RadioButtonView();
+                    view = new RadioButtonView_1.RadioButtonView(id, panel, dom);
                 }
                 else if (type === "checkbox") {
-                    view = new CheckboxView_1.CheckboxView();
+                    view = new CheckboxView_1.CheckboxView(id, panel, dom);
                 }
                 else if (type === "table") {
-                    view = new TableView_1.TableView();
+                    view = new TableView_1.TableView(id, panel, dom);
                 }
                 else if (type === "button") {
-                    view = new HtmlButtonView_1.HtmlButtonView();
+                    view = new HtmlButtonView_1.HtmlButtonView(id, panel, dom);
                 }
                 else if (type === "treeNodeObject") {
-                    view = new TreeView_2.TreeView();
+                    view = new TreeView_2.TreeView(id, panel, dom);
+                    view.bindEvent("init");
                 }
                 else if (type === "vectorShape") {
                     // 判断是否为按钮
                     if (dom.hasClass("button") || dom.hasClass("primary_button") || dom.hasClass("link_button")) {
-                        view = new ButtonView_2.ButtonView();
+                        view = new ButtonView_2.ButtonView(id, panel, dom);
                     }
                     else if (dom.hasClass("box_1") || dom.hasClass("box_2") || dom.hasClass("box_3")) {
-                        view = new CompositeView_1.CompositeView();
+                        view = new CompositeView_1.CompositeView(id, panel, dom);
                     }
                     else if (dom.hasClass("heading_1") || dom.hasClass("heading_2") || dom.hasClass("heading_3")) {
-                        view = new LabelView_1.LabelView();
+                        view = new LabelView_1.LabelView(id, panel, dom);
                     }
                 }
             }

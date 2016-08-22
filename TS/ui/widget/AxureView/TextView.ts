@@ -1,7 +1,21 @@
-class TextView {
-    private id: string;
+import {AbstractView} from "../../AbstractView";
+import {TadPanel} from "../../TadPanel";
+
+class TextView extends AbstractView {
     private location;
     private size;
+
+    constructor(id:string, host:TadPanel,dmEntry:string, thisNode:JQuery) {
+        super(id, host,dmEntry, thisNode);
+
+        var view = this;
+        if(this.dmEntry!=null)
+        {
+            this.$thisNode.on("change",function(){
+                view.updateModel(view.dmEntry,view.$thisNode.val());
+            });
+        }
+    }
 
     public bindEvent(actionName: string, action: string): void {
         if(actionName === "OnClick") {
@@ -17,10 +31,6 @@ class TextView {
                 console.log("onTextChange");
             });
         }
-    }
-
-    public setId(id: string): void {
-        this.id = id;
     }
 
     public setSize(size): void {

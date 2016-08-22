@@ -1,7 +1,14 @@
-class HtmlButtonView {
-    private id: string;
+import {AbstractView} from "../../AbstractView";
+import {TadPanel} from "../../TadPanel";
+
+class HtmlButtonView extends AbstractView {
     private location;
     private size;
+
+    constructor(id:string,host:TadPanel, thisNode: JQuery)
+    {
+        super(id,host,null, thisNode);
+    }
 
     public bindEvent(actionName: string, action: string): void {
         if(actionName === "onClick") {
@@ -9,10 +16,6 @@ class HtmlButtonView {
                 console.log("onClick");
             });
         }
-    }
-
-    public setId(id: string): void {
-        this.id = id;
     }
 
     public setSize(size): void {

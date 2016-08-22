@@ -125,7 +125,6 @@ export class TadPanel {
                     $("body").append(scripts[i]);
                 }
             }else{
-                console.log(domContent);
                 $("body").prepend(domContent);
                 scripts = $(div).find("script");
                 for(let i = 0; i < scripts.length; i++) {
@@ -165,8 +164,6 @@ export class TadPanel {
             view = ViewControl.buildView(type, id, this, null, $("#" + id));
 
             if(view != undefined) {
-
-                view.setId(id);
                 view.setLocation(location);
                 view.setSize(size);
 

@@ -12,7 +12,8 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
         }
         HtmlButtonView.prototype.bindEvent = function (actionName, action) {
             if (actionName === "onClick") {
-                $("#" + this.id + "_input").on("click", function () {
+                this.$thisNode.css("cursor", "pointer");
+                this.$thisNode.on("click", function () {
                     console.log("onClick");
                 });
             }

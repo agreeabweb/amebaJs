@@ -12,7 +12,7 @@ export class ShowMessage implements ICommandHandler {
         let content = command.getExtraData().get("content").getContent();
 
         if(type === "info" || type === "Info") {
-            alert(content);
+            console.log(content);
         }
         let end = "success";
 

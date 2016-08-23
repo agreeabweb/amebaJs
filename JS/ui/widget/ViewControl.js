@@ -19,7 +19,7 @@ define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView",
                     view = new TableView_1.TableView(id, panel, dom);
                 }
                 else if (type === "button") {
-                    view = new HtmlButtonView_1.HtmlButtonView(id, panel, dom);
+                    view = new HtmlButtonView_1.HtmlButtonView(id, panel, dom.find("input"));
                 }
                 else if (type === "treeNodeObject") {
                     view = new TreeView_2.TreeView(id, panel, dom);

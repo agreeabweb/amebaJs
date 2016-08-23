@@ -12,7 +12,8 @@ class HtmlButtonView extends AbstractView {
 
     public bindEvent(actionName: string, action: string): void {
         if(actionName === "onClick") {
-            $("#" + this.id + "_input").on("click", function() {
+            this.$thisNode.css("cursor", "pointer");
+            this.$thisNode.on("click", function() {
                 console.log("onClick");
             });
         }

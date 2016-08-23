@@ -11,14 +11,31 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             _super.call(this, id, host, null, thisNode);
         }
         CheckboxView.prototype.bindEvent = function (actionName, action) {
-            if (actionName === "onSelect" || actionName === "onUnselect") {
-                $("#" + this.id + "_input").on("click", function () {
-                    var checked = $(this).prop("checked");
-                    if (checked) {
-                        console.log("onSelected");
+            var view = this;
+            if (actionName === "onSelected") {
+                this.$thisNode.on("selected", function () {
+                    console.log("onSelected");
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
                     }
                     else {
-                        console.log("onUnselected");
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                        }
+                    }
+                });
+            }
+            else if (actionName === "onUnselected") {
+                this.$thisNode.on("unselected", function () {
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    }
+                    else {
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                        }
                     }
                 });
             }
@@ -28,6 +45,14 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
         };
         CheckboxView.prototype.setLocation = function (location) {
             this.location = location;
+        };
+        CheckboxView.prototype.SetCheckState = function (check) {
+            if (check) {
+                this.$thisNode.find("input[type='checkbox']").attr("checked", "true");
+            }
+            else {
+                this.$thisNode.find("input[type='checkbox']").removeAttr("checked");
+            }
         };
         CheckboxView.prototype.layout = function (objs, objPaths) {
             var dom = $("#" + this.id);
@@ -39,24 +64,21 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             var objects = objs.objects;
             if (objects != undefined) {
                 for (var i = 0; i < objects.length; i++) {
-                    this.layoutChild(objects[i], objPaths);
+                    var idMap = objects[i].id;
+                    var id = objPaths[idMap].scriptId;
+                    var childDom = $("#" + id);
+                    var size = objects[i].style.size;
+                    var location = objects[i].style.location;
+                    childDom.css("position", "absolute");
+                    if (size != undefined) {
+                        childDom.css("width", size.width);
+                        childDom.css("height", size.height);
+                    }
+                    if (location != undefined) {
+                        childDom.css("top", location.y - this.location.y);
+                        childDom.css("left", location.x - this.location.x);
+                    }
                 }
-            }
-        };
-        CheckboxView.prototype.layoutChild = function (obj, objPaths) {
-            var idMap = obj.id;
-            var id = objPaths[idMap].scriptId;
-            var childDom = $("#" + id);
-            var size = obj.style.size;
-            var location = obj.style.location;
-            childDom.css("position", "absolute");
-            if (size != undefined) {
-                childDom.css("width", size.width);
-                childDom.css("height", size.height);
-            }
-            if (location != undefined) {
-                childDom.css("top", location.y - this.location.y);
-                childDom.css("left", location.x - this.location.x);
             }
         };
         return CheckboxView;

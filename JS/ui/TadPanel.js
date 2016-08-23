@@ -58,7 +58,15 @@ define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (r
             this.widgetRegistry.put(id, view);
         };
         TadPanel.prototype.getWidget = function (id) {
-            return this.widgetRegistry.get(id);
+            var widget;
+            widget = this.widgetRegistry.get(id);
+            if (widget == undefined) {
+                widget = this.widgetRegistry.get(this.axureObjPaths[id].scriptId);
+            }
+            return widget;
+        };
+        TadPanel.prototype.setAxureObjPaths = function (paths) {
+            this.axureObjPaths = paths;
         };
         TadPanel.prototype.start = function () {
             var panel = this;

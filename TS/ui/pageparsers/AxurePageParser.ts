@@ -20,6 +20,12 @@ export class AxurePageParser implements IPageParser {
         // 0.获取html
         ResourceManager.getResourceFile(panel.getPath(), function (html) {
             let div, domContent;
+
+            // 清除之前页面的内容
+            if($("body").find("#base").length != 0) {
+                $("#base").remove();
+            }
+
             div = $("<div>");
             div.html(html);
             domContent = $(div).find("#base");
@@ -55,6 +61,7 @@ export class AxurePageParser implements IPageParser {
 
         objs = obj.page.diagram.objects;
         objPaths = obj.objectPaths;
+        panel.setAxureObjPaths(objPaths);
 
         for (let i = 0; i < objs.length; i++) {
             let idMap, id, type, location, size, interactionMap, view;
@@ -67,22 +74,15 @@ export class AxurePageParser implements IPageParser {
             interactionMap = objs[i].interactionMap;
 
             // 通过ViewControl类来统一创建view
-            view = ViewControl.buildView(type, id, this, null, $("#" + id));
+            view = ViewControl.buildView(type, id, panel, null, $("#" + id));
 
             if (view != undefined) {
                 view.setLocation(location);
                 view.setSize(size);
 
                 if (interactionMap != undefined) {
-                    for (let actionName in interactionMap) {
-                        let action = interactionMap[actionName];
-                        let cases = action.cases;
-                        for (let j = 0; j < cases.length; j++) {
-                            let actions = cases[j].actions;
-                            for (let k = 0; k < actions.length; k++) {
-                                view.bindEvent(actionName, actions[k]);
-                            }
-                        }
+                    for(let actionName in interactionMap) {
+                        view.bindEvent(actionName, interactionMap[actionName]);
                     }
                 }
                 // 组件布局控制

@@ -10,7 +10,7 @@ define(["require", "exports"], function (require, exports) {
             var type = command.getExtraData().get("type").getContent();
             var content = command.getExtraData().get("content").getContent();
             if (type === "info" || type === "Info") {
-                alert(content);
+                console.log(content);
             }
             var end = "success";
             callback({

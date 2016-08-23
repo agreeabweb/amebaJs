@@ -30,6 +30,8 @@ export class TadPanel {
     private target:string;//根据target获取面板工厂
     private targetArgMap:HashMap;
 
+    private axureObjPaths;
+
     private configTarget(target:string, targetArgMap:HashMap) {
         this.target = target;
         this.targetArgMap = targetArgMap;
@@ -89,7 +91,16 @@ export class TadPanel {
     }
 
     public getWidget(id:string) {
-        return this.widgetRegistry.get(id);
+        var widget;
+        widget = this.widgetRegistry.get(id);
+        if(widget == undefined) {
+            widget = this.widgetRegistry.get(this.axureObjPaths[id].scriptId);
+        }
+        return widget;
+    }
+
+    public setAxureObjPaths(paths: Object): void {
+        this.axureObjPaths = paths;
     }
 
     public start():void {

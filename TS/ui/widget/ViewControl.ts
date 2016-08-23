@@ -28,7 +28,7 @@ class ViewControl {
             } else if(type === "table") {
                 view = new AxureTable(id, panel, dom);
             } else if(type === "button") {
-                view = new AxureHtmlButton(id, panel, dom);
+                view = new AxureHtmlButton(id, panel, dom.find("input"));
             } else if(type === "treeNodeObject") {
                 view = new AxureTree(id, panel, dom);
                 view.bindEvent("init");

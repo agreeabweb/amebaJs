@@ -10,7 +10,14 @@ export class OpenPanel implements ICommandHandler {
     handleCommand(command:Command, callack:any):void {
         var path, tad, tadPanel, pits,target;
 
-        path = command.getExtraData().get("path");
+        if(command.getPath() != null) {
+            path = command.getPath();
+        } else if(command.getExtraData().get("path") != undefined) {
+            path = command.getExtraData().get("path");
+        } else {
+            throw "没有画面路径信息";
+        }
+        
         target = command.getExtraData().get("target");
         tad = command.getContext().get("Tad");
         pits = command.getExtraData().get("ProcessInstanceThreadSegment");

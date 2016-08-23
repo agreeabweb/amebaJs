@@ -62,7 +62,7 @@ export class AmebaPageParser implements IPageParser {
             events = prop.event;
 
             // 通过ViewControl类来统一创建view
-            view = ViewControl.buildView(feature, id, this, dm, $(dom));
+            view = ViewControl.buildView(feature, id, panel, dm, $(dom));
 
             if (view != undefined) {
                 // 向当前panel中注册该组件

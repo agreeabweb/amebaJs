@@ -17,6 +17,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         }
         TextView.prototype.bindEvent = function (actionName, action) {
+            var view = this;
             if (actionName === "OnClick") {
                 $("#" + this.id + "_input").on("click", function () {
                     console.log("onClick");
@@ -25,11 +26,29 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             else if (actionName === "onFocus") {
                 $("#" + this.id + "_input").on("focus", function () {
                     console.log("onFocus");
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    }
+                    else {
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                        }
+                    }
                 });
             }
             else if (actionName === "onTextChange") {
                 $("#" + this.id + "_input").on("change", function () {
                     console.log("onTextChange");
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    }
+                    else {
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                        }
+                    }
                 });
             }
         };
@@ -38,6 +57,9 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
         };
         TextView.prototype.setLocation = function (location) {
             this.location = location;
+        };
+        TextView.prototype.SetWidgetFormText = function (text) {
+            this.$thisNode.find("input[type='text']").val(text);
         };
         TextView.prototype.layout = function () {
             var dom = $("#" + this.id);

@@ -39,24 +39,21 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             var objects = objs.objects;
             if (objects != undefined) {
                 for (var i = 0; i < objects.length; i++) {
-                    this.layoutChild(objects[i], objPaths);
+                    var idMap = objects[i].id;
+                    var id = objPaths[idMap].scriptId;
+                    var childDom = $("#" + id);
+                    var size = objects[i].style.size;
+                    var location = objects[i].style.location;
+                    childDom.css("position", "absolute");
+                    if (size != undefined) {
+                        childDom.css("width", size.width);
+                        childDom.css("height", size.height);
+                    }
+                    if (location != undefined) {
+                        childDom.css("top", location.y - this.location.y);
+                        childDom.css("left", location.x - this.location.x);
+                    }
                 }
-            }
-        };
-        RadioButtonView.prototype.layoutChild = function (obj, objPaths) {
-            var idMap = obj.id;
-            var id = objPaths[idMap].scriptId;
-            var childDom = $("#" + id);
-            var size = obj.style.size;
-            var location = obj.style.location;
-            childDom.css("position", "absolute");
-            if (size != undefined) {
-                childDom.css("width", size.width);
-                childDom.css("height", size.height);
-            }
-            if (location != undefined) {
-                childDom.css("top", location.y - this.location.y);
-                childDom.css("left", location.x - this.location.x);
             }
         };
         return RadioButtonView;

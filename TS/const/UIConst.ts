@@ -4,8 +4,9 @@
 export class UIConst {
 
     public static DataModel = "DataModel";
-
-    public static TemplateClickEvent = "click";
+    public static Panel = "Panel";
+    public static PageParser = "PageParser";
     
-    public static DomClickEvent ="click";
+    public static TemplateClickEvent = "click";
+    public static DomClickEvent = "click";
 }

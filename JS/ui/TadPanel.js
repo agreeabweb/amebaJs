@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "../const/ServiceObj", "../configure/config", "./widget/ViewControl"], function (require, exports, HashMap_1, ResourceManager_1, ServiceObj_1, config_1, ViewControl_1) {
+define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (require, exports, HashMap_1, UIConst_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-03 0003.
@@ -24,6 +24,9 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         TadPanel.prototype.configTarget = function (target, targetArgMap) {
             this.target = target;
             this.targetArgMap = targetArgMap;
+        };
+        TadPanel.prototype.getPath = function () {
+            return this.path;
         };
         TadPanel.prototype.getContext = function () {
             return this.panelContext;
@@ -59,120 +62,11 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
         };
         TadPanel.prototype.start = function () {
             var panel = this;
-            this.getContext().set("Panel", this);
+            this.getContext().set(UIConst_1.UIConst.Panel, this);
             var ctx = this.getContext();
             var target = this.target;
-            // 0.获取html
-            ResourceManager_1.ResourceManager.getResourceFile(this.path, function (html) {
-                var div, domContent;
-                div = $("<div>");
-                div.html(html);
-                // 通过Axure生成
-                if (config_1.default.UIType === "Axure" || config_1.default.UIType === "axure") {
-                    domContent = $(div).find("#base");
-                }
-                else {
-                    domContent = $(div).find("#contentPanel");
-                }
-                // 展现
-                var registry = ctx.get(ServiceObj_1.ServiceObj.PanelCompositeFactoryRegistry);
-                var scripts;
-                if (target) {
-                    var factory = registry.getPanelFactory(target);
-                    var pane = factory.getPanelComposite();
-                    pane.prepend(domContent);
-                    scripts = $(div).find("script");
-                    for (var i = 0; i < scripts.length; i++) {
-                        $("body").append(scripts[i]);
-                    }
-                }
-                else {
-                    $("body").prepend(domContent);
-                    scripts = $(div).find("script");
-                    for (var i = 0; i < scripts.length; i++) {
-                        $("body").append(scripts[i]);
-                    }
-                }
-                // 解析出view
-                // 要先展现再解析，否则Axure的data读不出
-                if (config_1.default.UIType === "Axure" || config_1.default.UIType === "axure") {
-                    panel.translateAxureHTML($axure.data);
-                }
-                else {
-                    panel.translateNormalHTML(domContent);
-                }
-            });
-        };
-        TadPanel.prototype.translateAxureHTML = function (obj) {
-            var objs, objPaths;
-            objs = obj.page.diagram.objects;
-            objPaths = obj.objectPaths;
-            for (var i = 0; i < objs.length; i++) {
-                var idMap = void 0, id = void 0, type = void 0, location_1 = void 0, size = void 0, interactionMap = void 0, view = void 0;
-                idMap = objs[i].id;
-                id = objPaths[idMap].scriptId;
-                type = objs[i].type;
-                location_1 = objs[i].style.location;
-                size = objs[i].style.size;
-                interactionMap = objs[i].interactionMap;
-                // 通过ViewControl类来统一创建view
-                view = ViewControl_1.ViewControl.buildView(type, id, this, null, $("#" + id));
-                if (view != undefined) {
-                    view.setLocation(location_1);
-                    view.setSize(size);
-                    if (interactionMap != undefined) {
-                        for (var actionName in interactionMap) {
-                            var action = interactionMap[actionName];
-                            var cases = action.cases;
-                            for (var j = 0; j < cases.length; j++) {
-                                var actions = cases[j].actions;
-                                for (var k = 0; k < actions.length; k++) {
-                                    view.bindEvent(actionName, actions[k]);
-                                }
-                            }
-                        }
-                    }
-                    // 组件布局控制
-                    view.layout(objs[i], objPaths);
-                    // 向当前panel中注册该组件
-                    this.registerWidget(id, view);
-                }
-            }
-        };
-        TadPanel.prototype.translateNormalHTML = function (dom) {
-            var id, prop, children, view;
-            id = $(dom).attr("id");
-            prop = $(dom).attr("prop");
-            if (prop != undefined) {
-                var feature = void 0, dm = void 0, events = void 0;
-                prop = JSON.parse(prop);
-                feature = prop.feature;
-                dm = prop.dm;
-                events = prop.event;
-                // 通过ViewControl类来统一创建view
-                view = ViewControl_1.ViewControl.buildView(feature, id, this, dm, $(dom));
-                if (view != undefined) {
-                    // 向当前panel中注册该组件
-                    this.registerWidget(id, view);
-                    // 处理event
-                    if (events != undefined && events.length != 0) {
-                        for (var i = 0; i < events.length; i++) {
-                            view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
-                        }
-                    }
-                    // 注册dm
-                    if (dm != undefined) {
-                        this.registerEntryView(dm, view);
-                    }
-                }
-            }
-            // 解析该元素的孩子节点
-            children = $(dom).children();
-            if (children.length != 0) {
-                for (var i = 0; i < children.length; i++) {
-                    this.translateNormalHTML(children[i]);
-                }
-            }
+            var parser = this.getContext().get(UIConst_1.UIConst.PageParser);
+            parser.parsePage(this.target, this.getContext());
         };
         TadPanel.prototype.getViewsByEntry = function (name) {
             return this.entryToViews.get(name);

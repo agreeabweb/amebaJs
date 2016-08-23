@@ -1,4 +1,4 @@
-define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashMap", "./EngineEventManager", "./CommandHandlerExecutor", "./Tad", "../const/ServiceObj", "../resource/ResourceDocumentTable", "../engine/expression/DefaultExpressionEngine", "../engine/process/ProcessInstanceFactory", "./PanelCompositeFactoryRegistry", "./mission/AxureMissionFactory"], function (require, exports, Context_1, GUID_1, HashMap_1, EngineEventManager_1, CommandHandlerExecutor_1, Tad_1, ServiceObj_1, ResourceDocumentTable_1, DefaultExpressionEngine_1, ProcessInstanceFactory_1, PanelCompositeFactoryRegistry_1, AxureMissionFactory_1) {
+define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashMap", "./EngineEventManager", "./CommandHandlerExecutor", "./Tad", "../const/ServiceObj", "../resource/ResourceDocumentTable", "../engine/expression/DefaultExpressionEngine", "../engine/process/ProcessInstanceFactory", "./PanelCompositeFactoryRegistry", "./mission/AxureMissionFactory", "./pageparsers/AxurePageParser", "../const/UIConst"], function (require, exports, Context_1, GUID_1, HashMap_1, EngineEventManager_1, CommandHandlerExecutor_1, Tad_1, ServiceObj_1, ResourceDocumentTable_1, DefaultExpressionEngine_1, ProcessInstanceFactory_1, PanelCompositeFactoryRegistry_1, AxureMissionFactory_1, AxurePageParser_1, UIConst_1) {
     "use strict";
     var DefaultPanelFactory = (function () {
         function DefaultPanelFactory() {
@@ -42,6 +42,14 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashM
             // 6.MissionFactory
             var missionFactory = new AxureMissionFactory_1.AxureMissionFactory();
             Context_1.Context.baseContext.set(ServiceObj_1.ServiceObj.MissionFactory, missionFactory);
+            // 7.PageParser  TODO 换成反射
+            var parser = null;
+            // if (config.UIType == "Axure") {
+            parser = new AxurePageParser_1.AxurePageParser();
+            // } else {
+            //     parser = new AmebaPageParser();
+            // }
+            Context_1.Context.baseContext.set(UIConst_1.UIConst.PageParser, parser);
             // 1.启动tad
             var id = "Tad_" + GUID_1.default();
             // let tadPath = "/AppFramework_2013B/trade/test/aa/Aa.tad";

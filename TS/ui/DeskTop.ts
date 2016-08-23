@@ -17,6 +17,10 @@ import {ProcessInstanceFactory} from "../engine/process/ProcessInstanceFactory";
 import {DataModel}from"../runtime/DataModel";
 import {PanelCompositeFactoryRegistry} from "./PanelCompositeFactoryRegistry";
 import {AxureMissionFactory} from "./mission/AxureMissionFactory";
+import {AxurePageParser} from "./pageparsers/AxurePageParser";
+import {UIConst} from "../const/UIConst";
+// import {config} from "../configure/config";
+import {AmebaPageParser} from "./pageparsers/AmebaPageParser";
 
 class DefaultPanelFactory implements IPanelCompositeFactory {
     getPanelComposite():any {
@@ -36,9 +40,9 @@ export class DeskTop {
     }
 
     private createPanelFactoryRegistry() {
-        let registry:PanelCompositeFactoryRegistry= new PanelCompositeFactoryRegistry();
-        registry.addPanelFactory("",new DefaultPanelFactory());
-        this.sessionCtx.set(ServiceObj.PanelCompositeFactoryRegistry,registry);
+        let registry:PanelCompositeFactoryRegistry = new PanelCompositeFactoryRegistry();
+        registry.addPanelFactory("", new DefaultPanelFactory());
+        this.sessionCtx.set(ServiceObj.PanelCompositeFactoryRegistry, registry);
     }
 
     public init() {
@@ -62,7 +66,15 @@ export class DeskTop {
         Context.baseContext.set(ServiceObj.ProcessInstanceFactory, pif);
         // 6.MissionFactory
         var missionFactory = new AxureMissionFactory();
-        Context.baseContext.set(ServiceObj.MissionFactory,missionFactory);
+        Context.baseContext.set(ServiceObj.MissionFactory, missionFactory);
+        // 7.PageParser  TODO 换成反射
+        let parser = null;
+        // if (config.UIType == "Axure") {
+            parser = new AxurePageParser();
+        // } else {
+        //     parser = new AmebaPageParser();
+        // }
+        Context.baseContext.set(UIConst.PageParser, parser);
 
         // 1.启动tad
         let id:string = "Tad_" + GUID();

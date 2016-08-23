@@ -7,6 +7,8 @@ define(["require", "exports"], function (require, exports) {
         function UIConst() {
         }
         UIConst.DataModel = "DataModel";
+        UIConst.Panel = "Panel";
+        UIConst.PageParser = "PageParser";
         UIConst.TemplateClickEvent = "click";
         UIConst.DomClickEvent = "click";
         return UIConst;

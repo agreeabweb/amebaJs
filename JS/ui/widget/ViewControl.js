@@ -1,4 +1,4 @@
-define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView", "./HTMLView/TextView", "./HTMLView/TreeView", "./AxureView/ButtonView", "./AxureView/CheckboxView", "./AxureView/CompositeView", "./AxureView/HtmlButtonView", "./AxureView/LabelView", "./AxureView/RadioButtonView", "./AxureView/TableView", "./AxureView/TextView", "./AxureView/TreeView"], function (require, exports, config_1, ButtonView_1, TextView_1, TreeView_1, ButtonView_2, CheckboxView_1, CompositeView_1, HtmlButtonView_1, LabelView_1, RadioButtonView_1, TableView_1, TextView_2, TreeView_2) {
+define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView", "./HTMLView/TextView", "./HTMLView/TreeView", "./AxureView/ButtonView", "./AxureView/CheckboxView", "./AxureView/CompositeView", "./AxureView/HtmlButtonView", "./AxureView/LabelView", "./AxureView/RadioButtonView", "./AxureView/TableView", "./AxureView/TextView", "./AxureView/TreeView", "./AxureView/TextAreaView", "./AxureView/ListBoxView", "./AxureView/HeadingView"], function (require, exports, config_1, ButtonView_1, TextView_1, TreeView_1, ButtonView_2, CheckboxView_1, CompositeView_1, HtmlButtonView_1, LabelView_1, RadioButtonView_1, TableView_1, TextView_2, TreeView_2, TextAreaView_1, ListBoxView_1, HeadingView_1) {
     "use strict";
     var ViewControl = (function () {
         function ViewControl() {
@@ -25,6 +25,12 @@ define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView",
                     view = new TreeView_2.TreeView(id, panel, dom);
                     view.bindEvent("init");
                 }
+                else if (type === "textArea") {
+                    view = new TextAreaView_1.TextAreaView(id, panel, dom);
+                }
+                else if (type === "listBox") {
+                    view = new ListBoxView_1.ListBoxView(id, panel, dom);
+                }
                 else if (type === "vectorShape") {
                     // 判断是否为按钮
                     if (dom.hasClass("button") || dom.hasClass("primary_button") || dom.hasClass("link_button")) {
@@ -33,8 +39,11 @@ define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView",
                     else if (dom.hasClass("box_1") || dom.hasClass("box_2") || dom.hasClass("box_3")) {
                         view = new CompositeView_1.CompositeView(id, panel, dom);
                     }
-                    else if (dom.hasClass("heading_1") || dom.hasClass("heading_2") || dom.hasClass("heading_3")) {
+                    else if (dom.hasClass("label")) {
                         view = new LabelView_1.LabelView(id, panel, dom);
+                    }
+                    else if (dom.hasClass("heading_1") || dom.hasClass("heading_2") || dom.hasClass("heading_3")) {
+                        view = new HeadingView_1.HeadingView(id, panel, dom);
                     }
                 }
             }

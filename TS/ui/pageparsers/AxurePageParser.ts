@@ -30,7 +30,6 @@ export class AxurePageParser implements IPageParser {
             div.html(html);
             domContent = $(div).find("#base");
 
-
             // 展现
             let registry:PanelCompositeFactoryRegistry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
             var scripts;
@@ -69,17 +68,12 @@ export class AxurePageParser implements IPageParser {
             idMap = objs[i].id;
             id = objPaths[idMap].scriptId;
             type = objs[i].type;
-            location = objs[i].style.location;
-            size = objs[i].style.size;
             interactionMap = objs[i].interactionMap;
 
             // 通过ViewControl类来统一创建view
             view = ViewControl.buildView(type, id, panel, null, $("#" + id));
 
             if (view != undefined) {
-                view.setLocation(location);
-                view.setSize(size);
-
                 if (interactionMap != undefined) {
                     for(let actionName in interactionMap) {
                         view.bindEvent(actionName, interactionMap[actionName]);

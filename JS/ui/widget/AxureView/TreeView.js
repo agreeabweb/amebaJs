@@ -26,23 +26,17 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                         childrenContainer.css("visibility", "visible").css("display", "block");
                     }
                     //重新布局
-                    tree.layout(tree.obj, tree.objPaths);
+                    tree.layout(tree.obj);
                 });
             }
         };
-        TreeView.prototype.setSize = function (size) {
-            this.size = size;
-        };
-        TreeView.prototype.setLocation = function (location) {
-            this.location = location;
-        };
-        TreeView.prototype.layout = function (obj, objPaths) {
+        TreeView.prototype.layout = function (obj) {
             this.obj = obj;
-            this.objPaths = objPaths;
             // 整体布局
-            $("#" + this.id).css("position", "absolute")
-                .css("width", this.size.width).css("height", this.size.height)
-                .css("top", this.location.y).css("left", this.location.x);
+            var dom = $("#" + this.id);
+            dom.css("position", "absolute")
+                .css("width", obj.style.size.width).css("height", obj.style.size.height)
+                .css("top", obj.style.location.y).css("left", obj.style.location.x);
             // 孩子节点的布局
             var childrenContainer = $("#" + this.id + "_children");
             var children = childrenContainer.children();
@@ -57,6 +51,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             var idMap = this.getIdMap(id);
             var size = this.getObjSize(idMap, this.obj.objects);
             var location = this.getObjLocation(idMap, this.obj.objects);
+            var fontSize = this.getFontSize(idMap, this.obj.objects);
             dom.css("position", "absolute");
             if (size != undefined) {
                 dom.css("width", size.width).css("height", size.height);
@@ -66,6 +61,9 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
             else {
                 dom.css("top", 0).css("left", 0);
+            }
+            if (fontSize != undefined) {
+                dom.find(".text span").css("font-size", fontSize);
             }
             if (dom.find(".image").length != 0) {
                 var image = dom.find(".image");
@@ -170,9 +168,28 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                 }
             }
         };
+        TreeView.prototype.getFontSize = function (idMap, objects) {
+            if (idMap == undefined) {
+                throw "找不到此id对应的idMap";
+            }
+            if (objects != undefined) {
+                for (var i = 0; i < objects.length; i++) {
+                    if (objects[i].id === idMap) {
+                        return objects[i].style.fontSize;
+                    }
+                    else {
+                        var result = this.getFontSize(idMap, objects[i].objects);
+                        if (result != undefined) {
+                            return result;
+                        }
+                    }
+                }
+            }
+        };
         TreeView.prototype.getIdMap = function (id) {
-            for (var idMap in this.objPaths) {
-                if (this.objPaths[idMap].scriptId === id) {
+            var objPaths = this.host.getAxureObjPaths();
+            for (var idMap in objPaths) {
+                if (objPaths[idMap].scriptId === id) {
                     return idMap;
                 }
             }

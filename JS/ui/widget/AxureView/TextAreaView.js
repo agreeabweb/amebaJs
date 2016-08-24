@@ -5,18 +5,12 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
     "use strict";
-    var TextView = (function (_super) {
-        __extends(TextView, _super);
-        function TextView(id, host, dmEntry, thisNode) {
-            _super.call(this, id, host, dmEntry, thisNode);
-            var view = this;
-            if (this.dmEntry != null) {
-                this.$thisNode.on("change", function () {
-                    view.updateModel(view.dmEntry, view.$thisNode.val());
-                });
-            }
+    var TextAreaView = (function (_super) {
+        __extends(TextAreaView, _super);
+        function TextAreaView(id, host, thisNode) {
+            _super.call(this, id, host, null, thisNode);
         }
-        TextView.prototype.bindEvent = function (actionName, action) {
+        TextAreaView.prototype.bindEvent = function (actionName, action) {
             var view = this;
             if (actionName === "OnClick") {
                 $("#" + this.id + "_input").on("click", function () {
@@ -52,22 +46,22 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                 });
             }
         };
-        TextView.prototype.SetWidgetFormText = function (text) {
+        TextAreaView.prototype.SetWidgetFormText = function (text) {
             this.$thisNode.find("input[type='text']").val(text);
         };
-        TextView.prototype.layout = function (obj) {
+        TextAreaView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
                 .css("left", obj.style.location.x).css("top", obj.style.location.y);
-            var input = $("#" + this.id + "_input");
-            input.css("width", "inherit").css("height", "inherit");
+            var textArea = $("#" + this.id + " textarea");
+            textArea.css("width", obj.style.size.width).css("height", obj.style.size.height);
             if (obj.style.fontSize != undefined) {
-                input.css("font-szie", obj.style.fontSize);
+                textArea.css("font-size", obj.style.fontSize);
             }
         };
-        return TextView;
+        return TextAreaView;
     }(AbstractView_1.AbstractView));
-    exports.TextView = TextView;
+    exports.TextAreaView = TextAreaView;
 });
-//# sourceMappingURL=TextView.js.map
+//# sourceMappingURL=TextAreaView.js.map

@@ -45,18 +45,14 @@ define(["require", "exports", "../../resource/ResourceManager", "../widget/ViewC
             objPaths = obj.objectPaths;
             panel.setAxureObjPaths(objPaths);
             for (var i = 0; i < objs.length; i++) {
-                var idMap = void 0, id = void 0, type = void 0, location_1 = void 0, size = void 0, interactionMap = void 0, view = void 0;
+                var idMap = void 0, id = void 0, type = void 0, location_1, size = void 0, interactionMap = void 0, view = void 0;
                 idMap = objs[i].id;
                 id = objPaths[idMap].scriptId;
                 type = objs[i].type;
-                location_1 = objs[i].style.location;
-                size = objs[i].style.size;
                 interactionMap = objs[i].interactionMap;
                 // 通过ViewControl类来统一创建view
                 view = ViewControl_1.ViewControl.buildView(type, id, panel, null, $("#" + id));
                 if (view != undefined) {
-                    view.setLocation(location_1);
-                    view.setSize(size);
                     if (interactionMap != undefined) {
                         for (var actionName in interactionMap) {
                             view.bindEvent(actionName, interactionMap[actionName]);

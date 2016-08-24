@@ -2,11 +2,8 @@ import {AbstractView} from "../../AbstractView";
 import {TadPanel} from "../../TadPanel";
 
 class TreeView extends AbstractView {
-    private location;
-    private size;
 
     private obj;
-    private objPaths;
     private visibleLeavesNum;
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
@@ -30,27 +27,19 @@ class TreeView extends AbstractView {
                 }
 
                 //重新布局
-                tree.layout(tree.obj, tree.objPaths);         
+                tree.layout(tree.obj);         
             });
         }
     }
 
-    public setSize(size): void {
-        this.size = size;
-    }
-
-    public setLocation(location): void {
-        this.location = location;
-    }
-
-    public layout(obj, objPaths): void {
+    public layout(obj): void {
         this.obj = obj;
-        this.objPaths = objPaths;
 
         // 整体布局
-        $("#" + this.id).css("position", "absolute")
-            .css("width", this.size.width).css("height", this.size.height)
-            .css("top", this.location.y).css("left", this.location.x);
+        var dom = $("#" + this.id);
+        dom.css("position", "absolute")
+            .css("width", obj.style.size.width).css("height", obj.style.size.height)
+            .css("top", obj.style.location.y).css("left", obj.style.location.x);
 
         // 孩子节点的布局
         var childrenContainer = $("#" + this.id + "_children");
@@ -67,6 +56,7 @@ class TreeView extends AbstractView {
         var idMap = this.getIdMap(id);
         var size: any = this.getObjSize(idMap, this.obj.objects);
         var location = this.getObjLocation(idMap, this.obj.objects);
+        var fontSize = this.getFontSize(idMap, this.obj.objects);
 
         dom.css("position", "absolute");
         if(size != undefined) {
@@ -76,6 +66,9 @@ class TreeView extends AbstractView {
             dom.css("top", top * 20).css("left", location.x);
         } else {
             dom.css("top", 0).css("left", 0);
+        }
+        if(fontSize != undefined) {
+            dom.find(".text span").css("font-size", fontSize);
         }
 
         if(dom.find(".image").length != 0) {
@@ -183,9 +176,28 @@ class TreeView extends AbstractView {
         } 
     }
 
+    public getFontSize(idMap, objects) {
+        if(idMap == undefined) {
+            throw "找不到此id对应的idMap";
+        }
+        if(objects != undefined) {
+            for(var i = 0; i < objects.length; i++) {
+                if(objects[i].id === idMap) {
+                    return objects[i].style.fontSize;
+                } else {
+                    var result = this.getFontSize(idMap, objects[i].objects);
+                    if(result != undefined) {
+                        return result;
+                    }
+                }
+            }
+        } 
+    }
+
     public getIdMap(id) {
-        for(var idMap in this.objPaths) {
-            if(this.objPaths[idMap].scriptId === id) {
+        var objPaths = this.host.getAxureObjPaths();
+        for(var idMap in objPaths) {
+            if(objPaths[idMap].scriptId === id) {
                 return idMap;
             }
         }

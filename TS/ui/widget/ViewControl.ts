@@ -13,6 +13,9 @@ import {RadioButtonView as AxureRadioButton} from "./AxureView/RadioButtonView";
 import {TableView as AxureTable} from "./AxureView/TableView";
 import {TextView as AxureText} from "./AxureView/TextView";
 import {TreeView as AxureTree} from "./AxureView/TreeView";
+import {TextAreaView as AxureTextArea} from "./AxureView/TextAreaView";
+import {ListBoxView as AxureListBox} from "./AxureView/ListBoxView";
+import {HeadingView as AxureHeading} from "./AxureView/HeadingView";
 
 class ViewControl {
     public static buildView(type, id, panel, dm, dom) {
@@ -32,14 +35,20 @@ class ViewControl {
             } else if(type === "treeNodeObject") {
                 view = new AxureTree(id, panel, dom);
                 view.bindEvent("init");
+            } else if(type === "textArea") {
+                view = new AxureTextArea(id, panel, dom);
+            } else if(type === "listBox") {
+                view = new AxureListBox(id, panel, dom);
             } else if(type === "vectorShape") {
                 // 判断是否为按钮
                 if(dom.hasClass("button") || dom.hasClass("primary_button") || dom.hasClass("link_button")) {
                     view = new AxureButton(id, panel, dom);
                 } else if(dom.hasClass("box_1") || dom.hasClass("box_2") || dom.hasClass("box_3")) {
                     view = new AxureComposite(id, panel, dom);
-                } else if(dom.hasClass("heading_1") || dom.hasClass("heading_2") || dom.hasClass("heading_3")) {
+                } else if(dom.hasClass("label")) {
                     view = new AxureLabel(id, panel, dom);
+                } else if(dom.hasClass("heading_1") || dom.hasClass("heading_2") || dom.hasClass("heading_3")) {
+                    view = new AxureHeading(id, panel, dom);
                 }
             }
         } else {

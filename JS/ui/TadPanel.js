@@ -65,9 +65,6 @@ define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (r
             }
             return widget;
         };
-        TadPanel.prototype.setAxureObjPaths = function (paths) {
-            this.axureObjPaths = paths;
-        };
         TadPanel.prototype.start = function () {
             var panel = this;
             this.getContext().set(UIConst_1.UIConst.Panel, this);
@@ -104,6 +101,12 @@ define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (r
                 var v = views[i];
                 v.modelChanged(now);
             }
+        };
+        TadPanel.prototype.setAxureObjPaths = function (paths) {
+            this.axureObjPaths = paths;
+        };
+        TadPanel.prototype.getAxureObjPaths = function () {
+            return this.axureObjPaths;
         };
         return TadPanel;
     }());

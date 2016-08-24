@@ -5,24 +5,25 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
     "use strict";
-    var CompositeView = (function (_super) {
-        __extends(CompositeView, _super);
-        function CompositeView(id, host, thisNode) {
+    var HeadingView = (function (_super) {
+        __extends(HeadingView, _super);
+        function HeadingView(id, host, thisNode) {
             _super.call(this, id, host, null, thisNode);
         }
-        CompositeView.prototype.bindEvent = function (actionName, action) {
+        HeadingView.prototype.bindEvent = function (actionName, action) {
         };
-        CompositeView.prototype.layout = function (obj) {
+        HeadingView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
-                .css("left", obj.style.location.x).css("top", obj.style.location.y);
+                .css("left", obj.style.location.x).css("top", obj.style.location.y)
+                .css("font-weight", 700).css("font-family", "Arial Bold', 'Arial");
             if (obj.style.fontSize != undefined) {
                 dom.find(".text span").css("font-size", obj.style.fontSize);
             }
         };
-        return CompositeView;
+        return HeadingView;
     }(AbstractView_1.AbstractView));
-    exports.CompositeView = CompositeView;
+    exports.HeadingView = HeadingView;
 });
-//# sourceMappingURL=CompositeView.js.map
+//# sourceMappingURL=HeadingView.js.map

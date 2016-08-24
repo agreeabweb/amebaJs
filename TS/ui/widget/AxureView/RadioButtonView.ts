@@ -2,8 +2,6 @@ import {AbstractView} from "../../AbstractView";
 import {TadPanel} from "../../TadPanel";
 
 class RadioButtonView extends AbstractView {
-    private location;
-    private size;
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
@@ -23,25 +21,28 @@ class RadioButtonView extends AbstractView {
         }
     }
 
-    public setSize(size): void {
-        this.size = size;
+    public SetCheckState(check: boolean): void {
+        if(check) {
+            this.$thisNode.find("input[type='radio']").attr("checked", "true");
+        } else {
+            this.$thisNode.find("input[type='radio']").removeAttr("checked");
+        }
     }
 
-    public setLocation(location): void {
-        this.location = location;
-    }
-
-    public layout(objs, objPaths): void {
+    public layout(obj): void {
         var dom = $("#" + this.id);
-        dom.css("position", "absolute");
-        dom.css("width", this.size.width);
-        dom.css("height", this.size.height);
-        dom.css("left", this.location.x);
-        dom.css("top", this.location.y);
+        dom.css("position", "absolute")
+            .css("width", obj.style.size.width).css("height", obj.style.size.height)
+            .css("left", obj.style.location.x).css("top", obj.style.location.y);
 
-        var objects = objs.objects;
+        if(obj.style.fontSize != undefined) {
+            dom.find(".text span").css("font-size", obj.style.fontSize);
+        }
+
+        var objects = obj.objects;
         if(objects != undefined) {
             for(let i = 0; i < objects.length; i++) {
+                var objPaths = this.host.getAxureObjPaths();
                 var idMap = objects[i].id;
                 var id = objPaths[idMap].scriptId;
                 var childDom = $("#" + id);
@@ -49,12 +50,10 @@ class RadioButtonView extends AbstractView {
                 var location = objects[i].style.location;
                 childDom.css("position", "absolute");
                 if(size != undefined) {
-                    childDom.css("width", size.width);
-                    childDom.css("height", size.height);
+                    childDom.css("width", size.width).css("height", size.height);
                 }
                 if(location != undefined) {
-                    childDom.css("top", location.y - this.location.y);
-                    childDom.css("left", location.x - this.location.x);
+                    childDom.css("top", location.y - obj.style.location.y).css("left", location.x - obj.style.location.x);
                 }
             }
         }

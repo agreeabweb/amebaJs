@@ -12,21 +12,14 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
         }
         LabelView.prototype.bindEvent = function (actionName, action) {
         };
-        LabelView.prototype.setSize = function (size) {
-            this.size = size;
-        };
-        LabelView.prototype.setLocation = function (location) {
-            this.location = location;
-        };
-        LabelView.prototype.layout = function () {
+        LabelView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
-            dom.css("position", "absolute");
-            dom.css("width", this.size.width);
-            dom.css("height", this.size.height);
-            dom.css("left", this.location.x);
-            dom.css("top", this.location.y);
-            dom.css("font-weight", 700);
-            dom.css("font-family", "Arial Bold', 'Arial");
+            dom.css("position", "absolute")
+                .css("width", obj.style.size.width).css("height", obj.style.size.height)
+                .css("left", obj.style.location.x).css("top", obj.style.location.y);
+            if (obj.style.fontSize != undefined) {
+                dom.find(".text span").css("font-size", obj.style.fontSize);
+            }
         };
         return LabelView;
     }(AbstractView_1.AbstractView));

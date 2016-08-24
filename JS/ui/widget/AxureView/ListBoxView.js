@@ -5,32 +5,42 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
     "use strict";
-    var HtmlButtonView = (function (_super) {
-        __extends(HtmlButtonView, _super);
-        function HtmlButtonView(id, host, thisNode) {
+    var ListBoxView = (function (_super) {
+        __extends(ListBoxView, _super);
+        function ListBoxView(id, host, thisNode) {
             _super.call(this, id, host, null, thisNode);
         }
-        HtmlButtonView.prototype.bindEvent = function (actionName, action) {
+        ListBoxView.prototype.bindEvent = function (actionName, action) {
+            var view = this;
             if (actionName === "onClick") {
                 this.$thisNode.css("cursor", "pointer");
                 this.$thisNode.on("click", function () {
                     console.log("onClick");
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    }
+                    else {
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                        }
+                    }
                 });
             }
         };
-        HtmlButtonView.prototype.layout = function (obj) {
+        ListBoxView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
                 .css("left", obj.style.location.x).css("top", obj.style.location.y);
-            var input = $("#" + this.id + "_input");
-            input.css("width", "inherit").css("height", "inherit");
+            var list = $("#" + this.id + " select");
+            list.css("width", obj.style.size.width).css("height", obj.style.size.height);
             if (obj.style.fontSize != undefined) {
-                input.css("font-size", obj.style.fontSize);
+                list.css("font-size", obj.style.fontSize);
             }
         };
-        return HtmlButtonView;
+        return ListBoxView;
     }(AbstractView_1.AbstractView));
-    exports.HtmlButtonView = HtmlButtonView;
+    exports.ListBoxView = ListBoxView;
 });
-//# sourceMappingURL=HtmlButtonView.js.map
+//# sourceMappingURL=ListBoxView.js.map

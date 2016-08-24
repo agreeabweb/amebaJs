@@ -3,9 +3,6 @@ import {TadPanel} from "../../TadPanel";
 
 class ButtonView extends AbstractView {
 
-    private location;
-    private size;
-
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
         super(id,host,null, thisNode);
@@ -31,23 +28,17 @@ class ButtonView extends AbstractView {
         }
     }
 
-    public setSize(size): void {
-        this.size = size;
-    }
-
-    public setLocation(location): void {
-        this.location = location;
-    }
-
-    public layout(): void {
+    public layout(obj): void {
         var dom = $("#" + this.id);
-        dom.css("position", "absolute");
-        dom.css("width", this.size.width);
-        dom.css("height", this.size.height);
-        dom.css("left", this.location.x);
-        dom.css("top", this.location.y);
+        dom.css("position", "absolute")
+            .css("width", obj.style.size.width).css("height", obj.style.size.height)
+            .css("left", obj.style.location.x).css("top", obj.style.location.y);
 
-        $(dom.find("p")[0]).css("line-height", this.size.height + "px");
+        $(dom.find("p")[0]).css("line-height", obj.style.size.height + "px");
+
+        if(obj.style.fontSize != undefined) {
+            dom.find(".text span").css("font-size", obj.style.fontSize);
+        }
     }
 }
 

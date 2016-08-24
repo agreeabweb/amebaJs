@@ -99,10 +99,6 @@ export class TadPanel {
         return widget;
     }
 
-    public setAxureObjPaths(paths: Object): void {
-        this.axureObjPaths = paths;
-    }
-
     public start():void {
         var panel = this;
         this.getContext().set(UIConst.Panel, this);
@@ -144,6 +140,14 @@ export class TadPanel {
             let v:IView = views[i];
             v.modelChanged(now);
         }
+    }
+
+    public setAxureObjPaths(paths: Object): void {
+        this.axureObjPaths = paths;
+    }
+
+    public getAxureObjPaths(): Object {
+        return this.axureObjPaths;
     }
 
 }

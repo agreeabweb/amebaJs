@@ -1,17 +1,17 @@
-define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "./widget/TextView", "./widget/ButtonView"], function (require, exports, HashMap_1, ResourceManager_1, TextView_1, ButtonView_1) {
+define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (require, exports, HashMap_1, UIConst_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-03 0003.
      */
     var TadPanel = (function () {
-        /*busy,idle*/
-        function TadPanel(host, parentId, id, path) {
+        function TadPanel(pits, host, parentId, id, path) {
             this.widgetRegistry = new HashMap_1.HashMap();
             this.id = "";
             this.parentId = "";
             this.entryToViews = new HashMap_1.HashMap();
             this.taskQueue = new Array();
             this.state = "idle";
+            this.processInstanceThreadSegment = pits;
             this.host = host;
             this.parentId = parentId;
             this.id = id;
@@ -21,11 +21,21 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             var dm = this.host.getDataModel();
             dm.notifyThis(this.doUpdateViews, this);
         }
+        TadPanel.prototype.configTarget = function (target, targetArgMap) {
+            this.target = target;
+            this.targetArgMap = targetArgMap;
+        };
+        TadPanel.prototype.getPath = function () {
+            return this.path;
+        };
         TadPanel.prototype.getContext = function () {
             return this.panelContext;
         };
         TadPanel.prototype.getHost = function () {
             return this.host;
+        };
+        TadPanel.prototype.getProcessInstanceThreadSegment = function () {
+            return this.processInstanceThreadSegment;
         };
         TadPanel.prototype.isBusy = function () {
             return this.state === "busy";
@@ -48,70 +58,37 @@ define(["require", "exports", "../lib/HashMap", "../resource/ResourceManager", "
             this.widgetRegistry.put(id, view);
         };
         TadPanel.prototype.getWidget = function (id) {
-            return this.widgetRegistry.get(id);
+            var widget;
+            widget = this.widgetRegistry.get(id);
+            if (widget == undefined) {
+                widget = this.widgetRegistry.get(this.axureObjPaths[id].scriptId);
+            }
+            return widget;
+        };
+        TadPanel.prototype.setAxureObjPaths = function (paths) {
+            this.axureObjPaths = paths;
         };
         TadPanel.prototype.start = function () {
             var panel = this;
-            // 0.获取html
-            ResourceManager_1.ResourceManager.getResourceFile(this.path, function (html) {
-                var div;
-                div = $("<div>");
-                div.html(html);
-                // 1.解析出view
-                panel.translateHTML($(div).find("#contentPanel"));
-                // 2.展现
-                $("body").append(div);
-            });
-        };
-        TadPanel.prototype.translateHTML = function (dom) {
-            var id, prop, children, view;
-            id = $(dom).attr("id");
-            prop = $(dom).attr("prop");
-            if (prop != undefined) {
-                var feature = void 0, dm = void 0, events = void 0;
-                prop = JSON.parse(prop);
-                feature = prop.feature;
-                dm = prop.dm;
-                events = prop.event;
-                //判断view类型
-                if (feature === "Text") {
-                    view = new TextView_1.TextView(id, this, dm, $(dom));
-                }
-                else if (feature === "Button") {
-                    view = new ButtonView_1.ButtonView(id, this, $(dom));
-                }
-                // 处理event
-                if (events != undefined && events.length != 0) {
-                    for (var i = 0; i < events.length; i++) {
-                        view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
-                    }
-                }
-                // 注册dm
-                if (dm != undefined) {
-                    this.registerEntryView(dm, view);
-                }
-            }
-            // 解析该元素的孩子节点
-            children = $(dom).children();
-            if (children.length != 0) {
-                for (var i = 0; i < children.length; i++) {
-                    this.translateHTML(children[i]);
-                }
-            }
+            this.getContext().set(UIConst_1.UIConst.Panel, this);
+            var ctx = this.getContext();
+            var target = this.target;
+            var parser = this.getContext().get(UIConst_1.UIConst.PageParser);
+            parser.parsePage(this.target, this.getContext());
         };
         TadPanel.prototype.getViewsByEntry = function (name) {
             return this.entryToViews.get(name);
         };
         TadPanel.prototype.queueTaskPack = function (mission) {
-            if (this.isBusy()) {
-                this.taskQueue.push(mission);
-                return;
-            }
+            // if (this.isBusy()) {
+            this.taskQueue.push(mission); // busy和idle状态下的处理？？？
+            //     return;
+            // }
             this.state = "busy";
             var current = this.taskQueue.shift();
             while (current != null) {
                 // 这里同步还是异步看具体情况
-                setTimeout(current.execute(function () {
+                setTimeout(current.execute(this, function () {
                 }), 0);
                 current = this.taskQueue.shift();
             }

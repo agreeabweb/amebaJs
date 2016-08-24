@@ -9,6 +9,8 @@ import {EngineEvent} from "../const/EngineEvent";
 import {ServiceObj} from "../const/ServiceObj";
 import {Context} from "../runtime/Context";
 import {ShowMessage} from "./commandhandlers/ShowMessage";
+import {ControllerCallMethod} from "./commandhandlers/ControllerCallMethod";
+
 
 export class CommandHandlerExecutor {
 
@@ -17,13 +19,18 @@ export class CommandHandlerExecutor {
     constructor (){
         this.registerCommandHandler(EngineEvent.COMMAND_OpenPanel,new OpenPanel());
         this.registerCommandHandler(EngineEvent.COMMAND_ShowMessage,new ShowMessage());
+        this.registerCommandHandler(EngineEvent.COMMAND_ControllerCallMethod,new ControllerCallMethod());
     }
 
-    public handleEvent = function(data){
-        var ctx : Context = data.context;
-        let executor :CommandHandlerExecutor = ctx.get(ServiceObj.CommandHandlerExecutor);
-        let command = new Command(data.msg,data);
-        executor.execute(command,data.callback);
+    public handleEvent = function(command:Command){
+        // var ctx : Context = data.context;
+        if(command.getContext() ==null)
+        {
+            return;
+        }
+        let executor :CommandHandlerExecutor = command.getContext().get(ServiceObj.CommandHandlerExecutor);
+        // let command = new Command(data.msg,data);
+        executor.execute(command,command.getCallback());
     }
 
     public registerCommandHandler(name:string, handler:ICommandHandler) {

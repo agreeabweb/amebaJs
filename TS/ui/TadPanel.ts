@@ -5,9 +5,11 @@ import {IView}from "./IView";
 import {IMission}from "./mission/IMission";
 import {DataModel} from "../runtime/DataModel";
 import {Context} from "../runtime/Context";
-import {ResourceManager} from "../resource/ResourceManager";
-import {TextView} from "./widget/TextView";
-import {ButtonView} from "./widget/ButtonView";
+import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
+import {UIConst} from "../const/UIConst";
+import {IPageParser} from "./pageparsers/IPageParser";
+
+
 
 /**
  * Created by Oliver on 2016-08-03 0003.
@@ -23,9 +25,20 @@ export class TadPanel {
     private taskQueue:Array<IMission> = new Array<IMission>();
     private state:string = "idle";
     private panelContext:Context;
+    private processInstanceThreadSegment;
     /*busy,idle*/
+    private target:string;//根据target获取面板工厂
+    private targetArgMap:HashMap;
 
-    constructor(host:Tad, parentId:string, id:string, path:string) {
+    private axureObjPaths;
+
+    private configTarget(target:string, targetArgMap:HashMap) {
+        this.target = target;
+        this.targetArgMap = targetArgMap;
+    }
+
+    constructor(pits:ProcessInstanceThreadSegment, host:Tad, parentId:string, id:string, path:string) {
+        this.processInstanceThreadSegment = pits;
         this.host = host;
         this.parentId = parentId;
         this.id = id;
@@ -33,7 +46,11 @@ export class TadPanel {
         this.path = path;
         this.panelContext = this.host.getContext().createChild(this.id);
         let dm:DataModel = this.host.getDataModel();
-        dm.notifyThis(this.doUpdateViews,this);
+        dm.notifyThis(this.doUpdateViews, this);
+    }
+
+    public getPath():string {
+        return this.path;
     }
 
     public getContext():Context {
@@ -42,6 +59,10 @@ export class TadPanel {
 
     public  getHost():Tad {
         return this.host;
+    }
+
+    public getProcessInstanceThreadSegment():ProcessInstanceThreadSegment {
+        return this.processInstanceThreadSegment;
     }
 
     public isBusy():boolean {
@@ -55,14 +76,14 @@ export class TadPanel {
     public busy():void {
         this.state = "busy";
     }
-    
+
     public registerEntryView(name:string, view:any) {
         let views = this.entryToViews.get(name);
         if (views == null) {
             views = new Array();
         }
         views.push(view);
-        this.entryToViews.put(name,views);
+        this.entryToViews.put(name, views);
     }
 
     public registerWidget(id:string, view:any):void {
@@ -70,82 +91,42 @@ export class TadPanel {
     }
 
     public getWidget(id:string) {
-        return this.widgetRegistry.get(id);
+        var widget;
+        widget = this.widgetRegistry.get(id);
+        if(widget == undefined) {
+            widget = this.widgetRegistry.get(this.axureObjPaths[id].scriptId);
+        }
+        return widget;
+    }
+
+    public setAxureObjPaths(paths: Object): void {
+        this.axureObjPaths = paths;
     }
 
     public start():void {
         var panel = this;
-        // 0.获取html
-        ResourceManager.getResourceFile(this.path, function(html) {
-            var div;
-            div = $("<div>");
-            div.html(html);
-
-            // 1.解析出view
-            panel.translateHTML($(div).find("#contentPanel"));
-
-            // 2.展现
-            $("body").append(div);
-        });
+        this.getContext().set(UIConst.Panel, this);
+        var ctx = this.getContext();
+        var target = this.target;
+        let parser:IPageParser = this.getContext().get(UIConst.PageParser);
+        parser.parsePage(this.target, this.getContext());
     }
 
-    public translateHTML(dom: JQuery) {
-        var id, prop, children, view;
-
-        id = $(dom).attr("id");
-        prop = $(dom).attr("prop");
-
-        if(prop != undefined) {
-            let feature, dm, events;
-
-            prop = JSON.parse(prop);
-            feature = prop.feature;
-            dm = prop.dm;
-            events = prop.event;
-
-            //判断view类型
-            if(feature === "Text") {
-                view = new TextView(id, this, dm, $(dom));
-            } else if(feature === "Button") {
-                view = new ButtonView(id, this, $(dom));
-            }
-
-            // 处理event
-            if(events != undefined && events.length != 0) {
-                for(let i = 0; i < events.length; i++) {
-                    view.bindEvent(events[i].eventType, events[i].flowType, events[i].path);
-                }
-            }
-            // 注册dm
-            if(dm != undefined) {
-                this.registerEntryView(dm, view);
-            }
-        }
-
-        // 解析该元素的孩子节点
-        children = $(dom).children();
-        if(children.length != 0) {
-            for(let i = 0; i < children.length; i++) {
-                this.translateHTML(children[i]);
-            }
-        }
-    }
-    
     public getViewsByEntry(name:string):IView[] {
         return this.entryToViews.get(name);
     }
 
     public queueTaskPack(mission:IMission) {
 
-        if (this.isBusy()) {
-            this.taskQueue.push(mission);
-            return;
-        }
+        // if (this.isBusy()) {
+        this.taskQueue.push(mission);   // busy和idle状态下的处理？？？
+        //     return;
+        // }
         this.state = "busy";
         let current:IMission = this.taskQueue.shift();
         while (current != null) {
             // 这里同步还是异步看具体情况
-            setTimeout(current.execute(function () {
+            setTimeout(current.execute(this, function () {
 
             }), 0);
             current = this.taskQueue.shift();
@@ -153,14 +134,13 @@ export class TadPanel {
         this.state = "idle";
     }
 
-    public doUpdateViews(key,old,now) {
+    public doUpdateViews(key, old, now) {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
         console.log("dm变化，刷新UI..." + key);
         let views = this.entryToViews.get(key);
         let i:number;
         let size:number = views.length;
-        for(i=0;i<size;i++)
-        {
+        for (i = 0; i < size; i++) {
             let v:IView = views[i];
             v.modelChanged(now);
         }

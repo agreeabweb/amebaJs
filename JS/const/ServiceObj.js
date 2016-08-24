@@ -10,6 +10,8 @@ define(["require", "exports"], function (require, exports) {
         ServiceObj.ResourceDocumentTable = "ResourceDocumentTable";
         ServiceObj.DefaultExpressionEngine = "DefaultExpressionEngine";
         ServiceObj.ProcessInstanceFactory = "ProcessInstanceFactory";
+        ServiceObj.PanelCompositeFactoryRegistry = "PanelCompositeFactoryRegistry";
+        ServiceObj.MissionFactory = "MissionFactory";
         return ServiceObj;
     }());
     exports.ServiceObj = ServiceObj;

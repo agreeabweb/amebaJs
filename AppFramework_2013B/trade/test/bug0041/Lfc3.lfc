@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LogicFlowControl caption="" idCount="1" start="1">
+    <Component caption="显示信息" id="1" name="ShowMessage" version="1.0">
+        <InArg caption="信息类型" name="type">"Info"</InArg>
+        <InArg caption="信息内容" name="content">dm().UserId</InArg>
+        <InArg caption="样式" name="style"/>
+        <Entry id="xy_location" value="50,209"/>
+        <Entry id="xy_size" value="180,80"/>
+        <Out caption="成功" id="1" name="success" next="1001" targetTerminal="正常出口"/>
+        <Exception name="" next="" targetTerminal=""/>
+    </Component>
+    <EndStep id="1000">
+        <Entry id="xy_location" value="50,400"/>
+        <Entry id="xy_size" value="180,80"/>
+        <In caption="正常出口" id="1" name="正常出口"/>
+    </EndStep>
+    <DataBasket/>
+    <InternalVars/>
+    <InArgs/>
+    <OutArgs/>
+    <End caption="正常出口" id="1001" name="正常出口"/>
+</LogicFlowControl>

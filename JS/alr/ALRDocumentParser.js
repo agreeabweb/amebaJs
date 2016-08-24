@@ -84,7 +84,7 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
             callback(alr);
         };
         ALRDocumentParser.prototype.parseLogicletComponentElement = function (alr, element) {
-            var ce, inArgs, outArgs, ae, outs, exceptions;
+            var ce, inArgs, outArgs, ae, outs, exceptions, argText;
             ce = new LogicletComponentElement_1.LogicletComponentElement();
             ce.setId(element._id);
             ce.setShowId(element._showId == undefined ? "" : element._showId);
@@ -98,7 +98,11 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
                         ae = new ArgElement_1.ArgElement();
                         ae.setCaption(inArgs[i]._caption);
                         ae.setName(inArgs[i]._name);
-                        ae.setContent(inArgs[i].__text);
+                        argText = inArgs[i].__text;
+                        if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                            argText = argText.substring(1, argText.length - 1);
+                        }
+                        ae.setContent(argText);
                         ce.addInArg(ae);
                     }
                 }
@@ -106,7 +110,11 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
                     ae = new ArgElement_1.ArgElement();
                     ae.setCaption(inArgs._caption);
                     ae.setName(inArgs._name);
-                    ae.setContent(inArgs.__text);
+                    argText = inArgs[i].__text;
+                    if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                        argText = argText.substring(1, argText.length - 1);
+                    }
+                    ae.setContent(argText);
                     ce.addInArg(ae);
                 }
             }

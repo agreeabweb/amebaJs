@@ -7,10 +7,20 @@ define(["require", "exports", "../TadPanel", "../../lib/GUID"], function (requir
         function OpenPanel() {
         }
         OpenPanel.prototype.handleCommand = function (command, callack) {
-            var path, tad, tadPanel;
-            path = command.getData().param.get("path");
-            tad = command.getData().context.get("Tad");
-            tadPanel = new TadPanel_1.TadPanel(tad, tad.getId(), "Panel_" + GUID_1.default(), path);
+            var path, tad, tadPanel, pits, target;
+            if (command.getPath() != null) {
+                path = command.getPath();
+            }
+            else if (command.getExtraData().get("path") != undefined) {
+                path = command.getExtraData().get("path");
+            }
+            else {
+                throw "没有画面路径信息";
+            }
+            target = command.getExtraData().get("target");
+            tad = command.getContext().get("Tad");
+            pits = command.getExtraData().get("ProcessInstanceThreadSegment");
+            tadPanel = new TadPanel_1.TadPanel(pits, tad, tad.getId(), "Panel_" + GUID_1.default(), path);
             tadPanel.start();
         };
         return OpenPanel;

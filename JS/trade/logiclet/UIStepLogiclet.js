@@ -1,4 +1,4 @@
-define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub", "../../const/EngineEvent"], function (require, exports, Context_1, EventHub_1, EngineEvent_1) {
+define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub", "../../const/EngineEvent", "../../ui/Command"], function (require, exports, Context_1, EventHub_1, EngineEvent_1, Command_1) {
     "use strict";
     var UIStepLogiclet = (function () {
         function UIStepLogiclet() {
@@ -24,22 +24,25 @@ define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub",
             }
         };
         UIStepLogiclet.prototype.callHTML = function (pits, inputParams, callback) {
-            var data = {
-                msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel",
-                param: inputParams,
-                callback: callback,
-                context: Context_1.Context.getCurrent()
-            };
-            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel", data);
+            inputParams.put("ProcessInstanceThreadSegment", pits);
+            var command = new Command_1.Command(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, Context_1.Context.getCurrent(), null, callback, inputParams);
+            // let data = {
+            //     msg:EngineEvent.COMMAND_OpenPanel,
+            //     param: inputParams,
+            //     callback: callback,
+            //     context: Context.getCurrent()
+            // };
+            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, command);
         };
         UIStepLogiclet.prototype.callABF = function (pits, inputParams, callback) {
-            var data = {
-                msg: EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel",
-                param: inputParams,
-                callback: callback,
-                context: Context_1.Context.getCurrent()
-            };
-            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.ENGINE_EVENT + "OpenPanel", data);
+            var command = new Command_1.Command(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, Context_1.Context.getCurrent(), null, callback, inputParams);
+            // let data = {
+            //     msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
+            //     param: inputParams,
+            //     callback: callback,
+            //     context: Context.getCurrent()
+            // };
+            EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, command);
         };
         UIStepLogiclet.prototype.callAUF = function (pits, uiPath, mapping, inputParams, callback) {
         };

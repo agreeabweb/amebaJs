@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LogicFlowControl caption="" idCount="1" start="1">
+    <Component caption="控件执行方法获得返回" id="1" name="ControllerCallMethod" version="1.0">
+        <InArg caption="控件Id" name="controllerId">"tree1"</InArg>
+        <InArg caption="控件类" name="controllerClass">"树"</InArg>
+        <InArg caption="控件执行方法" name="methodName">"addNode"</InArg>
+        <InArg caption="方法参数" name="methodArgs">[3, "node9", "newNode", "New Node", "#", null]</InArg>
+        <OutArg caption="方法返回对象" name="result"/>
+        <Entry id="xy_location" value="50,215"/>
+        <Entry id="xy_size" value="180,80"/>
+        <Out caption="成功" id="1" name="success" next="1001" targetTerminal="正常出口"/>
+        <Exception name="" next="" targetTerminal=""/>
+    </Component>
+    <EndStep id="1000">
+        <Entry id="xy_location" value="50,400"/>
+        <Entry id="xy_size" value="180,80"/>
+        <In caption="正常出口" id="1" name="正常出口"/>
+    </EndStep>
+    <DataBasket/>
+    <InternalVars/>
+    <InArgs/>
+    <OutArgs/>
+    <End caption="正常出口" id="1001" name="正常出口"/>
+</LogicFlowControl>

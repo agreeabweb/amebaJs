@@ -17,18 +17,25 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
             var view = this; //避免this指代错误
             if (eventType === "click") {
                 view.getNode().on("click", function () {
-                    alert("click");
                     view.getHost().queueTaskPack(view.getMission(flowType, path));
-                    console.log(view.getHost().getHost().getDataModel().get("UserId"));
                 });
             }
         };
-        ButtonView.prototype.modelChanged = function (val) {
+        ButtonView.prototype.layout = function () {
+            var dom = $("#" + this.id);
+            dom.css("position", "absolute");
+            dom.css("width", this.size.width);
+            dom.css("height", this.size.height);
+            dom.css("left", this.location.x);
+            dom.css("top", this.location.y);
+            $(dom.find("p")[0]).css("line-height", this.size.height + "px");
         };
-        ;
-        ButtonView.prototype.updateModel = function (val) {
+        ButtonView.prototype.setSize = function (size) {
+            this.size = size;
         };
-        ;
+        ButtonView.prototype.setLocation = function (location) {
+            this.location = location;
+        };
         return ButtonView;
     }(AbstractView_1.AbstractView));
     exports.ButtonView = ButtonView;

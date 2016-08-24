@@ -91,14 +91,22 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
                     var ae = new ArgElement();
                     ae.setCaption(inArg[i]._caption);
                     ae.setName(inArg[i]._name);
-                    ae.setContent(inArg[i].__text);
+                    argText = inArg[i].__text;
+                    if(argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                        argText = argText.substring(1, argText.length - 1);
+                    }
+                    ae.setContent(argText);
                     ce.addInArg(ae);
                 }
             } else {
                 var ae = new ArgElement();
                 ae.setCaption(inArg._caption);
                 ae.setName(inArg._name);
-                ae.setContent(inArg.__text);
+                argText = inArg[i].__text;
+                if(argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                    argText = argText.substring(1, argText.length - 1);
+                }
+                ae.setContent(argText);
                 ce.addInArg(ae);
             }
         }
@@ -110,11 +118,7 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
                     var ae = new ArgElement();
                     ae.setCaption(outArg[i]._caption);
                     ae.setName(outArg[i]._name);
-                    argText = inArg[i].__text;
-                    if(argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
-                        argText = argText.substring(1, argText.length - 1);
-                    }
-                    ae.setContent(argText);
+                    ae.setContent(outArg[i].__text);
                     ce.addOutArg(ae);
                 }
             } else {
@@ -186,7 +190,11 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
                 var ae = new ArgElement();
                 ae.setCaption(inArg._caption);
                 ae.setName(inArg._name);
-                ae.setContent(inArg.__text);
+                argText = inArg[i].__text;
+                if(argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                    argText = argText.substring(1, argText.length - 1);
+                }
+                ae.setContent(argText);
                 ce.addInArg(ae);
             }
         }

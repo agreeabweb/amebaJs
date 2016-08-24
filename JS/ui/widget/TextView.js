@@ -34,6 +34,23 @@ define(["require", "exports", "../AbstractView"], function (require, exports, Ab
                 });
             }
         };
+        TextView.prototype.layout = function () {
+            var dom = $("#" + this.id);
+            dom.css("position", "absolute");
+            dom.css("width", this.size.width);
+            dom.css("height", this.size.height);
+            dom.css("left", this.location.x);
+            dom.css("top", this.location.y);
+            var input = $("#" + this.id + "_input");
+            input.css("width", "inherit");
+            input.css("height", "inherit");
+        };
+        TextView.prototype.setSize = function (size) {
+            this.size = size;
+        };
+        TextView.prototype.setLocation = function (location) {
+            this.location = location;
+        };
         return TextView;
     }(AbstractView_1.AbstractView));
     exports.TextView = TextView;

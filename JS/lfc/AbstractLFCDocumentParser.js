@@ -77,7 +77,11 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
                         var ae = new ArgElement_1.ArgElement();
                         ae.setCaption(inArg[i]._caption);
                         ae.setName(inArg[i]._name);
-                        ae.setContent(inArg[i].__text);
+                        argText = inArg[i].__text;
+                        if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                            argText = argText.substring(1, argText.length - 1);
+                        }
+                        ae.setContent(argText);
                         ce.addInArg(ae);
                     }
                 }
@@ -85,7 +89,11 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
                     var ae = new ArgElement_1.ArgElement();
                     ae.setCaption(inArg._caption);
                     ae.setName(inArg._name);
-                    ae.setContent(inArg.__text);
+                    argText = inArg[i].__text;
+                    if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                        argText = argText.substring(1, argText.length - 1);
+                    }
+                    ae.setContent(argText);
                     ce.addInArg(ae);
                 }
             }
@@ -97,11 +105,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
                         var ae = new ArgElement_1.ArgElement();
                         ae.setCaption(outArg[i]._caption);
                         ae.setName(outArg[i]._name);
-                        argText = inArg[i].__text;
-                        if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
-                            argText = argText.substring(1, argText.length - 1);
-                        }
-                        ae.setContent(argText);
+                        ae.setContent(outArg[i].__text);
                         ce.addOutArg(ae);
                     }
                 }
@@ -175,7 +179,11 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
                     var ae = new ArgElement_1.ArgElement();
                     ae.setCaption(inArg._caption);
                     ae.setName(inArg._name);
-                    ae.setContent(inArg.__text);
+                    argText = inArg[i].__text;
+                    if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
+                        argText = argText.substring(1, argText.length - 1);
+                    }
+                    ae.setContent(argText);
                     ce.addInArg(ae);
                 }
             }

@@ -11,6 +11,7 @@ export class EngineEventManager {
     public static init(context:any,subscriber:any){
         EventHub.subscribe(EngineEvent.COMMAND_OpenPanel,context,subscriber);
         EventHub.subscribe(EngineEvent.COMMAND_ShowMessage,context,subscriber);
+        EventHub.subscribe(EngineEvent.COMMAND_ControllerCallMethod,context,subscriber);
     }
 
 }

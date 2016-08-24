@@ -50,6 +50,7 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
             currentTask.setSuspend(true);
             // 调用组件
             Command.call(ce, function (result) {
+                currentTask.setSuspend(false);
                 // 出参处理
                 var outArgMap = ce.getOutArgMap();
                 if (outArgMap != undefined) {

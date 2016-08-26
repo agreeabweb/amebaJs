@@ -21,7 +21,7 @@ export class OpenPanel implements ICommandHandler {
         target = command.getExtraData().get("target");
         tad = command.getContext().get("Tad");
         pits = command.getExtraData().get("ProcessInstanceThreadSegment");
-        tadPanel = new TadPanel(pits, tad, tad.getId(), "Panel_" + GUID(), path);
-        tadPanel.start();
+
+        tad.openPanel(path, target, pits);
     }
 }

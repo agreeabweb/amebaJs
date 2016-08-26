@@ -1,4 +1,4 @@
-define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/ServiceObj", "../lib/HashMap", "../runtime/DataModel", "../const/UIConst"], function (require, exports, Context_1, GUID_1, ServiceObj_1, HashMap_1, DataModel_1, UIConst_1) {
+define(["require", "exports", "./TadPanel", "../runtime/Context", "../lib/GUID", "../const/ServiceObj", "../lib/HashMap", "../runtime/DataModel", "../const/UIConst"], function (require, exports, TadPanel_1, Context_1, GUID_1, ServiceObj_1, HashMap_1, DataModel_1, UIConst_1) {
     "use strict";
     var Tad = (function () {
         function Tad(id, host, path) {
@@ -44,6 +44,12 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../const/Ser
         };
         Tad.prototype.getId = function () {
             return this.id;
+        };
+        Tad.prototype.openPanel = function (path, target, pits) {
+            var tadPanelId = "Panel_" + GUID_1.default();
+            var tadPanel = new TadPanel_1.TadPanel(pits, this, this.id, tadPanelId, path);
+            this.panels.put(tadPanelId, tadPanel);
+            tadPanel.start();
         };
         return Tad;
     }());

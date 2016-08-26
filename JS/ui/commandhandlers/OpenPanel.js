@@ -1,4 +1,4 @@
-define(["require", "exports", "../TadPanel", "../../lib/GUID"], function (require, exports, TadPanel_1, GUID_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-04 0004.
@@ -20,8 +20,7 @@ define(["require", "exports", "../TadPanel", "../../lib/GUID"], function (requir
             target = command.getExtraData().get("target");
             tad = command.getContext().get("Tad");
             pits = command.getExtraData().get("ProcessInstanceThreadSegment");
-            tadPanel = new TadPanel_1.TadPanel(pits, tad, tad.getId(), "Panel_" + GUID_1.default(), path);
-            tadPanel.start();
+            tad.openPanel(path, target, pits);
         };
         return OpenPanel;
     }());

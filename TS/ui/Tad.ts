@@ -9,6 +9,7 @@ import {ServiceObj}from "../const/ServiceObj";
 import {HashMap} from "../lib/HashMap";
 import {DataModel} from "../runtime/DataModel";
 import {UIConst}from"../const/UIConst";
+import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
 
 export class Tad {
 
@@ -70,5 +71,12 @@ export class Tad {
 
     public getId(): string {
         return this.id;
+    }
+
+    public openPanel(path: string, target: string, pits: ProcessInstanceThreadSegment): void {
+        var tadPanelId = "Panel_" + GUID();
+        var tadPanel = new TadPanel(pits, this, this.id, tadPanelId, path);
+        this.panels.put(tadPanelId, tadPanel);
+        tadPanel.start();
     }
 }

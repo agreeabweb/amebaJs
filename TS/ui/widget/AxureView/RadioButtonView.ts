@@ -8,14 +8,33 @@ class RadioButtonView extends AbstractView {
         super(id,host,null, thisNode);
     }
 
-    public bindEvent(actionName: string, action: string): void {
+    public bindEvent(actionName: string, action: any): void {
+        var view = this;
         if(actionName === "onSelect" || actionName === "onUnselect") {
             $("#" + this.id + "_input").on("click", function() {
                 let checked = $(this).prop("checked");
                 if(checked) {
                     console.log("onSelected");
+                    if(action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    } else {
+                        var actions = action.cases[0].actions;
+                        for(var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i]));
+                        }
+                        
+                    }
                 } else {
                     console.log("onUnselected");
+                    if(action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    } else {
+                        var actions = action.cases[0].actions;
+                        for(var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i]));
+                        }
+                        
+                    }
                 }
             });
         }

@@ -43,7 +43,7 @@ class TextAreaView extends AbstractView {
     }
 
     public SetWidgetFormText(text: string): void {
-        this.$thisNode.find("input[type='text']").val(text);
+        this.$thisNode.find("textarea").text(text);
     }
 
     public layout(obj): void {

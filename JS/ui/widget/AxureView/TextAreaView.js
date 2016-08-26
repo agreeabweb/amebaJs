@@ -47,7 +47,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         TextAreaView.prototype.SetWidgetFormText = function (text) {
-            this.$thisNode.find("input[type='text']").val(text);
+            this.$thisNode.find("textarea").text(text);
         };
         TextAreaView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);

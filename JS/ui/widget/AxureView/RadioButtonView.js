@@ -11,14 +11,33 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             _super.call(this, id, host, null, thisNode);
         }
         RadioButtonView.prototype.bindEvent = function (actionName, action) {
+            var view = this;
             if (actionName === "onSelect" || actionName === "onUnselect") {
                 $("#" + this.id + "_input").on("click", function () {
                     var checked = $(this).prop("checked");
                     if (checked) {
                         console.log("onSelected");
+                        if (action.cases.length > 1) {
+                            throw "同一事件只能有一个case";
+                        }
+                        else {
+                            var actions = action.cases[0].actions;
+                            for (var i = 0; i < actions.length; i++) {
+                                view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                            }
+                        }
                     }
                     else {
                         console.log("onUnselected");
+                        if (action.cases.length > 1) {
+                            throw "同一事件只能有一个case";
+                        }
+                        else {
+                            var actions = action.cases[0].actions;
+                            for (var i = 0; i < actions.length; i++) {
+                                view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                            }
+                        }
                     }
                 });
             }

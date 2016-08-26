@@ -1,4 +1,4 @@
-define(["require", "exports", "../../lib/HashMap"], function (require, exports, HashMap_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-04 0004.
@@ -8,23 +8,35 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
         }
         ControllerCallMethod.prototype.handleCommand = function (command, callback) {
             var controllerId, methodName, method, methodArgs, tad, panel, widget;
-            if (command.getExtraData() instanceof HashMap_1.HashMap) {
-                controllerId = command.getExtraData().get("controllerId");
-                methodName = command.getExtraData().get("methodName");
-                methodArgs = command.getExtraData().get("methodArgs");
+            controllerId = command.getExtraData().get("controllerId");
+            if (!(typeof controllerId === "string")) {
+                controllerId = controllerId.getContent();
             }
-            else {
-                controllerId = command.getExtraData().get("controllerId").getContent();
-                methodName = command.getExtraData().get("methodName").getContent();
-                methodArgs = command.getExtraData().get("methodArgs").getContent();
+            methodName = command.getExtraData().get("methodName");
+            if (!(typeof methodName === "string")) {
+                methodName = methodName.getContent();
+            }
+            methodArgs = command.getExtraData().get("methodArgs");
+            if (!(methodArgs instanceof Array)) {
+                methodArgs = methodArgs.getContent();
                 methodArgs = JSON.parse(methodArgs);
             }
+            // controllerId = command.getExtraData().get("controllerId").getContent();
+            // methodName = command.getExtraData().get("methodName").getContent();
+            // methodArgs = command.getExtraData().get("methodArgs").getContent();
+            // methodArgs = JSON.parse(methodArgs);
             panel = command.getContext().get("Panel");
             widget = panel.getWidget(controllerId);
             method = widget[methodName];
             var result = method.apply(widget, methodArgs);
+            var end = "success";
             if (callback != null) {
-                callback(result);
+                callback({
+                    end: end,
+                    outArgs: {
+                        result: result
+                    }
+                });
             }
         };
         return ControllerCallMethod;

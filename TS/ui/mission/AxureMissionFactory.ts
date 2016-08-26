@@ -64,7 +64,7 @@ export class AxureMissionFactory implements IMissionFactory{
                         }
                         inputParamsInside.put("methodArgs", argsInsid);
                         let command: Command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, function(result) {
-                            args.push(result);
+                            args.push(result.outArgs.result);
                             inputParams.put("methodArgs", args);
 
                         }, inputParamsInside);

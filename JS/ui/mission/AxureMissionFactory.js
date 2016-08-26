@@ -53,7 +53,7 @@ define(["require", "exports", "./FlowMission", "../Command", "./CommandMission",
                             }
                             inputParamsInside.put("methodArgs", argsInsid);
                             var command_1 = new Command_1.Command(EngineEvent_1.EngineEvent.COMMAND_ControllerCallMethod, null, null, function (result) {
-                                args_1.push(result);
+                                args_1.push(result.outArgs.result);
                                 inputParams_1.put("methodArgs", args_1);
                             }, inputParamsInside);
                             var mission_1 = new CommandMission_1.CommandMission(command_1);

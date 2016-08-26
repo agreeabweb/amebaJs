@@ -8,6 +8,7 @@ import {Context} from "../runtime/Context";
 import {ProcessInstanceThreadSegment} from "../engine/process/ProcessInstanceThreadSegment";
 import {UIConst} from "../const/UIConst";
 import {IPageParser} from "./pageparsers/IPageParser";
+import {CommandMission} from "./mission/CommandMission";
 
 
 
@@ -112,19 +113,28 @@ export class TadPanel {
         return this.entryToViews.get(name);
     }
 
-    public queueTaskPack(mission:IMission) {
+    public queueTaskPack(mission:any) {
 
-        // if (this.isBusy()) {
-        this.taskQueue.push(mission);   // busy和idle状态下的处理？？？
-        //     return;
-        // }
+        if(mission instanceof Array) {
+            for(let i = 0; i < mission.length; i++) {
+                this.taskQueue.push(mission[i]); 
+            }
+        } else {
+            // if (this.isBusy()) {
+            this.taskQueue.push(mission);   // busy和idle状态下的处理？？？
+            //     return;
+            // }
+        }
+        
         this.state = "busy";
         let current:IMission = this.taskQueue.shift();
         while (current != null) {
             // 这里同步还是异步看具体情况
-            setTimeout(current.execute(this, function () {
-
-            }), 0);
+            var callback: Function;
+            if(current instanceof CommandMission) {
+                callback = (<CommandMission>current).getCommandCallback();
+            }
+            setTimeout(current.execute(this, callback), 0);
             current = this.taskQueue.shift();
         }
         this.state = "idle";
@@ -132,7 +142,7 @@ export class TadPanel {
 
     public doUpdateViews(key, old, now) {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-        console.log("dm变化，刷新UI..." + key);
+        // console.log("dm变化，刷新UI..." + key);
         let views = this.entryToViews.get(key);
         let i:number;
         let size:number = views.length;

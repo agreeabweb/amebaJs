@@ -22,7 +22,10 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
             panel = command.getContext().get("Panel");
             widget = panel.getWidget(controllerId);
             method = widget[methodName];
-            method.apply(widget, methodArgs);
+            var result = method.apply(widget, methodArgs);
+            if (callback != null) {
+                callback(result);
+            }
         };
         return ControllerCallMethod;
     }());

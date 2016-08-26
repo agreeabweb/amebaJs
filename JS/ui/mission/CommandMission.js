@@ -13,6 +13,9 @@ define(["require", "exports", "../../const/ServiceObj"], function (require, expo
             this.command.setCallback(callback);
             commandExecutor.execute(this.command, this.command.getCallback());
         };
+        CommandMission.prototype.getCommandCallback = function () {
+            return this.command.getCallback();
+        };
         return CommandMission;
     }());
     exports.CommandMission = CommandMission;

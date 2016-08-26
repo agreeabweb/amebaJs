@@ -1,4 +1,4 @@
-define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (require, exports, HashMap_1, UIConst_1) {
+define(["require", "exports", "../lib/HashMap", "../const/UIConst", "./mission/CommandMission"], function (require, exports, HashMap_1, UIConst_1, CommandMission_1) {
     "use strict";
     /**
      * Created by Oliver on 2016-08-03 0003.
@@ -77,23 +77,31 @@ define(["require", "exports", "../lib/HashMap", "../const/UIConst"], function (r
             return this.entryToViews.get(name);
         };
         TadPanel.prototype.queueTaskPack = function (mission) {
-            // if (this.isBusy()) {
-            this.taskQueue.push(mission); // busy和idle状态下的处理？？？
-            //     return;
-            // }
+            if (mission instanceof Array) {
+                for (var i = 0; i < mission.length; i++) {
+                    this.taskQueue.push(mission[i]);
+                }
+            }
+            else {
+                // if (this.isBusy()) {
+                this.taskQueue.push(mission); // busy和idle状态下的处理？？？
+            }
             this.state = "busy";
             var current = this.taskQueue.shift();
             while (current != null) {
                 // 这里同步还是异步看具体情况
-                setTimeout(current.execute(this, function () {
-                }), 0);
+                var callback;
+                if (current instanceof CommandMission_1.CommandMission) {
+                    callback = current.getCommandCallback();
+                }
+                setTimeout(current.execute(this, callback), 0);
                 current = this.taskQueue.shift();
             }
             this.state = "idle";
         };
         TadPanel.prototype.doUpdateViews = function (key, old, now) {
             //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
-            console.log("dm变化，刷新UI..." + key);
+            // console.log("dm变化，刷新UI..." + key);
             var views = this.entryToViews.get(key);
             var i;
             var size = views.length;

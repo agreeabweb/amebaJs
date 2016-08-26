@@ -14,10 +14,11 @@ import config from "../../configure/config";
 export class AxureMissionFactory implements IMissionFactory{
 
 
-    public getMission(type:string,path: any):IMission{
+    public getMission(type:string,path: any): IMission[]{
+        var missions = [];
         if(type === "Flow" || type === "flow")
         {
-            return new FlowMission(path, null/**inArgMap */);
+            missions.push(new FlowMission(path, null/**inArgMap */));
         }
         else if(type === "linkWindow"){
 
@@ -26,24 +27,58 @@ export class AxureMissionFactory implements IMissionFactory{
 
             let command:Command = new Command(EngineEvent.COMMAND_OpenPanel,null,null,null,inputParams);
             let mission = new CommandMission(command);
-            return mission;
+            missions.push(mission);
         }
         else if(type === "setFunction") {
 
             let expr = path.expr.subExprs[0];
             let inputParams = new HashMap();
-            inputParams.put("methodName", expr.functionName);
-            inputParams.put("controllerId", expr.arguments[0].value[0]);
-            var methodArgs = [];
-            for(var i = 1; i < expr.arguments.length; i++) {
-                methodArgs.push(expr.arguments[i].value);
-            }
-            inputParams.put("methodArgs", methodArgs);
+            let exprArgs, args = [];
 
-            let command: Command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, null, inputParams);
-            let mission = new CommandMission(command);
-            return mission;
+            if(expr.exprType === "fcall") {
+                inputParams.put("methodName", expr.functionName);
+                exprArgs = expr.arguments;
+                for(let i = 0; i < exprArgs.length; i++) {
+                    // 调用方法的主体
+                    if(exprArgs[i].exprType === "pathLiteral") {
+                        if(exprArgs[i].isThis === true) {
+
+                        } else {
+                            inputParams.put("controllerId", (exprArgs[i].value)[0]);
+                        }
+                    } else if(exprArgs[i].exprType === "stringLiteral") {
+                        args.push(exprArgs[i].value);
+                    } else if(exprArgs[i].exprType === "fcall") {
+                        let inputParamsInside = new HashMap();
+                        let exprArgsInside, argsInsid = [];
+                        inputParamsInside.put("methodName", exprArgs[i].functionName);
+                        exprArgsInside = exprArgs[i].arguments;
+                        for(let j = 0; j < exprArgsInside.length; j++) {
+                            if(exprArgsInside[j].exprType === "pathLiteral") {
+                                if(exprArgsInside[j].isThis === true) {
+
+                                } else {
+                                    inputParamsInside.put("controllerId", (exprArgsInside[j].value)[0]);
+                                }
+                            }
+                        }
+                        inputParamsInside.put("methodArgs", argsInsid);
+                        let command: Command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, function(result) {
+                            args.push(result);
+                            inputParams.put("methodArgs", args);
+
+                        }, inputParamsInside);
+                        let mission: CommandMission = new CommandMission(command);
+                        missions.push(mission);
+                    }
+                }
+                inputParams.put("methodArgs", args);
+
+                let command: Command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, null, inputParams);
+                let mission: CommandMission = new CommandMission(command);
+                missions.push(mission);
+            }
         }
-        return null;
+        return missions;
     }
 }

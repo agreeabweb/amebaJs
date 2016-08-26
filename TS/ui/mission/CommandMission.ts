@@ -22,4 +22,8 @@ export class CommandMission implements  IMission {
         this.command.setCallback(callback);
         commandExecutor.execute(this.command,this.command.getCallback());
     }
+
+    public getCommandCallback(): Function {
+        return this.command.getCallback();
+    }
 }

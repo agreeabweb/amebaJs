@@ -4,5 +4,5 @@ import {IMission} from "./IMission";
  */
 export interface IMissionFactory {
 
-    getMission(type:string, path:string):IMission[];
+    getMission(type:string, path:string, targetId: string):IMission[];
 }

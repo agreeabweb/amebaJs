@@ -17,7 +17,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             var view = this; //避免this指代错误
             if (eventType === "click") {
                 view.getNode().on("click", function () {
-                    view.getHost().queueTaskPack(view.getMission(flowType, path));
+                    view.getHost().queueTaskPack(view.getMission(flowType, path, view.id));
                 });
             }
         };

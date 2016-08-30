@@ -17,8 +17,8 @@ define(["require", "exports", "../lib/HashMap", "../const/UIConst", "../const/Se
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);
         };
-        AbstractView.prototype.getMission = function (type, path) {
-            return this.getHost().getContext().get(ServiceObj_1.ServiceObj.MissionFactory).getMission(type, path);
+        AbstractView.prototype.getMission = function (type, path, targetId) {
+            return this.getHost().getContext().get(ServiceObj_1.ServiceObj.MissionFactory).getMission(type, path, targetId);
         };
         AbstractView.prototype.getHost = function () {
             return this.host;

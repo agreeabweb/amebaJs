@@ -31,8 +31,8 @@ export abstract class AbstractView implements IView{
         this.host.registerEntryView(name,this);
     }
 
-    protected getMission(type:string,path:string):IMission{
-        return this.getHost().getContext().get(ServiceObj.MissionFactory).getMission(type,path);
+    protected getMission(type:string,path:string, targetId: string):IMission{
+        return this.getHost().getContext().get(ServiceObj.MissionFactory).getMission(type,path, targetId);
     }
     
     public getHost(): TadPanel {

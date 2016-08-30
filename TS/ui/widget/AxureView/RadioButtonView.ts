@@ -3,38 +3,26 @@ import {TadPanel} from "../../TadPanel";
 
 class RadioButtonView extends AbstractView {
 
+    private hasChecked = false
+
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
         super(id,host,null, thisNode);
     }
 
     public bindEvent(actionName: string, action: any): void {
-        var view = this;
-        if(actionName === "onSelect" || actionName === "onUnselect") {
-            $("#" + this.id + "_input").on("click", function() {
-                let checked = $(this).prop("checked");
-                if(checked) {
-                    console.log("onSelected");
-                    if(action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    } else {
-                        var actions = action.cases[0].actions;
-                        for(var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i]));
-                        }
-                        
-                    }
+        var view = this, group;
+        if(actionName === "onSelect") {
+            $("#" + this.id + "_input").on("change", function(e) {
+                console.log("onSelect");
+                if(action.cases.length > 1) {
+                    throw "同一事件只能有一个case";
                 } else {
-                    console.log("onUnselected");
-                    if(action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    } else {
-                        var actions = action.cases[0].actions;
-                        for(var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i]));
-                        }
-                        
+                    var actions = action.cases[0].actions;
+                    for(var i = 0; i < actions.length; i++) {
+                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
                     }
+                    
                 }
             });
         }
@@ -46,6 +34,10 @@ class RadioButtonView extends AbstractView {
         } else {
             this.$thisNode.find("input[type='radio']").removeAttr("checked");
         }
+    }
+
+    public GetWidgetText(): string {
+        return this.$thisNode.find(".text span").text();
     }
 
     public layout(obj): void {

@@ -2,13 +2,49 @@ import {AbstractView} from "../../AbstractView";
 import {TadPanel} from "../../TadPanel";
 
 class TableView extends AbstractView {
+    private eTargetId: string; // 触发事件的不一定是table，可能是table_cell
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
         super(id,host,null, thisNode);
     }
 
-    public bindEvent(actionName: string, action: string): void {
+    public bindEvent(actionName: string, action: any, id): void {
+        var view = this, targetId;
+
+        targetId = id || this.id;
+        this.eTargetId = id;
+        if(actionName === "onClick") {
+            
+            $("#" + targetId).css("cursor", "pointer");
+            $("#" + targetId).on("click", function() {
+                console.log("onClick");
+                if(action.cases.length > 1) {
+                    throw "同一事件只能有一个case";
+                } else {
+                    var actions = action.cases[0].actions;
+                    for(var i = 0; i < actions.length; i++) {
+                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
+                    }
+                    
+                }
+            });
+        }
+    }
+
+    public SetCheckState(value) {
+        var targetId;
+        if(this.eTargetId) {
+            targetId = this.eTargetId;
+        } else {
+            targetId = this.id;
+        }
+
+        if(value) {
+            $("#" + targetId).addClass("selected");
+        } else {
+            $("#" + targetId).removeClass("selected");
+        }
     }
 
     public layout(obj): void {
@@ -26,12 +62,22 @@ class TableView extends AbstractView {
     }
 
     public layoutChild(obj) {
-        var objPaths = this.host.getAxureObjPaths();
-        var idMap = obj.id;
-        var id = objPaths[idMap].scriptId;
-        var childDom = $("#" + id);
-        var size = obj.style.size;
-        var location = obj.style.location;
+        var objPaths, idMap, id, childDom, size, location, interactionMap;
+
+        objPaths = this.host.getAxureObjPaths();
+        idMap = obj.id;
+        id = objPaths[idMap].scriptId;
+        childDom = $("#" + id);
+        size = obj.style.size;
+        location = obj.style.location;
+        interactionMap = obj.interactionMap;  // 表格单元的事件
+        
+        if(interactionMap != undefined) {
+            for(let actionName in interactionMap) {
+                this.bindEvent(actionName, interactionMap[actionName], id);
+            }
+        }
+
         childDom.css("position", "absolute");
         if(size != undefined) {
             childDom.css("width", size.width).css("height", size.height);

@@ -24,13 +24,13 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             if (eventType === "click") {
                 view.getNode().on("click", function () {
                     alert("click");
-                    view.getHost().queueTaskPack(view.getMission(flowType, path));
+                    view.getHost().queueTaskPack(view.getMission(flowType, path, view.id));
                 });
             }
             if (eventType === "change") {
                 view.getNode().on("change", function () {
                     alert("change");
-                    view.getHost().queueTaskPack(view.getMission(flowType, path));
+                    view.getHost().queueTaskPack(view.getMission(flowType, path, view.id));
                 });
             }
         };

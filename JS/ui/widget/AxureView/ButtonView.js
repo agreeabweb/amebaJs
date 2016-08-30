@@ -22,7 +22,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                     else {
                         var actions = action.cases[0].actions;
                         for (var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
                         }
                     }
                 });

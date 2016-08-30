@@ -10,7 +10,40 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
         function TableView(id, host, thisNode) {
             _super.call(this, id, host, null, thisNode);
         }
-        TableView.prototype.bindEvent = function (actionName, action) {
+        TableView.prototype.bindEvent = function (actionName, action, id) {
+            var view = this, targetId;
+            targetId = id || this.id;
+            this.eTargetId = id;
+            if (actionName === "onClick") {
+                $("#" + targetId).css("cursor", "pointer");
+                $("#" + targetId).on("click", function () {
+                    console.log("onClick");
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
+                    }
+                    else {
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
+                        }
+                    }
+                });
+            }
+        };
+        TableView.prototype.SetCheckState = function (value) {
+            var targetId;
+            if (this.eTargetId) {
+                targetId = this.eTargetId;
+            }
+            else {
+                targetId = this.id;
+            }
+            if (value) {
+                $("#" + targetId).addClass("selected");
+            }
+            else {
+                $("#" + targetId).removeClass("selected");
+            }
         };
         TableView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
@@ -25,12 +58,19 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         TableView.prototype.layoutChild = function (obj) {
-            var objPaths = this.host.getAxureObjPaths();
-            var idMap = obj.id;
-            var id = objPaths[idMap].scriptId;
-            var childDom = $("#" + id);
-            var size = obj.style.size;
-            var location = obj.style.location;
+            var objPaths, idMap, id, childDom, size, location, interactionMap;
+            objPaths = this.host.getAxureObjPaths();
+            idMap = obj.id;
+            id = objPaths[idMap].scriptId;
+            childDom = $("#" + id);
+            size = obj.style.size;
+            location = obj.style.location;
+            interactionMap = obj.interactionMap; // 表格单元的事件
+            if (interactionMap != undefined) {
+                for (var actionName in interactionMap) {
+                    this.bindEvent(actionName, interactionMap[actionName], id);
+                }
+            }
             childDom.css("position", "absolute");
             if (size != undefined) {
                 childDom.css("width", size.width).css("height", size.height);

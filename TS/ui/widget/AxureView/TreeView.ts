@@ -77,7 +77,7 @@ class TreeView extends AbstractView {
             size = this.getObjSize(idMap, this.obj.objects);
             location = this.getObjLocation(idMap, this.obj.objects);
 
-            image.css("position", "absolute");
+            image.css("position", "absolute").css("cursor", "pointer");
             if(size != undefined) {
                 image.css("width", size.width).css("height", size.height);
             }

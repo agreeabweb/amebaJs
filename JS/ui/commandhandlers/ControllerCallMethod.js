@@ -21,10 +21,6 @@ define(["require", "exports"], function (require, exports) {
                 methodArgs = methodArgs.getContent();
                 methodArgs = JSON.parse(methodArgs);
             }
-            // controllerId = command.getExtraData().get("controllerId").getContent();
-            // methodName = command.getExtraData().get("methodName").getContent();
-            // methodArgs = command.getExtraData().get("methodArgs").getContent();
-            // methodArgs = JSON.parse(methodArgs);
             panel = command.getContext().get("Panel");
             widget = panel.getWidget(controllerId);
             method = widget[methodName];

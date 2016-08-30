@@ -15,7 +15,7 @@ export class ButtonView extends AbstractView {
         if(eventType === "click")
         {
             view.getNode().on("click",function(){
-                view.getHost().queueTaskPack(view.getMission(flowType,path));
+                view.getHost().queueTaskPack(view.getMission(flowType,path, view.id));
             });
         }
 

@@ -14,25 +14,25 @@ import config from "../../configure/config";
 export class AxureMissionFactory implements IMissionFactory{
 
 
-    public getMission(type:string,path: any): IMission[]{
-        var missions = [];
+    public getMission(type:string,path: any, targetId: string): IMission[]{
+        var missions = [], inputParams, command, mission;
         if(type === "Flow" || type === "flow")
         {
             missions.push(new FlowMission(path, null/**inArgMap */));
         }
         else if(type === "linkWindow"){
 
-            let inputParams = new HashMap();
+            inputParams = new HashMap();
             inputParams.put("path", path.target.url);
 
-            let command:Command = new Command(EngineEvent.COMMAND_OpenPanel,null,null,null,inputParams);
-            let mission = new CommandMission(command);
+            command = new Command(EngineEvent.COMMAND_OpenPanel,null,null,null,inputParams);
+            mission = new CommandMission(command);
             missions.push(mission);
         }
         else if(type === "setFunction") {
+            inputParams = new HashMap();
 
             let expr = path.expr.subExprs[0];
-            let inputParams = new HashMap();
             let exprArgs, args = [];
 
             if(expr.exprType === "fcall") {
@@ -42,7 +42,7 @@ export class AxureMissionFactory implements IMissionFactory{
                     // 调用方法的主体
                     if(exprArgs[i].exprType === "pathLiteral") {
                         if(exprArgs[i].isThis === true) {
-
+                            inputParams.put("controllerId", targetId);
                         } else {
                             inputParams.put("controllerId", (exprArgs[i].value)[0]);
                         }
@@ -56,26 +56,26 @@ export class AxureMissionFactory implements IMissionFactory{
                         for(let j = 0; j < exprArgsInside.length; j++) {
                             if(exprArgsInside[j].exprType === "pathLiteral") {
                                 if(exprArgsInside[j].isThis === true) {
-
+                                    inputParamsInside.put("controllerId", targetId);
                                 } else {
                                     inputParamsInside.put("controllerId", (exprArgsInside[j].value)[0]);
                                 }
                             }
                         }
                         inputParamsInside.put("methodArgs", argsInsid);
-                        let command: Command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, function(result) {
+                        command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, function(result) {
                             args.push(result.outArgs.result);
                             inputParams.put("methodArgs", args);
 
                         }, inputParamsInside);
-                        let mission: CommandMission = new CommandMission(command);
+                        mission = new CommandMission(command);
                         missions.push(mission);
                     }
                 }
                 inputParams.put("methodArgs", args);
 
-                let command: Command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, null, inputParams);
-                let mission: CommandMission = new CommandMission(command);
+                command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, null, inputParams);
+                mission = new CommandMission(command);
                 missions.push(mission);
             }
         }

@@ -9,34 +9,20 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
         __extends(RadioButtonView, _super);
         function RadioButtonView(id, host, thisNode) {
             _super.call(this, id, host, null, thisNode);
+            this.hasChecked = false;
         }
         RadioButtonView.prototype.bindEvent = function (actionName, action) {
-            var view = this;
-            if (actionName === "onSelect" || actionName === "onUnselect") {
-                $("#" + this.id + "_input").on("click", function () {
-                    var checked = $(this).prop("checked");
-                    if (checked) {
-                        console.log("onSelected");
-                        if (action.cases.length > 1) {
-                            throw "同一事件只能有一个case";
-                        }
-                        else {
-                            var actions = action.cases[0].actions;
-                            for (var i = 0; i < actions.length; i++) {
-                                view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
-                            }
-                        }
+            var view = this, group;
+            if (actionName === "onSelect") {
+                $("#" + this.id + "_input").on("change", function (e) {
+                    console.log("onSelect");
+                    if (action.cases.length > 1) {
+                        throw "同一事件只能有一个case";
                     }
                     else {
-                        console.log("onUnselected");
-                        if (action.cases.length > 1) {
-                            throw "同一事件只能有一个case";
-                        }
-                        else {
-                            var actions = action.cases[0].actions;
-                            for (var i = 0; i < actions.length; i++) {
-                                view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i]));
-                            }
+                        var actions = action.cases[0].actions;
+                        for (var i = 0; i < actions.length; i++) {
+                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
                         }
                     }
                 });
@@ -49,6 +35,9 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             else {
                 this.$thisNode.find("input[type='radio']").removeAttr("checked");
             }
+        };
+        RadioButtonView.prototype.GetWidgetText = function () {
+            return this.$thisNode.find(".text span").text();
         };
         RadioButtonView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);

@@ -21,7 +21,7 @@ class TextAreaView extends AbstractView {
                 } else {
                     var actions = action.cases[0].actions;
                     for(var i = 0; i < actions.length; i++) {
-                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i]));
+                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
                     }
                     
                 }
@@ -34,7 +34,7 @@ class TextAreaView extends AbstractView {
                 } else {
                     var actions = action.cases[0].actions;
                     for(var i = 0; i < actions.length; i++) {
-                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i]));
+                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
                     }
                     
                 }

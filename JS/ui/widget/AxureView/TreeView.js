@@ -12,6 +12,7 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             this.init();
         }
         TreeView.prototype.bindEvent = function (actionName, action) {
+            this.bindEventToTarget($("#" + this.eTargetId), actionName, action);
         };
         TreeView.prototype.init = function () {
             var tree = this;
@@ -50,9 +51,16 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             var id = $(obj).attr("id");
             var dom = $("#" + id);
             var idMap = this.getIdMap(id);
-            var size = this.getObjSize(idMap, this.obj.objects);
-            var location = this.getObjLocation(idMap, this.obj.objects);
-            var fontSize = this.getFontSize(idMap, this.obj.objects);
+            var size = this.getObjInfo(idMap, this.obj.objects, "size");
+            var location = this.getObjInfo(idMap, this.obj.objects, "location");
+            var fontSize = this.getObjInfo(idMap, this.obj.objects, "fontSize");
+            var interactionMap = this.getObjInfo(idMap, this.obj.objects, "interactionMap");
+            if (interactionMap != undefined) {
+                this.eTargetId = id;
+                for (var actionName in interactionMap) {
+                    this.bindEvent(actionName, interactionMap[actionName]);
+                }
+            }
             dom.css("position", "absolute");
             if (size != undefined) {
                 dom.css("width", size.width).css("height", size.height);
@@ -69,8 +77,8 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             if (dom.find(".image").length != 0) {
                 var image = dom.find(".image");
                 idMap = this.getIdMap(image.attr("id"));
-                size = this.getObjSize(idMap, this.obj.objects);
-                location = this.getObjLocation(idMap, this.obj.objects);
+                size = this.getObjInfo(idMap, this.obj.objects, "size");
+                location = this.getObjInfo(idMap, this.obj.objects, "location");
                 image.css("position", "absolute").css("cursor", "pointer");
                 if (size != undefined) {
                     image.css("width", size.width).css("height", size.height);
@@ -83,8 +91,8 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
                 }
                 var selectiongroup = $(image).next();
                 idMap = this.getIdMap(selectiongroup.attr("id"));
-                size = this.getObjSize(idMap, this.obj.objects);
-                location = this.getObjLocation(idMap, this.obj.objects);
+                size = this.getObjInfo(idMap, this.obj.objects, "size");
+                location = this.getObjInfo(idMap, this.obj.objects, "location");
                 selectiongroup.css("position", "absolute");
                 if (size != undefined) {
                     selectiongroup.css("width", size.width).css("height", size.height);
@@ -99,8 +107,8 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             else {
                 var selectiongroup = $(dom).children();
                 idMap = this.getIdMap(selectiongroup.attr("id"));
-                size = this.getObjSize(idMap, this.obj.objects);
-                location = this.getObjLocation(idMap, this.obj.objects);
+                size = this.getObjInfo(idMap, this.obj.objects, "size");
+                location = this.getObjInfo(idMap, this.obj.objects, "location");
                 selectiongroup.css("position", "absolute");
                 if (size != undefined) {
                     selectiongroup.css("width", size.width).css("height", size.height);
@@ -133,53 +141,96 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
                 return 0; //没有孩子节点
             }
         };
-        TreeView.prototype.getObjLocation = function (idMap, objects) {
+        // public getInteractionMap(idMap, objects) {
+        //     if(idMap == undefined) {
+        //         throw "找不到此id对应的idMap";
+        //     } 
+        //     if(objects != undefined) {
+        //         for(var i = 0; i < objects.length; i++) {
+        //             if(objects[i].id === idMap) {
+        //                 return objects[i].interactionMap;
+        //             } else {
+        //                 var result = this.getInteractionMap(idMap, objects[i].objects);
+        //                 if(result != undefined) {
+        //                     return result;
+        //                 }
+        //             }
+        //         }
+        //     } 
+        // }
+        // public getObjLocation(idMap, objects) {
+        //     if(idMap == undefined) {
+        //         throw "找不到此id对应的idMap";
+        //     } 
+        //     if(objects != undefined) {
+        //         for(var i = 0; i < objects.length; i++) {
+        //             if(objects[i].id === idMap) {
+        //                 return objects[i].style.location;
+        //             } else {
+        //                 var result = this.getObjLocation(idMap, objects[i].objects);
+        //                 if(result != undefined) {
+        //                     return result;
+        //                 }
+        //             }
+        //         }
+        //     } 
+        // }
+        // public getObjSize(idMap, objects) {
+        //     if(idMap == undefined) {
+        //         throw "找不到此id对应的idMap";
+        //     }
+        //     if(objects != undefined) {
+        //         for(var i = 0; i < objects.length; i++) {
+        //             if(objects[i].id === idMap) {
+        //                 return objects[i].style.size;
+        //             } else {
+        //                 var result = this.getObjSize(idMap, objects[i].objects);
+        //                 if(result != undefined) {
+        //                     return result;
+        //                 }
+        //             }
+        //         }
+        //     } 
+        // }
+        // public getFontSize(idMap, objects) {
+        //     if(idMap == undefined) {
+        //         throw "找不到此id对应的idMap";
+        //     }
+        //     if(objects != undefined) {
+        //         for(var i = 0; i < objects.length; i++) {
+        //             if(objects[i].id === idMap) {
+        //                 return objects[i].style.fontSize;
+        //             } else {
+        //                 var result = this.getFontSize(idMap, objects[i].objects);
+        //                 if(result != undefined) {
+        //                     return result;
+        //                 }
+        //             }
+        //         }
+        //     } 
+        // }
+        TreeView.prototype.getObjInfo = function (idMap, objects, info) {
             if (idMap == undefined) {
                 throw "找不到此id对应的idMap";
             }
             if (objects != undefined) {
                 for (var i = 0; i < objects.length; i++) {
                     if (objects[i].id === idMap) {
-                        return objects[i].style.location;
-                    }
-                    else {
-                        var result = this.getObjLocation(idMap, objects[i].objects);
-                        if (result != undefined) {
-                            return result;
+                        if (info === "fontSize") {
+                            return objects[i].style.fontSize;
+                        }
+                        else if (info === "location") {
+                            return objects[i].style.location;
+                        }
+                        else if (info === "size") {
+                            return objects[i].style.size;
+                        }
+                        else if (info === "interactionMap") {
+                            return objects[i].interactionMap;
                         }
                     }
-                }
-            }
-        };
-        TreeView.prototype.getObjSize = function (idMap, objects) {
-            if (idMap == undefined) {
-                throw "找不到此id对应的idMap";
-            }
-            if (objects != undefined) {
-                for (var i = 0; i < objects.length; i++) {
-                    if (objects[i].id === idMap) {
-                        return objects[i].style.size;
-                    }
                     else {
-                        var result = this.getObjSize(idMap, objects[i].objects);
-                        if (result != undefined) {
-                            return result;
-                        }
-                    }
-                }
-            }
-        };
-        TreeView.prototype.getFontSize = function (idMap, objects) {
-            if (idMap == undefined) {
-                throw "找不到此id对应的idMap";
-            }
-            if (objects != undefined) {
-                for (var i = 0; i < objects.length; i++) {
-                    if (objects[i].id === idMap) {
-                        return objects[i].style.fontSize;
-                    }
-                    else {
-                        var result = this.getFontSize(idMap, objects[i].objects);
+                        var result = this.getObjInfo(idMap, objects[i].objects, info);
                         if (result != undefined) {
                             return result;
                         }

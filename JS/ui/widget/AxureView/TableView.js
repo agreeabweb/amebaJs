@@ -11,36 +11,8 @@ define(["require", "exports", "./AbstractAxureView", "../../eventpub/Event"], fu
             _super.call(this, id, host, null, thisNode);
         }
         TableView.prototype.bindEvent = function (actionName, action) {
-            // var targetId = id || this.id;
             this.bindEventToTarget($("#" + this.eTargetId), actionName, action);
         };
-        // public bindEvent(actionName: string, action: any, id): void {
-        //     var view = this, targetId;
-        //     targetId = id || this.id;
-        //     if(actionName === "onClick") {
-        //         $("#" + targetId).css("cursor", "pointer");
-        //         $("#" + targetId).on("click", function() {
-        //             console.log("onClick");
-        //             view.eTargetId = $(this).attr("id");
-        //             if(action.cases.length > 1) {
-        //                 throw "同一事件只能有一个case";
-        //             } else {
-        //                 var actions = action.cases[0].actions;
-        //                 for(var i = 0; i < actions.length; i++) {
-        //                     view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
-        //                 }
-        //             }
-        //         });
-        //     } else if(actionName === "onSelect") {
-        //         AEvent.addEvent(targetId, "onSelect", function() {
-        //             console.log("onSelect");
-        //         });
-        //     } else if(actionName === "onUnselect") {
-        //         AEvent.addEvent(targetId, "onUnselect", function() {
-        //             console.log("onUnselect");
-        //         });
-        //     }
-        // }
         TableView.prototype.SetCheckState = function (value) {
             var targetId, target;
             if (this.eTargetId) {

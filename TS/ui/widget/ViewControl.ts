@@ -34,7 +34,6 @@ class ViewControl {
                 view = new AxureHtmlButton(id, panel, dom.find("input"));
             } else if(type === "treeNodeObject") {
                 view = new AxureTree(id, panel, dom);
-                view.bindEvent("init");
             } else if(type === "textArea") {
                 view = new AxureTextArea(id, panel, dom);
             } else if(type === "listBox") {

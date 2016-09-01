@@ -47,7 +47,7 @@ define(["require", "exports", "../../AbstractView", "../../eventpub/Event"], fun
             }
         };
         AbstractAxureView.prototype.dealwithEvent = function (target, actionName, action, view) {
-            if (target.hasClass("table_cell")) {
+            if (target.hasClass("table_cell") || target.hasClass("treenode")) {
                 view.eTargetId = target.attr("id");
             }
             if (action.cases.length > 1) {

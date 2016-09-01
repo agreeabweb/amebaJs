@@ -43,7 +43,7 @@ abstract class AbstractAxureView extends AbstractView {
     }
 
     public dealwithEvent(target: JQuery, actionName: string, action: any, view) {
-        if(target.hasClass("table_cell")) {
+        if(target.hasClass("table_cell") || target.hasClass("treenode")) {
             view.eTargetId = target.attr("id");
         }
 

@@ -23,7 +23,6 @@ define(["require", "exports", "../../configure/config", "./HTMLView/ButtonView",
                 }
                 else if (type === "treeNodeObject") {
                     view = new TreeView_2.TreeView(id, panel, dom);
-                    view.bindEvent("init");
                 }
                 else if (type === "textArea") {
                     view = new TextAreaView_1.TextAreaView(id, panel, dom);

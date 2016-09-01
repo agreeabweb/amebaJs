@@ -3,47 +3,85 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "./AbstractAxureView", "../../eventpub/Event"], function (require, exports, AbstractAxureView_1, Event_1) {
     "use strict";
     var TableView = (function (_super) {
         __extends(TableView, _super);
         function TableView(id, host, thisNode) {
             _super.call(this, id, host, null, thisNode);
         }
-        TableView.prototype.bindEvent = function (actionName, action, id) {
-            var view = this, targetId;
-            targetId = id || this.id;
-            this.eTargetId = id;
-            if (actionName === "onClick") {
-                $("#" + targetId).css("cursor", "pointer");
-                $("#" + targetId).on("click", function () {
-                    console.log("onClick");
-                    if (action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    }
-                    else {
-                        var actions = action.cases[0].actions;
-                        for (var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
-                        }
-                    }
-                });
-            }
+        TableView.prototype.bindEvent = function (actionName, action) {
+            // var targetId = id || this.id;
+            this.bindEventToTarget($("#" + this.eTargetId), actionName, action);
         };
+        // public bindEvent(actionName: string, action: any, id): void {
+        //     var view = this, targetId;
+        //     targetId = id || this.id;
+        //     if(actionName === "onClick") {
+        //         $("#" + targetId).css("cursor", "pointer");
+        //         $("#" + targetId).on("click", function() {
+        //             console.log("onClick");
+        //             view.eTargetId = $(this).attr("id");
+        //             if(action.cases.length > 1) {
+        //                 throw "同一事件只能有一个case";
+        //             } else {
+        //                 var actions = action.cases[0].actions;
+        //                 for(var i = 0; i < actions.length; i++) {
+        //                     view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
+        //                 }
+        //             }
+        //         });
+        //     } else if(actionName === "onSelect") {
+        //         AEvent.addEvent(targetId, "onSelect", function() {
+        //             console.log("onSelect");
+        //         });
+        //     } else if(actionName === "onUnselect") {
+        //         AEvent.addEvent(targetId, "onUnselect", function() {
+        //             console.log("onUnselect");
+        //         });
+        //     }
+        // }
         TableView.prototype.SetCheckState = function (value) {
-            var targetId;
+            var targetId, target;
             if (this.eTargetId) {
                 targetId = this.eTargetId;
             }
             else {
                 targetId = this.id;
             }
-            if (value) {
-                $("#" + targetId).addClass("selected");
+            target = $("#" + targetId);
+            if (value === "true") {
+                target.addClass("selected");
+                if (Event_1.AEvent.checkEventIsExsit(targetId, "onSelect")) {
+                    Event_1.AEvent.fireEvent(targetId, "onSelect");
+                }
+            }
+            else if (value === "false") {
+                target.removeClass("selected");
+                if (Event_1.AEvent.checkEventIsExsit(targetId, "onUnselect")) {
+                    Event_1.AEvent.fireEvent(targetId, "onUnselect");
+                }
             }
             else {
-                $("#" + targetId).removeClass("selected");
+                if (target.hasClass("selected")) {
+                    target.removeClass("selected");
+                    if (Event_1.AEvent.checkEventIsExsit(targetId, "onUnselect")) {
+                        Event_1.AEvent.fireEvent(targetId, "onUnselect");
+                    }
+                }
+                else {
+                    target.addClass("selected");
+                    if (Event_1.AEvent.checkEventIsExsit(targetId, "onSelect")) {
+                        Event_1.AEvent.fireEvent(targetId, "onSelect");
+                    }
+                }
             }
+        };
+        TableView.prototype.GetWidgetText = function () {
+            return $("#" + this.eTargetId + " .text span").text();
+        };
+        TableView.prototype.setETargetId = function (eTargetId) {
+            this.eTargetId = eTargetId;
         };
         TableView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
@@ -67,8 +105,9 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             location = obj.style.location;
             interactionMap = obj.interactionMap; // 表格单元的事件
             if (interactionMap != undefined) {
+                this.eTargetId = id;
                 for (var actionName in interactionMap) {
-                    this.bindEvent(actionName, interactionMap[actionName], id);
+                    this.bindEvent(actionName, interactionMap[actionName]);
                 }
             }
             childDom.css("position", "absolute");
@@ -93,7 +132,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         return TableView;
-    }(AbstractView_1.AbstractView));
+    }(AbstractAxureView_1.AbstractAxureView));
     exports.TableView = TableView;
 });
 //# sourceMappingURL=TableView.js.map

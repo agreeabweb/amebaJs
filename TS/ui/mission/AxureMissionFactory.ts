@@ -16,6 +16,7 @@ export class AxureMissionFactory implements IMissionFactory{
 
     public getMission(type:string,path: any, targetId: string): IMission[]{
         var missions = [], inputParams, command, mission;
+        inputParams = new HashMap();
         if(type === "Flow" || type === "flow")
         {
             missions.push(new FlowMission(path, null/**inArgMap */));

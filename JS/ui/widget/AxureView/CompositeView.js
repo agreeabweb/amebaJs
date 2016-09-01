@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "./AbstractAxureView"], function (require, exports, AbstractAxureView_1) {
     "use strict";
     var CompositeView = (function (_super) {
         __extends(CompositeView, _super);
@@ -22,7 +22,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         return CompositeView;
-    }(AbstractView_1.AbstractView));
+    }(AbstractAxureView_1.AbstractAxureView));
     exports.CompositeView = CompositeView;
 });
 //# sourceMappingURL=CompositeView.js.map

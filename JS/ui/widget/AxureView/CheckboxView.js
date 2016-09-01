@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "./AbstractAxureView"], function (require, exports, AbstractAxureView_1) {
     "use strict";
     var CheckboxView = (function (_super) {
         __extends(CheckboxView, _super);
@@ -11,44 +11,14 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             _super.call(this, id, host, null, thisNode);
         }
         CheckboxView.prototype.bindEvent = function (actionName, action) {
-            var view = this;
-            if (actionName === "onSelect" || actionName === "onUnselect") {
-                $("#" + this.id + "_input").on("click", function () {
-                    console.log("onClick");
-                    var checked = $(this).prop("checked");
-                    if (checked) {
-                        console.log("onSelected");
-                        if (action.cases.length > 1) {
-                            throw "同一事件只能有一个case";
-                        }
-                        else {
-                            var actions = action.cases[0].actions;
-                            for (var i = 0; i < actions.length; i++) {
-                                view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
-                            }
-                        }
-                    }
-                    else {
-                        console.log("onUnselected");
-                        if (action.cases.length > 1) {
-                            throw "同一事件只能有一个case";
-                        }
-                        else {
-                            var actions = action.cases[0].actions;
-                            for (var i = 0; i < actions.length; i++) {
-                                view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
-                            }
-                        }
-                    }
-                });
-            }
+            this.bindEventToTarget($("#" + this.id + "_input"), actionName, action);
         };
         CheckboxView.prototype.SetCheckState = function (check) {
             if (check) {
-                this.$thisNode.find("input[type='checkbox']").attr("checked", "true");
+                this.$thisNode.find("input[type='checkbox']").prop("checked", true);
             }
             else {
-                this.$thisNode.find("input[type='checkbox']").removeAttr("checked");
+                this.$thisNode.find("input[type='checkbox']").prop("checked", false);
             }
         };
         CheckboxView.prototype.GetWidgetText = function () {
@@ -82,7 +52,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         return CheckboxView;
-    }(AbstractView_1.AbstractView));
+    }(AbstractAxureView_1.AbstractAxureView));
     exports.CheckboxView = CheckboxView;
 });
 //# sourceMappingURL=CheckboxView.js.map

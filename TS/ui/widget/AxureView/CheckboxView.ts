@@ -1,7 +1,7 @@
-import {AbstractView} from "../../AbstractView";
+import {AbstractAxureView} from "./AbstractAxureView";
 import {TadPanel} from "../../TadPanel";
 
-class CheckboxView extends AbstractView {
+class CheckboxView extends AbstractAxureView {
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
@@ -9,44 +9,14 @@ class CheckboxView extends AbstractView {
     }
 
     public bindEvent(actionName: string, action: any): void {
-        var view = this;
-
-        if(actionName === "onSelect" || actionName === "onUnselect") {
-            $("#" + this.id + "_input").on("click", function() {
-                console.log("onClick");
-                let checked = $(this).prop("checked");
-                if(checked) {
-                    console.log("onSelected");
-                    if(action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    } else {
-                        var actions = action.cases[0].actions;
-                        for(var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
-                        }
-                        
-                    }
-                } else {
-                    console.log("onUnselected");
-                    if(action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    } else {
-                        var actions = action.cases[0].actions;
-                        for(var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
-                        }
-                        
-                    }
-                }
-            });
-        }
+        this.bindEventToTarget($("#" + this.id + "_input"), actionName, action);
     }
 
     public SetCheckState(check: boolean): void {
         if(check) {
-            this.$thisNode.find("input[type='checkbox']").attr("checked", "true");
+            this.$thisNode.find("input[type='checkbox']").prop("checked", true);
         } else {
-            this.$thisNode.find("input[type='checkbox']").removeAttr("checked");
+            this.$thisNode.find("input[type='checkbox']").prop("checked", false);
         }
     }
 

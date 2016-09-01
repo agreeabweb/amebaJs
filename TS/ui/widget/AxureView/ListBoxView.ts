@@ -1,30 +1,25 @@
-import {AbstractView} from "../../AbstractView";
+import {AbstractAxureView} from "./AbstractAxureView";
 import {TadPanel} from "../../TadPanel";
 
-class ListBoxView extends AbstractView {
+class ListBoxView extends AbstractAxureView {
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
         super(id,host,null, thisNode);
     }
 
-
     public bindEvent(actionName: string, action: any): void {
-        var view = this;
-        if(actionName === "onSelectionChange") {
-            $("#" + this.id + " select").on("change", function() {
-                console.log("onSelectionChange");
-                if(action.cases.length > 1) {
-                    throw "同一事件只能有一个case";
-                } else {
-                    var actions = action.cases[0].actions;
-                    for(var i = 0; i < actions.length; i++) {
-                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
-                    }
-                    
-                }
-            });
+        this.bindEventToTarget($("#" + this.id + " select"), actionName, action);
+    }
+
+    public GetSelectedOption(): string {
+        var options = $("#" + this.id + " select option");
+        for(let i = 0; i < options.length; i++) {
+            if($(options[i]).prop("selected") === true) {
+                return $(options[i]).val();
+            }
         }
+        return null;
     }
 
     public layout(obj): void {

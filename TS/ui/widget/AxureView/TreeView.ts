@@ -1,7 +1,7 @@
-import {AbstractView} from "../../AbstractView";
+import {AbstractAxureView} from "./AbstractAxureView";
 import {TadPanel} from "../../TadPanel";
 
-class TreeView extends AbstractView {
+class TreeView extends AbstractAxureView {
 
     private obj;
     private visibleLeavesNum;
@@ -9,27 +9,30 @@ class TreeView extends AbstractView {
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
         super(id,host,null, thisNode);
+        this.init();
     }
 
     public bindEvent(actionName: string, action: string): void {
-        var tree = this;
-        if(actionName === "init") {
-            $("#" + this.id + " .image").on("click", function() {
-                var parentId = $(this).parent().attr("id");
-                var childrenContainer = $("#" + parentId + "_children");
-                var img = $(this).find("img");
-                if(childrenContainer.css("visibility") === "visible") {
-                    img.attr("src", (img.attr("src")).replace("_selected", ""));
-                    childrenContainer.css("visibility", "hidden").css("display", "none");
-                } else {
-                    img.attr("src", (img.attr("src")).split(".")[0] + "_selected.png");
-                    childrenContainer.css("visibility", "visible").css("display", "block");
-                }
+        
+    }
 
-                //重新布局
-                tree.layout(tree.obj);         
-            });
-        }
+    public init() {
+        var tree = this;
+        $("#" + this.id + " .image").on("click", function() {
+            var parentId = $(this).parent().attr("id");
+            var childrenContainer = $("#" + parentId + "_children");
+            var img = $(this).find("img");
+            if(childrenContainer.css("visibility") === "visible") {
+                img.attr("src", (img.attr("src")).replace("_selected", ""));
+                childrenContainer.css("visibility", "hidden").css("display", "none");
+            } else {
+                img.attr("src", (img.attr("src")).split(".")[0] + "_selected.png");
+                childrenContainer.css("visibility", "visible").css("display", "block");
+            }
+
+            //重新布局
+            tree.layout(tree.obj);         
+        });
     }
 
     public layout(obj): void {

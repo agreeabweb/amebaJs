@@ -3,32 +3,33 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "./AbstractAxureView"], function (require, exports, AbstractAxureView_1) {
     "use strict";
     var TreeView = (function (_super) {
         __extends(TreeView, _super);
         function TreeView(id, host, thisNode) {
             _super.call(this, id, host, null, thisNode);
+            this.init();
         }
         TreeView.prototype.bindEvent = function (actionName, action) {
+        };
+        TreeView.prototype.init = function () {
             var tree = this;
-            if (actionName === "init") {
-                $("#" + this.id + " .image").on("click", function () {
-                    var parentId = $(this).parent().attr("id");
-                    var childrenContainer = $("#" + parentId + "_children");
-                    var img = $(this).find("img");
-                    if (childrenContainer.css("visibility") === "visible") {
-                        img.attr("src", (img.attr("src")).replace("_selected", ""));
-                        childrenContainer.css("visibility", "hidden").css("display", "none");
-                    }
-                    else {
-                        img.attr("src", (img.attr("src")).split(".")[0] + "_selected.png");
-                        childrenContainer.css("visibility", "visible").css("display", "block");
-                    }
-                    //重新布局
-                    tree.layout(tree.obj);
-                });
-            }
+            $("#" + this.id + " .image").on("click", function () {
+                var parentId = $(this).parent().attr("id");
+                var childrenContainer = $("#" + parentId + "_children");
+                var img = $(this).find("img");
+                if (childrenContainer.css("visibility") === "visible") {
+                    img.attr("src", (img.attr("src")).replace("_selected", ""));
+                    childrenContainer.css("visibility", "hidden").css("display", "none");
+                }
+                else {
+                    img.attr("src", (img.attr("src")).split(".")[0] + "_selected.png");
+                    childrenContainer.css("visibility", "visible").css("display", "block");
+                }
+                //重新布局
+                tree.layout(tree.obj);
+            });
         };
         TreeView.prototype.layout = function (obj) {
             this.obj = obj;
@@ -196,7 +197,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             return undefined;
         };
         return TreeView;
-    }(AbstractView_1.AbstractView));
+    }(AbstractAxureView_1.AbstractAxureView));
     exports.TreeView = TreeView;
 });
 //# sourceMappingURL=TreeView.js.map

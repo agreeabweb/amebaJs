@@ -1,7 +1,7 @@
-import {AbstractView} from "../../AbstractView";
+import {AbstractAxureView} from "./AbstractAxureView";
 import {TadPanel} from "../../TadPanel";
 
-class RadioButtonView extends AbstractView {
+class RadioButtonView extends AbstractAxureView {
 
     private hasChecked = false
 
@@ -11,28 +11,14 @@ class RadioButtonView extends AbstractView {
     }
 
     public bindEvent(actionName: string, action: any): void {
-        var view = this, group;
-        if(actionName === "onSelect") {
-            $("#" + this.id + "_input").on("change", function(e) {
-                console.log("onSelect");
-                if(action.cases.length > 1) {
-                    throw "同一事件只能有一个case";
-                } else {
-                    var actions = action.cases[0].actions;
-                    for(var i = 0; i < actions.length; i++) {
-                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
-                    }
-                    
-                }
-            });
-        }
+        this.bindEventToTarget($("#" + this.id + "_input"), actionName, action);
     }
 
     public SetCheckState(check: boolean): void {
         if(check) {
-            this.$thisNode.find("input[type='radio']").attr("checked", "true");
+            this.$thisNode.find("input[type='checkbox']").prop("checked", true);
         } else {
-            this.$thisNode.find("input[type='radio']").removeAttr("checked");
+            this.$thisNode.find("input[type='checkbox']").prop("checked", false);
         }
     }
 

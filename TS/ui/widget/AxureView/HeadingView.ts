@@ -1,14 +1,14 @@
-import {AbstractView} from "../../AbstractView";
+import {AbstractAxureView} from "./AbstractAxureView";
 import {TadPanel} from "../../TadPanel";
 
-class HeadingView extends AbstractView {
+class HeadingView extends AbstractAxureView {
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
     {
         super(id,host,null, thisNode);
     }
 
-    public bindEvent(actionName: string, action: string): void {
+    public bindEvent(actionName: string, action: any): void {
     }
 
     public layout(obj): void {

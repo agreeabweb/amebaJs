@@ -8,6 +8,7 @@ define(["require", "exports", "./FlowMission", "../Command", "./CommandMission",
         }
         AxureMissionFactory.prototype.getMission = function (type, path, targetId) {
             var missions = [], inputParams, command, mission;
+            inputParams = new HashMap_1.HashMap();
             if (type === "Flow" || type === "flow") {
                 missions.push(new FlowMission_1.FlowMission(path, null /**inArgMap */));
             }

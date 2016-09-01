@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "./AbstractAxureView"], function (require, exports, AbstractAxureView_1) {
     "use strict";
     var ListBoxView = (function (_super) {
         __extends(ListBoxView, _super);
@@ -11,21 +11,16 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             _super.call(this, id, host, null, thisNode);
         }
         ListBoxView.prototype.bindEvent = function (actionName, action) {
-            var view = this;
-            if (actionName === "onSelectionChange") {
-                $("#" + this.id + " select").on("change", function () {
-                    console.log("onSelectionChange");
-                    if (action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    }
-                    else {
-                        var actions = action.cases[0].actions;
-                        for (var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
-                        }
-                    }
-                });
+            this.bindEventToTarget($("#" + this.id + " select"), actionName, action);
+        };
+        ListBoxView.prototype.GetSelectedOption = function () {
+            var options = $("#" + this.id + " select option");
+            for (var i = 0; i < options.length; i++) {
+                if ($(options[i]).prop("selected") === true) {
+                    return $(options[i]).val();
+                }
             }
+            return null;
         };
         ListBoxView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
@@ -39,7 +34,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         return ListBoxView;
-    }(AbstractView_1.AbstractView));
+    }(AbstractAxureView_1.AbstractAxureView));
     exports.ListBoxView = ListBoxView;
 });
 //# sourceMappingURL=ListBoxView.js.map

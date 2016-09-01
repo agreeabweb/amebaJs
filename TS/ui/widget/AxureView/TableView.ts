@@ -1,7 +1,8 @@
-import {AbstractView} from "../../AbstractView";
+import {AbstractAxureView} from "./AbstractAxureView";
 import {TadPanel} from "../../TadPanel";
+import {AEvent} from "../../eventpub/Event";
 
-class TableView extends AbstractView {
+class TableView extends AbstractAxureView {
     private eTargetId: string; // 触发事件的不一定是table，可能是table_cell
 
     constructor(id:string,host:TadPanel, thisNode: JQuery)
@@ -9,42 +10,82 @@ class TableView extends AbstractView {
         super(id,host,null, thisNode);
     }
 
-    public bindEvent(actionName: string, action: any, id): void {
-        var view = this, targetId;
-
-        targetId = id || this.id;
-        this.eTargetId = id;
-        if(actionName === "onClick") {
-            
-            $("#" + targetId).css("cursor", "pointer");
-            $("#" + targetId).on("click", function() {
-                console.log("onClick");
-                if(action.cases.length > 1) {
-                    throw "同一事件只能有一个case";
-                } else {
-                    var actions = action.cases[0].actions;
-                    for(var i = 0; i < actions.length; i++) {
-                        view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
-                    }
-                    
-                }
-            });
-        }
+    public bindEvent(actionName: string, action: any): void {
+        // var targetId = id || this.id;
+        this.bindEventToTarget($("#" + this.eTargetId), actionName, action);
     }
 
+    // public bindEvent(actionName: string, action: any, id): void {
+    //     var view = this, targetId;
+
+    //     targetId = id || this.id;
+    //     if(actionName === "onClick") {
+    //         $("#" + targetId).css("cursor", "pointer");
+    //         $("#" + targetId).on("click", function() {
+    //             console.log("onClick");
+    //             view.eTargetId = $(this).attr("id");
+    //             if(action.cases.length > 1) {
+    //                 throw "同一事件只能有一个case";
+    //             } else {
+    //                 var actions = action.cases[0].actions;
+    //                 for(var i = 0; i < actions.length; i++) {
+    //                     view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
+    //                 }
+                    
+    //             }
+    //         });
+    //     } else if(actionName === "onSelect") {
+    //         AEvent.addEvent(targetId, "onSelect", function() {
+    //             console.log("onSelect");
+    //         });
+    //     } else if(actionName === "onUnselect") {
+    //         AEvent.addEvent(targetId, "onUnselect", function() {
+    //             console.log("onUnselect");
+    //         });
+    //     }
+    // }
+
     public SetCheckState(value) {
-        var targetId;
+        var targetId, target;
         if(this.eTargetId) {
             targetId = this.eTargetId;
         } else {
             targetId = this.id;
         }
 
-        if(value) {
-            $("#" + targetId).addClass("selected");
+        target = $("#" + targetId);
+
+        if(value === "true") {
+            target.addClass("selected");
+            if(AEvent.checkEventIsExsit(targetId, "onSelect")) {
+                AEvent.fireEvent(targetId, "onSelect");
+            }
+        } else if(value === "false") {
+            target.removeClass("selected");
+            if(AEvent.checkEventIsExsit(targetId, "onUnselect")) {
+                AEvent.fireEvent(targetId, "onUnselect");
+            }
         } else {
-            $("#" + targetId).removeClass("selected");
+            if(target.hasClass("selected")) {
+                target.removeClass("selected");
+                if(AEvent.checkEventIsExsit(targetId, "onUnselect")) {
+                    AEvent.fireEvent(targetId, "onUnselect");
+                }
+            } else {
+                target.addClass("selected");
+                if(AEvent.checkEventIsExsit(targetId, "onSelect")) {
+                    AEvent.fireEvent(targetId, "onSelect");
+                }
+            }
         }
+    }
+
+    public GetWidgetText(): string {
+        return $("#" + this.eTargetId + " .text span").text();
+    }
+
+    public setETargetId(eTargetId) {
+        this.eTargetId = eTargetId;
     }
 
     public layout(obj): void {
@@ -73,8 +114,9 @@ class TableView extends AbstractView {
         interactionMap = obj.interactionMap;  // 表格单元的事件
         
         if(interactionMap != undefined) {
+            this.eTargetId = id;
             for(let actionName in interactionMap) {
-                this.bindEvent(actionName, interactionMap[actionName], id);
+                this.bindEvent(actionName, interactionMap[actionName]);
             }
         }
 

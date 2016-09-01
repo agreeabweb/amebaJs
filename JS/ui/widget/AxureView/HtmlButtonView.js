@@ -3,7 +3,7 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-define(["require", "exports", "../../AbstractView"], function (require, exports, AbstractView_1) {
+define(["require", "exports", "./AbstractAxureView"], function (require, exports, AbstractAxureView_1) {
     "use strict";
     var HtmlButtonView = (function (_super) {
         __extends(HtmlButtonView, _super);
@@ -11,22 +11,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             _super.call(this, id, host, null, thisNode);
         }
         HtmlButtonView.prototype.bindEvent = function (actionName, action) {
-            var view = this;
-            if (actionName === "onClick") {
-                this.$thisNode.css("cursor", "pointer");
-                $("#" + this.id + "_input").on("click", function () {
-                    console.log("onClick");
-                    if (action.cases.length > 1) {
-                        throw "同一事件只能有一个case";
-                    }
-                    else {
-                        var actions = action.cases[0].actions;
-                        for (var i = 0; i < actions.length; i++) {
-                            view.getHost().queueTaskPack(view.getMission(actions[i].action, actions[i], view.id));
-                        }
-                    }
-                });
-            }
+            this.bindEventToTarget($(this.$thisNode), actionName, action);
         };
         HtmlButtonView.prototype.layout = function (obj) {
             var dom = $("#" + this.id);
@@ -40,7 +25,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             }
         };
         return HtmlButtonView;
-    }(AbstractView_1.AbstractView));
+    }(AbstractAxureView_1.AbstractAxureView));
     exports.HtmlButtonView = HtmlButtonView;
 });
 //# sourceMappingURL=HtmlButtonView.js.map

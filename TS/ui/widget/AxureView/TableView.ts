@@ -14,8 +14,8 @@ class TableView extends AbstractAxureView {
         this.bindEventToTarget($("#" + this.eTargetId), actionName, action);
     }
 
-    public SetCheckState(value) {
-        var targetId, target;
+    public SetCheckState(value: string): void {
+        let targetId, target;
         if(this.eTargetId) {
             targetId = this.eTargetId;
         } else {
@@ -53,17 +53,15 @@ class TableView extends AbstractAxureView {
         return $("#" + this.eTargetId + " .text span").text();
     }
 
-    public setETargetId(eTargetId) {
-        this.eTargetId = eTargetId;
-    }
-
     public layout(obj): void {
-        var dom = $("#" + this.id);
+        let dom, objects;
+
+        dom = $("#" + this.id);
         dom.css("position", "absolute")
             .css("width", obj.style.size.width).css("height", obj.style.size.height)
             .css("left", obj.style.location.x).css("top", obj.style.location.y);
 
-        var objects = obj.objects;
+        objects = obj.objects;
         if(objects != undefined) {
             for(let i = 0; i < objects.length; i++) {
                 this.layoutChild(objects[i]);
@@ -71,8 +69,8 @@ class TableView extends AbstractAxureView {
         }
     }
 
-    public layoutChild(obj) {
-        var objPaths, idMap, id, childDom, size, location, interactionMap;
+    public layoutChild(obj: any): void {
+        let objPaths, idMap, id, childDom, size, location, interactionMap, objects;
 
         objPaths = this.host.getAxureObjPaths();
         idMap = obj.id;
@@ -104,7 +102,7 @@ class TableView extends AbstractAxureView {
             childDom.find(".text span").css("font-size", obj.style.fontSize);
         }
 
-        var objects = obj.objects;
+        objects = obj.objects;
         if(objects != undefined) {
             for(let i = 0; i < objects.length; i++) {
                 this.layoutChild(objects[i]);

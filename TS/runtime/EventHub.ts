@@ -8,7 +8,7 @@ export class EventHub {
     * engine.command.*：订阅流程中的Command
     * model.change.*: 订阅dm变化
     * */
-    public static subscribe(topic:string, context:any, callback:any){
+    public static subscribe(topic:string, context:any, callback:any): void{
         // if(context == null)
         // {
         //     amplify.subscribe(topic,callback);
@@ -18,7 +18,7 @@ export class EventHub {
 
     }
 
-    public static unsubscribe( topic:string, context:any, callback:any ){
+    public static unsubscribe( topic:string, context:any, callback:any ): void{
         amplify.unsubscribe(topic,context,callback);
     }
 
@@ -26,7 +26,7 @@ export class EventHub {
     //     PubSub.clearAllSubscriptions();
     // }
 
-    public static publish(topic:string,data:any){
+    public static publish(topic:string,data:any): void{
         amplify.publish(topic,data);
     }
 }

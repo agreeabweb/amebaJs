@@ -14,8 +14,8 @@ import config from "../../configure/config";
 export class AxureMissionFactory implements IMissionFactory{
 
 
-    public getMission(type:string,path: any, targetId: string): IMission[]{
-        var missions = [], inputParams, command, mission;
+    public getMission(type:string, path: any, targetId: string): IMission[]{
+        let missions = [], inputParams, command, mission;
         inputParams = new HashMap();
         if(type === "Flow" || type === "flow")
         {
@@ -31,10 +31,10 @@ export class AxureMissionFactory implements IMissionFactory{
             missions.push(mission);
         }
         else if(type === "setFunction") {
-            inputParams = new HashMap();
+            let expr, exprArgs, args = [];
 
-            let expr = path.expr.subExprs[0];
-            let exprArgs, args = [];
+            inputParams = new HashMap();
+            expr = path.expr.subExprs[0];
 
             if(expr.exprType === "fcall") {
                 inputParams.put("methodName", expr.functionName);
@@ -50,8 +50,9 @@ export class AxureMissionFactory implements IMissionFactory{
                     } else if(exprArgs[i].exprType === "stringLiteral") {
                         args.push(exprArgs[i].value);
                     } else if(exprArgs[i].exprType === "fcall") {
-                        let inputParamsInside = new HashMap();
-                        let exprArgsInside, argsInsid = [];
+                        let inputParamsInside, exprArgsInside, argsInside = [];
+                        
+                        inputParamsInside = new HashMap();
                         inputParamsInside.put("methodName", exprArgs[i].functionName);
                         exprArgsInside = exprArgs[i].arguments;
                         for(let j = 0; j < exprArgsInside.length; j++) {
@@ -63,7 +64,7 @@ export class AxureMissionFactory implements IMissionFactory{
                                 }
                             }
                         }
-                        inputParamsInside.put("methodArgs", argsInsid);
+                        inputParamsInside.put("methodArgs", argsInside);
                         command = new Command(EngineEvent.COMMAND_ControllerCallMethod, null, null, function(result) {
                             args.push(result.outArgs.result);
                             inputParams.put("methodArgs", args);

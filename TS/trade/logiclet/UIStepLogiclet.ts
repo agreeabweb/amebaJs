@@ -8,7 +8,7 @@ import {Command} from "../../ui/Command";
 
 class UIStepLogiclet implements ILogiclet {
     public call(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
-        var path, check;
+        let path, check;
 
         path = inputParams.get("path");
         if(path == null || path.length === 0) {
@@ -28,26 +28,12 @@ class UIStepLogiclet implements ILogiclet {
 
     public callHTML(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
         inputParams.put("ProcessInstanceThreadSegment", pits);
-        let command = new Command(EngineEvent.COMMAND_OpenPanel,Context.getCurrent(),
-        null,callback,inputParams);
-        // let data = {
-        //     msg:EngineEvent.COMMAND_OpenPanel,
-        //     param: inputParams,
-        //     callback: callback,
-        //     context: Context.getCurrent()
-        // };
+        let command = new Command(EngineEvent.COMMAND_OpenPanel,Context.getCurrent(),null,callback,inputParams);
         EventHub.publish(EngineEvent.COMMAND_OpenPanel, command);
     }
 
     public callABF(pits: ProcessInstanceThreadSegment, inputParams: HashMap, callback: Function): void {
-        let command = new Command(EngineEvent.COMMAND_OpenPanel,Context.getCurrent(),
-            null,callback,inputParams);
-        // let data = {
-        //     msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
-        //     param: inputParams,
-        //     callback: callback,
-        //     context: Context.getCurrent()
-        // };
+        let command = new Command(EngineEvent.COMMAND_OpenPanel,Context.getCurrent(),null,callback,inputParams);
         EventHub.publish(EngineEvent.COMMAND_OpenPanel, command);
     }
 

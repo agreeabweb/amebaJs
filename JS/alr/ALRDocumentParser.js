@@ -47,12 +47,13 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
             }
             lanes = root.Lanes;
             if (lanes != undefined) {
+                var lane = void 0, contains = void 0;
                 if (lanes instanceof Array) {
                     for (var i = 0; i < lanes.length; i++) {
-                        var lane = new Lane_1.Lane();
+                        lane = new Lane_1.Lane();
                         lane.setName(lanes[i]._name);
                         lane.setWidth(lanes[i]._width);
-                        var contains = (lanes[i]._contains).split(",");
+                        contains = (lanes[i]._contains).split(",");
                         for (var j = 0; j < contains.length; j++) {
                             lane.addNodeId(contains[j]);
                         }
@@ -60,10 +61,10 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
                     }
                 }
                 else {
-                    var lane = new Lane_1.Lane();
+                    lane = new Lane_1.Lane();
                     lane.setName(lanes._name);
                     lane.setWidth(lanes._width);
-                    var contains = (lanes._contains).split(",");
+                    contains = (lanes._contains).split(",");
                     for (var i = 0; i < contains.length; i++) {
                         lane.addNodeId(contains[i]);
                     }
@@ -84,7 +85,7 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
             callback(alr);
         };
         ALRDocumentParser.prototype.parseLogicletComponentElement = function (alr, element) {
-            var ce, inArgs, outArgs, ae, outs, exceptions, argText;
+            var ce, inArgs, outArgs, outs, exceptions;
             ce = new LogicletComponentElement_1.LogicletComponentElement();
             ce.setId(element._id);
             ce.setShowId(element._showId == undefined ? "" : element._showId);
@@ -95,10 +96,10 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
             if (inArgs != undefined) {
                 if (inArgs instanceof Array) {
                     for (var i = 0; i < inArgs.length; i++) {
-                        ae = new ArgElement_1.ArgElement();
+                        var ae = new ArgElement_1.ArgElement();
                         ae.setCaption(inArgs[i]._caption);
                         ae.setName(inArgs[i]._name);
-                        argText = inArgs[i].__text;
+                        var argText = inArgs[i].__text;
                         if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
                             argText = argText.substring(1, argText.length - 1);
                         }
@@ -107,10 +108,10 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
                     }
                 }
                 else {
-                    ae = new ArgElement_1.ArgElement();
+                    var ae = new ArgElement_1.ArgElement();
                     ae.setCaption(inArgs._caption);
                     ae.setName(inArgs._name);
-                    argText = inArgs[i].__text;
+                    var argText = inArgs.__text;
                     if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
                         argText = argText.substring(1, argText.length - 1);
                     }
@@ -122,7 +123,7 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
             if (outArgs != undefined) {
                 if (outArgs instanceof Array) {
                     for (var i = 0; i < outArgs.length; i++) {
-                        ae = new ArgElement_1.ArgElement();
+                        var ae = new ArgElement_1.ArgElement();
                         ae.setCaption(outArgs[i]._caption);
                         ae.setName(outArgs[i]._name);
                         ae.setContent(outArgs[i].__text);
@@ -130,7 +131,7 @@ define(["require", "exports", "./define/AgreeLogicRule", "./define/Lane", "./def
                     }
                 }
                 else {
-                    ae = new ArgElement_1.ArgElement();
+                    var ae = new ArgElement_1.ArgElement();
                     ae.setCaption(outArgs._caption);
                     ae.setName(outArgs._name);
                     ae.setContent(outArgs.__text);

@@ -6,6 +6,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
             this.outArgMap = new HashMap_1.HashMap();
             this.outNextMap = new HashMap_1.HashMap();
         }
+        //-------------------------------------------------adder-------------------------------------------------
         ComponentElement.prototype.addInArg = function (ae) {
             this.inArgMap.put(ae.getName(), ae);
         };
@@ -15,6 +16,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
         ComponentElement.prototype.addOutNext = function (id, next) {
             this.outNextMap.put(id, next);
         };
+        //-------------------------------------------------getter-------------------------------------------------
         ComponentElement.prototype.getCaption = function () {
             return this.caption;
         };
@@ -39,6 +41,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
         ComponentElement.prototype.getOutNextMap = function () {
             return this.outNextMap;
         };
+        //-------------------------------------------------------------setter--------------------------------------
         ComponentElement.prototype.setCaption = function (caption) {
             this.caption = caption;
         };

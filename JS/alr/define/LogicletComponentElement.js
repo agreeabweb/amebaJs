@@ -10,9 +10,11 @@ define(["require", "exports", "./ComponentElement"], function (require, exports,
         function LogicletComponentElement() {
             _super.apply(this, arguments);
         }
+        //--------------------------------------getter-----------------------------
         LogicletComponentElement.prototype.getName = function () {
             return this.name;
         };
+        //--------------------------------------setter-------------------------------
         LogicletComponentElement.prototype.setName = function (name) {
             this.name = name;
         };

@@ -8,8 +8,9 @@ define(["require", "exports", "./MPTFile"], function (require, exports, MPTFile_
     var LFCFile = (function (_super) {
         __extends(LFCFile, _super);
         function LFCFile() {
-            _super.apply(this, arguments);
+            _super.call(this);
         }
+        ;
         return LFCFile;
     }(MPTFile_1.MPTFile));
     exports.LFCFile = LFCFile;

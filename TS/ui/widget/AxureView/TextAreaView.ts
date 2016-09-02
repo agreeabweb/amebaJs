@@ -15,13 +15,15 @@ class TextAreaView extends AbstractAxureView {
         this.$thisNode.find("textarea").text(text);
     }
 
-    public layout(obj): void {
-        var dom = $("#" + this.id);
+    public layout(obj: any): void {
+        let dom, textArea;
+
+        dom = $("#" + this.id);
         dom.css("position", "absolute")
             .css("width", obj.style.size.width).css("height", obj.style.size.height)
             .css("left", obj.style.location.x).css("top", obj.style.location.y);
 
-        var textArea = $("#" + this.id + " textarea");
+        textArea = $("#" + this.id + " textarea");
         textArea.css("width", obj.style.size.width).css("height", obj.style.size.height);
         if(obj.style.fontSize != undefined) {
             textArea.css("font-size", obj.style.fontSize);

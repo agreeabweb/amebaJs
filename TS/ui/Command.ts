@@ -9,11 +9,6 @@ export class Command {
     private ctx:Context;
     private path:string;
     private callback:Function;
-    //
-    // constructor(name:string, data:any) {
-    //     this.name = name;
-    //     this.extraData = data;
-    // }
 
     constructor(name:string,ctx:Context,path:string,callback:Function,extra:any){
         this.name = name;
@@ -23,41 +18,34 @@ export class Command {
         this.extraData = extra;
     }
 
+    //------------------------------------------------getter---------------------------------------------
     public getCallback():Function {
         return this.callback;
     }
-
-    public setCallback(callback:Function) {
-        this.callback = callback;
-    }
-
     public getPath():string {
         return this.path;
     }
-
-    public setPath(path:string):void {
-        this.path = path;
-    }
-
     public getContext():Context {
         return this.ctx;
     }
-
-    public setContext(ctx:Context):void {
-        this.ctx = ctx;
-    }
-
-
-
     getName():string {
         return this.name;
     }
-
     getExtraData():any {
         return this.extraData;
     }
 
-    setExtraData(extraData:any) {
+    //------------------------------------------------setter---------------------------------------------
+    public setCallback(callback:Function): void {
+        this.callback = callback;
+    }
+    public setPath(path:string):void {
+        this.path = path;
+    }
+    public setContext(ctx:Context):void {
+        this.ctx = ctx;
+    }
+    setExtraData(extraData:any): void {
         this.extraData = extraData;
     }
 }

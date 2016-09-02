@@ -3,12 +3,14 @@ define(["require", "exports"], function (require, exports) {
     var SedaMappingTargetEntry = (function () {
         function SedaMappingTargetEntry() {
         }
+        //----------------------------------------getter----------------------------------
         SedaMappingTargetEntry.prototype.getPath = function () {
             return this.path;
         };
         SedaMappingTargetEntry.prototype.getMapping = function () {
             return this.mapping;
         };
+        //-----------------------------------------setter-----------------------------------
         SedaMappingTargetEntry.prototype.setPath = function (path) {
             this.path = path;
         };

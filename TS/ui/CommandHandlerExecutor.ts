@@ -22,8 +22,8 @@ export class CommandHandlerExecutor {
         this.registerCommandHandler(EngineEvent.COMMAND_ControllerCallMethod,new ControllerCallMethod());
     }
 
-    public handleEvent = function(command:Command){
-        // var ctx : Context = data.context;
+    public handleEvent = function(command:Command): void{
+        // let ctx : Context = data.context;
         if(command.getContext() ==null)
         {
             return;
@@ -33,7 +33,7 @@ export class CommandHandlerExecutor {
         executor.execute(command,command.getCallback());
     }
 
-    public registerCommandHandler(name:string, handler:ICommandHandler) {
+    public registerCommandHandler(name:string, handler:ICommandHandler): void {
         this.handlers.put(name, handler);
     }
 
@@ -41,7 +41,7 @@ export class CommandHandlerExecutor {
         return this.handlers.get(name);
     }
 
-    public execute(command:Command, callback:any) {
+    public execute(command:Command, callback:any): void {
         let handler:ICommandHandler = this.handlers.get(command.getName());
         handler.handleCommand(command, callback);
     }

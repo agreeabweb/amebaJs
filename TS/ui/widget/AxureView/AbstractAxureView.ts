@@ -10,7 +10,7 @@ abstract class AbstractAxureView extends AbstractView {
     }
 
     public bindEventToTarget(target: JQuery, actionName: string, action: any):void {
-        var view = this;
+        let view = this;
         if(actionName === "onClick") {
             target.css("cursor", "pointer");
             target.on("click", function() {
@@ -42,7 +42,7 @@ abstract class AbstractAxureView extends AbstractView {
         }
     }
 
-    public dealwithEvent(target: JQuery, actionName: string, action: any, view) {
+    public dealwithEvent(target: JQuery, actionName: string, action: any, view): void {
         if(target.hasClass("table_cell") || target.hasClass("treenode")) {
             view.eTargetId = target.attr("id");
         }
@@ -50,8 +50,8 @@ abstract class AbstractAxureView extends AbstractView {
         if(action.cases.length > 1) {
             throw "同一事件只能有一个case";
         } else {
-            var actions = action.cases[0].actions;
-            for(var i = 0; i < actions.length; i++) {
+            let actions = action.cases[0].actions;
+            for(let i = 0; i < actions.length; i++) {
                 view.getHost().queueTaskPack(view.getMission(actions[i].action,actions[i], view.id));
             }
         }

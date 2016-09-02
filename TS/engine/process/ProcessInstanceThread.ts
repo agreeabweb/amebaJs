@@ -24,7 +24,7 @@ class ProcessInstanceThread {
      * 根据流程定义资源创建一个子流程。然后可以对segment对象的LRT进行服务对象配置，并调用其start方法启动。
      */
     public openSegment(definitionPath: string, callback: Function): void {
-        var pit, id;
+        let pit, id;
         
         pit = this;
         id = GUID();

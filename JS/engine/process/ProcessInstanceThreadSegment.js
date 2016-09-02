@@ -5,8 +5,6 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/realm/LogicRea
      */
     var ProcessInstanceThreadSegment = (function () {
         function ProcessInstanceThreadSegment(id, pit, definitionPath, definition) {
-            this.inArgMap = []; // 入参容器
-            this.outArgMap = []; // 出参容器
             this.varMap = new HashMap_1.HashMap();
             this.exceptionStack = [];
             this.id = id;
@@ -29,12 +27,11 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/realm/LogicRea
             PITS = this; // 避免this指代混乱
             // 处理入参
             if (inArgMap != undefined) {
-                this.inArgMap.push(inArgMap);
+                this.inArgMap = inArgMap;
             }
             // 构造控制任务
             controlTask = new LogicRealmTask_1.LogicRealmTask(PITS.coreTask.getRealm(), "Control(" + PITS.coreTask.getName() + ")", /* LRT的具体逻辑实现 */ function () {
-                var subHead;
-                subHead = controlTask.startSub(function () {
+                var subHead = controlTask.startSub(function () {
                     PITS.stepControlFinal(callback); // 该分支执行完之后的逻辑控制
                 });
                 subHead.hook(PITS.coreTask); //将coreTask核心任务挂接到controlTask任务下
@@ -48,7 +45,7 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/realm/LogicRea
          * 用于控制整个lfc执行完之后的走向
          */
         ProcessInstanceThreadSegment.prototype.stepControlFinal = function (callback) {
-            var current, processResult, endValueMap, endName;
+            var current, endValueMap, endName;
             this.currentNodeId = undefined;
             current = this.pit.getLogicRealm().getCurrentTask();
             // 做成功标记
@@ -63,7 +60,7 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/realm/LogicRea
             if (this.exceptionStack.length != 0) {
             }
             else {
-                processResult = new ProcessResult_1.ProcessResult();
+                var processResult = new ProcessResult_1.ProcessResult();
                 processResult.setEnd(this.coreTask.getParent().getSelectedEnd());
                 processResult.setOutArgMap(this.outArgMap);
                 callback(processResult);
@@ -99,13 +96,14 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/realm/LogicRea
          * 处理节点完结后的逻辑去向
          */
         ProcessInstanceThreadSegment.prototype.stepCoreLogic = function () {
-            var PITS, currentTask, subHead;
+            var PITS;
             PITS = this; // 避免this指代混乱
             if (PITS.currentNodeEndId > 1000) {
                 console.log("流程结束");
                 console.log("----------------------------");
             }
             else {
+                var currentTask = void 0, subHead = void 0;
                 // 创建下一个节点任务
                 currentTask = PITS.pit.getLogicRealm().getCurrentTask();
                 subHead = currentTask.startSub(function () {
@@ -138,11 +136,12 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/realm/LogicRea
             // 获取节点出口，给节点后续进行挂钩
             outs = PITS.definition.getOutNextMap(nodeId);
             if (outs != undefined) {
-                var keySet = outs.keySet();
-                for (var i = 0; i < keySet.length; i++) {
+                var keySet_1 = outs.keySet();
+                for (var i = 0; i < keySet_1.length; i++) {
                     (function (i) {
-                        var endName = keySet[i];
-                        var endId = outs.get(keySet[i]);
+                        var endName, endId;
+                        endName = keySet_1[i];
+                        endId = outs.get(keySet_1[i]);
                         nodeLRT.hook(new LogicRealmTask_1.LogicRealmTask(nodeLRT.realm, "StepNodeOut-" + endName, function () {
                             PITS.stepNodeOut(endName, endId);
                         }), endName);

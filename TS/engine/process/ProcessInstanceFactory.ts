@@ -13,7 +13,7 @@ class ProcessInstanceFactory {
      * 执行新流程，并获得根流程的PITS。该方法会在上下文中创建PI，并创建PIT及其首个PITS。 返回的PITS对象支持在start方法启动前对其LRT进行服务对象配置。
      */
     public pitsByCreatingPI(context: Context, definitionPath: string, callback: Function): void {
-        var pi, id, pit;
+        let pi, id, pit;
         
         // 判断该context下是否已经存在PI
         pi = context.getLocal("ProcessInstance");
@@ -32,9 +32,7 @@ class ProcessInstanceFactory {
      * 返回的PITS对象支持在start方法启动前对其LRT进行服务对象配置。
      */
     public pitsByGettingPIT(logicRealm: LogicRealm, definitionPath: string, callback: Function): void {
-        var pit;
-        
-        pit = logicRealm.get("ProcessInstanceThread");
+        let pit = logicRealm.get("ProcessInstanceThread");
         pit.openSegment(definitionPath, function(pits) {
             callback(pits);
         });

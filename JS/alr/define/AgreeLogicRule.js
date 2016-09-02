@@ -8,6 +8,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
             this.lanes = new Array();
         }
         ;
+        //--------------------------------------------------------adder------------------------------------------------
         AgreeLogicRule.prototype.addLane = function (lane) {
             this.lanes.push(lane);
         };
@@ -23,6 +24,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
         AgreeLogicRule.prototype.addEndValue = function (id, value) {
             this.endValueMap.put(id, value);
         };
+        //--------------------------------------------------------getter------------------------------------------------
         AgreeLogicRule.prototype.getLanes = function () {
             return this.lanes;
         };
@@ -47,6 +49,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
         AgreeLogicRule.prototype.getListNodes = function () {
             return this.nodesList;
         };
+        //-------------------------------------------------------setter--------------------------------------------------
         AgreeLogicRule.prototype.setPath = function (path) {
             this.path = path;
         };

@@ -81,16 +81,17 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
         };
         ;
         TADProcessDefinitionAdapter.prototype.performLogicStep = function (pits, tadBean, mptBean, step) {
-            var context, pif, pit, currentTask, inArgMap, inArgExprMap, path;
+            var context, pif, pit, currentTask, inArgMap, inArgExprMap, keySet, path;
             // 1. 出入参表达式
             inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
             inArgMap = new HashMap_1.HashMap();
-            var keySet = inArgExprMap.keySet();
+            keySet = inArgExprMap.keySet();
             for (var i = 0; i < keySet.length; i++) {
-                var name = keySet[i];
-                var expr = inArgExprMap.get(keySet[i]);
-                var value = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
-                inArgMap.put(name, value);
+                var name_1 = void 0, expr = void 0, value = void 0;
+                name_1 = keySet[i];
+                expr = inArgExprMap.get(keySet[i]);
+                value = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+                inArgMap.put(name_1, value);
             }
             path = inArgMap.get("path");
             context = Context_1.Context.getCurrent();
@@ -111,7 +112,7 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
         };
         ;
         TADProcessDefinitionAdapter.prototype.performSedaStep = function (pits, tadBean, mptBean, step) {
-            var tadPath, temp, sedaPath, pit, currentTask, listAse, abstractEntryList;
+            var tadPath, temp, sedaPath, pit, currentTask;
             tadPath = tadBean.getPath();
             temp = tadPath.split("/");
             sedaPath = "";
@@ -124,11 +125,12 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
             pit.getLogicRealm().setState("suspended");
             currentTask.setSuspend(true);
             Context_1.Context.getCurrent().get("ResourceDocumentTable").getDocument(sedaPath, "SedaEntry", function (sedaEntry) {
+                var listAse, abstractEntryList, pass;
                 currentTask.setSuspend(false);
                 if (sedaEntry == null) {
                     return;
                 }
-                var pass = true;
+                pass = true;
                 listAse = new Array();
                 abstractEntryList = sedaEntry.getListAbstractEntry();
                 for (var i = 0; i < abstractEntryList.length; i++) {
@@ -141,14 +143,15 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                 }
                 for (var i = 0; i < listAse.length; i++) {
                     if (listAse[i] != null && listAse[i].getListAlr() != null && listAse[i].getListAlr().length > 0) {
+                        var mapping = void 0, alrList = void 0;
                         pass = true;
-                        var mapping = new HashMap_1.HashMap();
-                        var alrList = listAse[i].getListAlr();
+                        mapping = new HashMap_1.HashMap();
+                        alrList = listAse[i].getListAlr();
                         var _loop_1 = function(j) {
-                            alrPath = alrList[j].getPath();
+                            var alrPath = alrList[j].getPath();
                             if (alrList[j].getListDataMapping() != null && alrList[i].getListDataMapping().length > 0) {
-                                listDataMapping = alrList[i].getListDataMapping();
-                                for (k = 0; k < listDataMapping.length; k++) {
+                                var listDataMapping = alrList[i].getListDataMapping();
+                                for (var k = 0; k < listDataMapping.length; k++) {
                                     mapping = listDataMapping[k].getMapping();
                                 }
                             }
@@ -181,7 +184,6 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                                 });
                             });
                         };
-                        var alrPath, listDataMapping, k;
                         for (var j = alrList.length - 1; j >= 0; j--) {
                             _loop_1(j);
                         }
@@ -192,40 +194,9 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
         ;
         TADProcessDefinitionAdapter.prototype.performUI = function (pits, mptBean, step) {
             console.log("此节点为UIStep");
-            var uiFile, path, inArgExprMap, inArgMap, inArgExprMapKeySet, mapping, target, currentTask;
+            var uiFile, path, inArgExprMap, inArgMap, inArgExprMapKeySet, pit, mapping, target, currentTask;
             uiFile = step;
             inArgExprMap = uiFile.getInArgMap();
-            inArgMap = new HashMap_1.HashMap();
-            inArgExprMapKeySet = inArgExprMap.keySet();
-            for (var i = 0; i < inArgExprMapKeySet.length; i++) {
-                var name_1 = void 0, expr = void 0, value = void 0;
-                name_1 = inArgExprMapKeySet[i];
-                expr = inArgExprMap.get(name_1);
-                value = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
-                if (value == null) {
-                    continue;
-                }
-                inArgMap.put(name_1, value);
-            }
-            mapping = uiFile.getMapping();
-            path = uiFile.getPath();
-            inArgMap.put("path", path);
-            inArgMap.put("mapping", mapping);
-            target = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(uiFile.getTarget());
-            inArgMap.put("target", target);
-            var pit = pits.getProcessInstanceThread();
-            currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
-            pit.getLogicRealm().setState("suspended");
-            currentTask.setSuspend(true);
-            this.uiStepLogiclet.call(pits, inArgMap, function (processResult) {
-                currentTask.setSuspend(false);
-                currentTask.end(processResult.getEnd());
-            });
-        };
-        ;
-        TADProcessDefinitionAdapter.prototype.performUIStep = function (pits, tadBean, mptBean, step) {
-            var inArgExprMap, inArgExprMapKeySet, inArgMap, mapping, currentTask;
-            inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
             inArgMap = new HashMap_1.HashMap();
             inArgExprMapKeySet = inArgExprMap.keySet();
             for (var i = 0; i < inArgExprMapKeySet.length; i++) {
@@ -238,11 +209,42 @@ define(["require", "exports", "../runtime/Context", "../mpt/define/LogicStep", "
                 }
                 inArgMap.put(name_2, value);
             }
+            mapping = uiFile.getMapping();
+            path = uiFile.getPath();
+            inArgMap.put("path", path);
+            inArgMap.put("mapping", mapping);
+            target = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(uiFile.getTarget());
+            inArgMap.put("target", target);
+            pit = pits.getProcessInstanceThread();
+            currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
+            pit.getLogicRealm().setState("suspended");
+            currentTask.setSuspend(true);
+            this.uiStepLogiclet.call(pits, inArgMap, function (processResult) {
+                currentTask.setSuspend(false);
+                currentTask.end(processResult.getEnd());
+            });
+        };
+        ;
+        TADProcessDefinitionAdapter.prototype.performUIStep = function (pits, tadBean, mptBean, step) {
+            var inArgExprMap, inArgExprMapKeySet, inArgMap, mapping, currentTask, pit;
+            inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
+            inArgMap = new HashMap_1.HashMap();
+            inArgExprMapKeySet = inArgExprMap.keySet();
+            for (var i = 0; i < inArgExprMapKeySet.length; i++) {
+                var name_3 = void 0, expr = void 0, value = void 0;
+                name_3 = inArgExprMapKeySet[i];
+                expr = inArgExprMap.get(name_3);
+                value = Context_1.Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+                if (value == null) {
+                    continue;
+                }
+                inArgMap.put(name_3, value);
+            }
             mapping = tadBean.getNodeMapping(step.getId());
             if (mapping != null) {
                 inArgMap.put("mapping", mapping);
             }
-            var pit = pits.getProcessInstanceThread();
+            pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
             pit.getLogicRealm().setState("suspended");
             currentTask.setSuspend(true);

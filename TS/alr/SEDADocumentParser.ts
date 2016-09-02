@@ -5,11 +5,11 @@ import {SedaMptTargetEntry} from "./define/SedaMptTargetEntry";
 import {SedaAlrTargetEntry} from "./define/SedaAlrTargetEntry";
 import {SedaMappingTargetEntry} from "./define/SedaMappingTargetEntry";
 
-declare var X2JS;
+declare let X2JS;
 
 class SEDADocumentParser implements IDocumentParser {
     public parse(path: string, input: string, callback: Function): void {
-        var xml2json, doc, root, sedaEntry, parseSedaEntries;
+        let xml2json, doc, root, sedaEntry, parseSedaEntries;
         
         // 把xml转化为json
         xml2json = new X2JS();
@@ -25,8 +25,8 @@ class SEDADocumentParser implements IDocumentParser {
         callback(sedaEntry);
     }
 
-    public parseAbstractSedaEntry(root) {
-        var result, mpts, ase, listState, element, state, alrs, listSmte;
+    public parseAbstractSedaEntry(root: any): void {
+        let result, mpts, ase, listState, element, state, alrs;
 
         result = new Array<AbstractSedaEntry>();
         
@@ -43,7 +43,7 @@ class SEDADocumentParser implements IDocumentParser {
         
         alrs = element.ALR;
         if(alrs instanceof Array) {
-            for(var i = 0; i < alrs.length; i++) {
+            for(let i = 0; i < alrs.length; i++) {
                 state = new SedaAlrTargetEntry();
                 state.setPath(alrs[i]._path);
                 state.setCaption(alrs[i]._caption);

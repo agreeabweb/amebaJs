@@ -15,7 +15,7 @@ define(["require", "exports", "./define/SedaEntry", "./define/SedaMptTargetEntry
             callback(sedaEntry);
         };
         SEDADocumentParser.prototype.parseAbstractSedaEntry = function (root) {
-            var result, mpts, ase, listState, element, state, alrs, listSmte;
+            var result, mpts, ase, listState, element, state, alrs;
             result = new Array();
             mpts = root.MPT;
             if (mpts != undefined) {

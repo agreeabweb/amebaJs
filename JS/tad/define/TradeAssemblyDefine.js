@@ -13,8 +13,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
             if (argExpression == undefined) {
                 return;
             }
-            var map;
-            map = this.nodeInArgExpressionMap.get(nodeId);
+            var map = this.nodeInArgExpressionMap.get(nodeId);
             if (map == null) {
                 this.nodeInArgExpressionMap.put(nodeId, new HashMap_1.HashMap());
                 map = this.nodeInArgExpressionMap.get(nodeId);
@@ -26,8 +25,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
             if (argExpression == undefined) {
                 return;
             }
-            var map;
-            map = this.nodeOutArgExpressionMap.get(nodeId);
+            var map = this.nodeOutArgExpressionMap.get(nodeId);
             if (map == null) {
                 this.nodeOutArgExpressionMap.put(nodeId, new HashMap_1.HashMap());
                 map = this.nodeOutArgExpressionMap.get(nodeId);
@@ -36,8 +34,7 @@ define(["require", "exports", "../../lib/HashMap"], function (require, exports, 
         };
         ;
         TradeAssemblyDefine.prototype.addNodeMapping = function (nodeId, target, source) {
-            var map;
-            map = this.nodeMapping.get(nodeId);
+            var map = this.nodeMapping.get(nodeId);
             if (map == null) {
                 this.nodeMapping.put(nodeId, new HashMap_1.HashMap());
                 map = this.nodeMapping.get(nodeId);

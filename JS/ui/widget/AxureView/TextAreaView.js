@@ -17,11 +17,12 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             this.$thisNode.find("textarea").text(text);
         };
         TextAreaView.prototype.layout = function (obj) {
-            var dom = $("#" + this.id);
+            var dom, textArea;
+            dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
                 .css("left", obj.style.location.x).css("top", obj.style.location.y);
-            var textArea = $("#" + this.id + " textarea");
+            textArea = $("#" + this.id + " textarea");
             textArea.css("width", obj.style.size.width).css("height", obj.style.size.height);
             if (obj.style.fontSize != undefined) {
                 textArea.css("font-size", obj.style.fontSize);

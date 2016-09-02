@@ -7,10 +7,11 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
             return null;
         };
         AbstractALRProcessDefinitionAdapter.prototype.createNodeRunnable = function (pits, definitionBean, nodeId) {
-            var bean, node, varMap, keySet, endValue, pit, currentTask, ce;
+            var bean, node, pit, currentTask, ce;
             bean = definitionBean;
             node = bean.getNode(nodeId);
             if (bean.getVarMap() != null) {
+                var varMap = void 0, keySet = void 0;
                 varMap = bean.getVarMap();
                 keySet = varMap.keySet();
                 for (var i = 0; i < keySet.length; i++) {
@@ -20,7 +21,7 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
             if (node == null) {
-                endValue = bean.getEndValue(nodeId);
+                var endValue = bean.getEndValue(nodeId);
                 if (endValue != null) {
                     currentTask.end(endValue);
                 }
@@ -103,36 +104,37 @@ define(["require", "exports", "./define/ComponentElement", "./define/LogicletCom
                 });
             });
         };
+        //----------------------------------------------------------------------------getter--------------------------------------
         AbstractALRProcessDefinitionAdapter.prototype.getExceptionNext = function (definitionBean, nodeId) {
-            var bean, node, ce;
+            var bean, node;
             bean = definitionBean;
             node = bean.getNode(nodeId);
             if (node instanceof ComponentElement_1.ComponentElement) {
-                ce = node;
+                var ce = node;
                 return ce.getExceptionNext();
             }
             return null;
         };
         AbstractALRProcessDefinitionAdapter.prototype.getNodeCaption = function (definitionBean, nodeId) {
-            var bean, node, ce, endValue;
+            var bean, node;
             bean = definitionBean;
             node = bean.getNode(nodeId);
             if (node == null) {
-                endValue = bean.getEndValue(nodeId);
+                var endValue = bean.getEndValue(nodeId);
                 return endValue + "( " + nodeId + " )";
             }
             else if (node instanceof ComponentElement_1.ComponentElement) {
-                ce = node;
+                var ce = node;
                 return ce.getCaption() + "( " + nodeId + " )" + ", showId( " + ce.getShowId() + " )";
             }
             return "节点( " + nodeId + " )";
         };
         AbstractALRProcessDefinitionAdapter.prototype.getOutNextMap = function (definitionBean, nodeId) {
-            var bean, node, ce;
+            var bean, node;
             bean = definitionBean;
             node = bean.getNode(nodeId);
             if (node instanceof ComponentElement_1.ComponentElement) {
-                ce = node;
+                var ce = node;
                 return ce.getOutNextMap();
             }
             return null;

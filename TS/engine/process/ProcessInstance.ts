@@ -27,7 +27,7 @@ class ProcessInstance {
      * 准备流程执行，创建PIT
      */
     public openThread(): ProcessInstanceThread {
-        var id, pit;
+        let id, pit;
         
         id = "PIT-" + GUID();
         pit = new ProcessInstanceThread(id, this); 

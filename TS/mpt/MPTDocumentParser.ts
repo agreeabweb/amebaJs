@@ -9,14 +9,14 @@ import {LogicStep} from "./define/LogicStep";
 import {SedaStep} from "./define/SedaStep";
 import {IDocumentParser} from "../resource/IDocumentParser";
 
-declare var X2JS
+declare let X2JS
 
 class MPTDocumentParser implements IDocumentParser {
 
     public constructor() {};
 
     public parse(path: string, input: string, callback: Function): void {
-        var MPTDP, doc, mpt, root, startNodeId, lfcs, logicsteps, sedasteps, uisteps, uis, xml2json;
+        let MPTDP, doc, mpt, root, startNodeId, lfcs, logicsteps, sedasteps, uisteps, uis, xml2json;
         
         MPTDP = this;
         
@@ -37,7 +37,7 @@ class MPTDocumentParser implements IDocumentParser {
         lfcs = root.LFC;
         if(lfcs != undefined) {
             if(lfcs instanceof Array) {
-                for(var i = 0; i < lfcs.length; i++) {
+                for(let i = 0; i < lfcs.length; i++) {
                     mpt.addStep(MPTDP.parseStepElement(new LFCFile(), lfcs[i]));
                 }
             } else {
@@ -48,7 +48,7 @@ class MPTDocumentParser implements IDocumentParser {
         logicsteps = root.LogicStep;
         if(logicsteps != undefined) {
             if(logicsteps instanceof Array) {
-                for(var i = 0; i < logicsteps.length; i++) {
+                for(let i = 0; i < logicsteps.length; i++) {
                     mpt.addStep(MPTDP.parseStepElement(new LogicStep(), logicsteps[i]));
                 }
             } else {
@@ -59,7 +59,7 @@ class MPTDocumentParser implements IDocumentParser {
         sedasteps = root.SedaStep;
         if(sedasteps != undefined) {
             if(sedasteps instanceof Array) {
-                for(var i = 0; i < sedasteps.length; i++) {
+                for(let i = 0; i < sedasteps.length; i++) {
                     mpt.addStep(MPTDP.parseStepElement(new SedaStep(), sedasteps[i]));
                 }
             } else {
@@ -70,7 +70,7 @@ class MPTDocumentParser implements IDocumentParser {
         uisteps = root.UIStep;
         if(uisteps != undefined) {
             if(uisteps instanceof Array) {
-                for(var i = 0; i < uisteps.length; i++) {
+                for(let i = 0; i < uisteps.length; i++) {
                     mpt.addStep(MPTDP.parseStepElement(new UIStep(), uisteps[i]));
                 }
             } else {
@@ -81,7 +81,7 @@ class MPTDocumentParser implements IDocumentParser {
         uis = root.UI;
         if(uis != undefined) {
             if(uis instanceof Array) {
-                for(var i = 0; i < uis.length; i++) {
+                for(let i = 0; i < uis.length; i++) {
                     mpt.addStep(MPTDP.parseStepElement(new UIFile(), uis[i]));
                 }
             } else {
@@ -91,9 +91,9 @@ class MPTDocumentParser implements IDocumentParser {
 
         // 处理内部变量
         if(root.InternalVars != undefined && root.InternalVars != "") {
-            var vars = root.InternalVars.Var;
+            let vars = root.InternalVars.Var;
             if(vars instanceof Array) {
-                for(var i = 0; i < vars.length; i++) {
+                for(let i = 0; i < vars.length; i++) {
                     mpt.addVarMap(vars[i]._name);
                 }
             } else {
@@ -102,9 +102,9 @@ class MPTDocumentParser implements IDocumentParser {
         }
         callback(mpt);
     };
+
     public parseStepElement(step: MPTStep, element): MPTStep {
-        var outs, ex, inArg, inArgMap, inArgName, inArgText, outArg, outArgMap, outArgName, outArgText,
-            mappings;
+        let outs, ex;
         
         step.setId(element._id);
         step.setShowId(element._showId === undefined? "" : element._showId);
@@ -113,7 +113,7 @@ class MPTDocumentParser implements IDocumentParser {
         
         outs = element.Out;
         if(outs instanceof Array) {
-            for(var i = 0; i < outs.length; i++) {
+            for(let i = 0; i < outs.length; i++) {
                 step.addOutNext(outs[i]._name, outs[i]._next);
             }
         } else {
@@ -125,6 +125,8 @@ class MPTDocumentParser implements IDocumentParser {
         step.setExceptionNext(ex._next);
         
         if(step instanceof MPTFile) {
+            let inArg, inArgMap, inArgName, inArgText, outArg, outArgMap, outArgName, outArgText, mappings;
+            
             (<MPTFile>step).setPath(element._path);
         
             inArg = element.InArg;

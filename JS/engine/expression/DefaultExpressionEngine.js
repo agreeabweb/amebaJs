@@ -23,8 +23,8 @@ define(["require", "exports", "../../lib/HashMap", "../../runtime/Context"], fun
          * 取值
          */
         DefaultExpressionEngine.prototype.evaluate = function (expression, pits) {
-            var value;
             if (expression != undefined) {
+                var value = void 0;
                 if (expression.match(/^varMap()./)) {
                     value = pits.getVarMap(expression);
                     console.log(pits.getCoreTask().getName() + " 中表达式：" + expression + " 的值为: " + value);

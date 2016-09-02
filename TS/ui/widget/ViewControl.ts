@@ -1,4 +1,6 @@
 import config from "../../configure/config";
+import {TadPanel} from "../TadPanel";
+import {AbstractView} from "../AbstractView";
 
 import {ButtonView as HTMlButton } from "./HTMLView/ButtonView";
 import {TextView as HTMLText} from "./HTMLView/TextView";
@@ -18,8 +20,8 @@ import {ListBoxView as AxureListBox} from "./AxureView/ListBoxView";
 import {HeadingView as AxureHeading} from "./AxureView/HeadingView";
 
 class ViewControl {
-    public static buildView(type, id, panel, dm, dom) {
-        var view;
+    public static buildView(type: string, id: string, panel: TadPanel, dm: string, dom: JQuery): AbstractView {
+        let view;
         if(config.UIType === "Axure" || config.UIType === "axure") {
             if(type === "textBox") {
                 view = new AxureText(id, panel, dm, dom);

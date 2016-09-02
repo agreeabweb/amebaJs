@@ -24,8 +24,10 @@ class CheckboxView extends AbstractAxureView {
         return this.$thisNode.find(".text span").text();
     }
 
-    public layout(obj): void {
-        var dom = $("#" + this.id);
+    public layout(obj: any): void {
+        let dom, objects;
+
+        dom = $("#" + this.id);
         dom.css("position", "absolute")
             .css("width", obj.style.size.width).css("height", obj.style.size.height)
             .css("left", obj.style.location.x).css("top", obj.style.location.y);
@@ -34,15 +36,17 @@ class CheckboxView extends AbstractAxureView {
             dom.find(".text span").css("font-size", obj.style.fontSize);
         }
 
-        var objects = obj.objects;
+        objects = obj.objects;
         if(objects != undefined) {
             for(let i = 0; i < objects.length; i++) {
-                var objPaths = this.host.getAxureObjPaths();
-                var idMap = objects[i].id;
-                var id = objPaths[idMap].scriptId;
-                var childDom = $("#" + id);
-                var size = objects[i].style.size;
-                var location = objects[i].style.location;
+                let objPaths, idMap, id, childDom, size, location;
+
+                objPaths = this.host.getAxureObjPaths();
+                idMap = objects[i].id;
+                id = objPaths[idMap].scriptId;
+                childDom = $("#" + id);
+                size = objects[i].style.size;
+                location = objects[i].style.location;
                 childDom.css("position", "absolute");
                 if(size != undefined) {
                     childDom.css("width", size.width).css("height", size.height);

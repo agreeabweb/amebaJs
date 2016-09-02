@@ -3,6 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var SedaAlrTargetEntry = (function () {
         function SedaAlrTargetEntry() {
         }
+        //--------------------------------------------------getter------------------------------------------
         SedaAlrTargetEntry.prototype.getPath = function () {
             return this.path;
         };
@@ -12,6 +13,7 @@ define(["require", "exports"], function (require, exports) {
         SedaAlrTargetEntry.prototype.getListDataMapping = function () {
             return this.listDataMapping;
         };
+        //---------------------------------------------------setter------------------------------------------
         SedaAlrTargetEntry.prototype.setPath = function (path) {
             this.path = path;
         };

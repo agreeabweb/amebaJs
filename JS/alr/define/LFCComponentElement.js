@@ -10,15 +10,18 @@ define(["require", "exports", "./ComponentElement"], function (require, exports,
         function LFCComponentElement() {
             _super.apply(this, arguments);
         }
+        //--------------------------------------------------------adder-------------------------------------------
         LFCComponentElement.prototype.addMapping = function (target, source) {
             this.mapping.put(target, source);
         };
+        //------------------------------------------------------getter--------------------------------------------
         LFCComponentElement.prototype.getMapping = function () {
             return this.mapping;
         };
         LFCComponentElement.prototype.getPath = function () {
             return this.path;
         };
+        //------------------------------------------------------setter---------------------------------------------
         LFCComponentElement.prototype.setPath = function (path) {
             this.path = path;
         };

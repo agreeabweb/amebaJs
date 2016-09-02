@@ -25,28 +25,28 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
             // }
         };
         TreeView.prototype.addNode = function (level, parentId, id, title, href, icon) {
-            var node, ul, li, a, i, span, mainMenu, parent, parentUL;
             // 检查节点id是否已存在
-            node = $("#" + this.id + " #" + id);
+            var node = $("#" + this.id + " #" + id);
             if (node.length != 0) {
                 throw "此id已被占用！";
             }
             else {
+                var ul = void 0, li_1, a = void 0, i = void 0, span = void 0;
                 // 创建新菜单节点
-                li = $("<li>");
-                li.attr("id", id);
-                li.on("click", function () {
-                    if (li.hasClass("active")) {
-                        li.removeClass("active");
+                li_1 = $("<li>");
+                li_1.attr("id", id);
+                li_1.on("click", function () {
+                    if (li_1.hasClass("active")) {
+                        li_1.removeClass("active");
                     }
                     else {
-                        li.addClass("active");
+                        li_1.addClass("active");
                     }
                 });
                 a = $("<a>");
                 a.attr("href", href);
                 a.text(title);
-                li.append(a);
+                li_1.append(a);
                 // 图标信息
                 if (icon != null) {
                     i = $("<i>");
@@ -56,21 +56,22 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                 // 添加一级菜单
                 if (level === 1) {
                     // 一开始没有任何节点的情况
-                    mainMenu = $("#" + this.id + " #main-menu");
+                    var mainMenu = $("#" + this.id + " #main-menu");
                     if (mainMenu.length === 0) {
                         ul = $("<ul>");
                         ul.attr("class", "nav");
                         ul.attr("id", "main-menu");
-                        ul.append(li);
+                        ul.append(li_1);
                         $("#" + this.id + " .sidebar-collapse").append(ul);
                     }
                     else {
-                        mainMenu.append(li);
+                        mainMenu.append(li_1);
                     }
                 }
                 else {
-                    parent = $("#" + this.id + " #" + parentId);
-                    parentUL = parent.find("ul");
+                    var parent_1, parentUL = void 0;
+                    parent_1 = $("#" + this.id + " #" + parentId);
+                    parentUL = parent_1.find("ul");
                     // 父节点下无其他节点
                     if (parentUL.length === 0) {
                         // 创建下拉箭头
@@ -85,7 +86,7 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                                 ul.addClass("collapse");
                             }
                         });
-                        $(parent.find("a")[0]).append(span);
+                        $(parent_1.find("a")[0]).append(span);
                         ul = $("<ul>");
                         if (level === 2) {
                             ul.attr("class", "nav nav-second-level collapse");
@@ -99,27 +100,27 @@ define(["require", "exports", "../../AbstractView"], function (require, exports,
                         else {
                             throw "树节点不支持该深度";
                         }
-                        ul.append(li);
-                        parent.append(ul);
+                        ul.append(li_1);
+                        parent_1.append(ul);
                     }
                     else {
-                        $(parentUL[0]).append(li);
+                        $(parentUL[0]).append(li_1);
                     }
                 }
             }
         };
         TreeView.prototype.deleteNode = function (id) {
-            var selector, ul, lis;
-            selector = "#" + this.id + " #main-menu #" + id;
+            var selector = "#" + this.id + " #main-menu #" + id;
             if ($(selector).length != 0) {
+                var ul = void 0, lis = void 0;
                 // 检查该节点的父节点是否还有其他孩子节点
                 ul = $(selector).parent();
                 $(selector).remove(); // 删除该节点
                 // 无其他孩子节点
                 lis = $(ul).find("li");
                 if (lis.length === 0) {
-                    var test = $(ul).prev().find("span")[0];
-                    $(test).remove(); //删除下拉箭头
+                    var arrow = $(ul).prev().find("span")[0];
+                    $(arrow).remove(); //删除下拉箭头
                     $(ul).remove(); // 删除其父容器
                 }
                 else {

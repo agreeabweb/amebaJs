@@ -8,7 +8,7 @@ import GUID from "../../lib/GUID";
 export class OpenPanel implements ICommandHandler {
 
     handleCommand(command:Command, callack:any):void {
-        var path, tad, tadPanel, pits,target;
+        let path, tad, tadPanel, pits,target;
 
         if(command.getPath() != null) {
             path = command.getPath();

@@ -8,8 +8,9 @@ define(["require", "exports", "./MPTStep"], function (require, exports, MPTStep_
     var SedaStep = (function (_super) {
         __extends(SedaStep, _super);
         function SedaStep() {
-            _super.apply(this, arguments);
+            _super.call(this);
         }
+        ;
         return SedaStep;
     }(MPTStep_1.MPTStep));
     exports.SedaStep = SedaStep;

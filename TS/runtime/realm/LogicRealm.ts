@@ -31,14 +31,14 @@ class LogicRealm {
             return;
         }
         // 锁定currentTask引用
-        var _currentTask = this.currentTask;
+        let _currentTask = this.currentTask;
         // 2. 选择执行方式
         if(/* 没有任务可以作为父任务，只能队列执行 */_currentTask == undefined) {
             // 2.a 作为队列根任务执行
             this.asyncExec(task);
         } else {
             // 2.b 作为当前任务的子任务执行
-            var newSub = _currentTask.startSub(null);
+            let newSub = _currentTask.startSub(null);
             newSub.hook(task, null);
             newSub.end(null); // 触发子任务推进
         }
@@ -77,10 +77,10 @@ class LogicRealm {
      * 执行任务队列
      */
     public runTaskQueue(): void {
-        var task, sync;
+        let task;
         // 判断当前realm是否为running状态，taskQueue里是否有任务
         while(this.isRunning() && (task = this.taskQueue.shift()) != null) {
-            sync = this.runDirectly(task);
+            let sync = this.runDirectly(task);
             if(!sync) {
                 return;
             }
@@ -108,7 +108,7 @@ class LogicRealm {
             // checkDisposeHook();
             
             // 注意，由于移花接木原因，task调用后，此时的currentTask未必就是task
-            var currentTaskRef = this.currentTask;
+            let currentTaskRef = this.currentTask;
             if(currentTaskRef == null || currentTaskRef.isSuspended()) {
                 return false;
             }
@@ -122,12 +122,12 @@ class LogicRealm {
      * 继续执行当前任务的衍生任务以及队列里的后续任务
      */
     public continueExec(): void {
-        console.log("开始continue..");
+        let endTask, next;
+        
         if(this.isDead()) {
             return;
         }
         if(this.currentTask == undefined) {
-            console.log("没有当前任务！");
             return;
         }
         if(this.state === "suspended") {  
@@ -135,15 +135,15 @@ class LogicRealm {
         }
         this.configCurrentContext();
         //找到结束的任务，未必是currentTask，如果是它的父任务结束，那就回到父一级调度
-        var endTask = this.currentTask;
+        endTask = this.currentTask;
         if(endTask.getParent() != undefined && endTask.getParent().isEnded()) {
             endTask = endTask.getParent();
         }
         // 从已经结束的任务继续下一个任务
-        var next = endTask.getNext();
+        next = endTask.getNext();
         console.log("下一个任务获取: "+next.getName())
         if(next != null) {
-            var sync = this.runDirectly(next);
+            let sync = this.runDirectly(next);
             if(!sync) {
                 return;
             }

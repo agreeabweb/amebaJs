@@ -33,11 +33,6 @@ export class TadPanel {
 
     private axureObjPaths;
 
-    private configTarget(target:string, targetArgMap:HashMap) {
-        this.target = target;
-        this.targetArgMap = targetArgMap;
-    }
-
     constructor(pits:ProcessInstanceThreadSegment, host:Tad, parentId:string, id:string, path:string) {
         this.processInstanceThreadSegment = pits;
         this.host = host;
@@ -50,70 +45,23 @@ export class TadPanel {
         dm.notifyThis(this.doUpdateViews, this);
     }
 
-    public getPath():string {
-        return this.path;
-    }
-
-    public getContext():Context {
-        return this.panelContext;
-    }
-
-    public  getHost():Tad {
-        return this.host;
-    }
-
-    public getProcessInstanceThreadSegment():ProcessInstanceThreadSegment {
-        return this.processInstanceThreadSegment;
-    }
-
-    public isBusy():boolean {
-        return this.state === "busy";
-    }
-
-    public idle():void {
-        this.state = "idle";
-    }
-
-    public busy():void {
-        this.state = "busy";
-    }
-
-    public registerEntryView(name:string, view:any) {
-        let views = this.entryToViews.get(name);
-        if (views == null) {
-            views = new Array();
-        }
-        views.push(view);
-        this.entryToViews.put(name, views);
-    }
-
-    public registerWidget(id:string, view:any):void {
-        this.widgetRegistry.put(id, view);
-    }
-
-    public getWidget(id:string) {
-        var widget;
-        widget = this.widgetRegistry.get(id);
-        if(widget == undefined) {
-            widget = this.widgetRegistry.get(this.axureObjPaths[id].scriptId);
-        }
-        return widget;
+    private configTarget(target:string, targetArgMap:HashMap): void {
+        this.target = target;
+        this.targetArgMap = targetArgMap;
     }
 
     public start():void {
-        var panel = this;
+        let panel, ctx, target, parser: IPageParser;
+
+        panel = this;
         this.getContext().set(UIConst.Panel, this);
-        var ctx = this.getContext();
-        var target = this.target;
-        let parser:IPageParser = this.getContext().get(UIConst.PageParser);
+        ctx = this.getContext();
+        target = this.target;
+        parser = this.getContext().get(UIConst.PageParser);
         parser.parsePage(this.target, this.getContext());
     }
 
-    public getViewsByEntry(name:string):IView[] {
-        return this.entryToViews.get(name);
-    }
-
-    public queueTaskPack(mission:any) {
+    public queueTaskPack(mission:any): void {
 
         if(mission instanceof Array) {
             for(let i = 0; i < mission.length; i++) {
@@ -130,7 +78,7 @@ export class TadPanel {
         let current:IMission = this.taskQueue.shift();
         while (current != null) {
             // 这里同步还是异步看具体情况
-            var callback: Function;
+            let callback: Function;
             if(current instanceof CommandMission) {
                 callback = (<CommandMission>current).getCommandCallback();
             }
@@ -140,24 +88,76 @@ export class TadPanel {
         this.state = "idle";
     }
 
-    public doUpdateViews(key, old, now) {
+    public registerEntryView(name:string, view:any): void {
+        let views = this.entryToViews.get(name);
+        if (views == null) {
+            views = new Array();
+        }
+        views.push(view);
+        this.entryToViews.put(name, views);
+    }
+
+    public registerWidget(id:string, view:any):void {
+        this.widgetRegistry.put(id, view);
+    }
+
+    public doUpdateViews(key: string, old: string, now: string): void {
         //  array.filter((v, i, a) => v % 2 == 0).forEach((v, i, a) => this.callback(v))
         // console.log("dm变化，刷新UI..." + key);
-        let views = this.entryToViews.get(key);
-        let i:number;
-        let size:number = views.length;
-        for (i = 0; i < size; i++) {
+        let views, size;
+
+        views = this.entryToViews.get(key);
+        size = views.length;
+        for (let i = 0; i < size; i++) {
             let v:IView = views[i];
             v.modelChanged(now);
         }
     }
 
+    public busy():void {
+        this.state = "busy";
+    }
+
+    //--------------------------------------------------getter--------------------------------------------------
+    public getPath():string {
+        return this.path;
+    }
+    public getContext():Context {
+        return this.panelContext;
+    }
+    public  getHost():Tad {
+        return this.host;
+    }
+    public getProcessInstanceThreadSegment():ProcessInstanceThreadSegment {
+        return this.processInstanceThreadSegment;
+    }
+    public getAxureObjPaths(): Object {
+        return this.axureObjPaths;
+    }
+    public getWidget(id:string): IView {
+        let widget;
+        widget = this.widgetRegistry.get(id);
+        if(widget == undefined) {
+            widget = this.widgetRegistry.get(this.axureObjPaths[id].scriptId);
+        }
+        return widget;
+    }
+    public getViewsByEntry(name:string):IView[] {
+        return this.entryToViews.get(name);
+    }
+
+    //--------------------------------------------------setter-----------------------------------------------------
     public setAxureObjPaths(paths: Object): void {
         this.axureObjPaths = paths;
     }
 
-    public getAxureObjPaths(): Object {
-        return this.axureObjPaths;
+    //-------------------------------------------------checker----------------------------------------------------
+    public isBusy():boolean {
+        return this.state === "busy";
+    }
+
+    public idle():void {
+        this.state = "idle";
     }
 
 }

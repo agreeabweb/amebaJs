@@ -1,7 +1,7 @@
 import {TradeAssemblyDefine} from "./define/TradeAssemblyDefine";
 import {IDocumentParser} from "../resource/IDocumentParser";
 
-declare var X2JS
+declare let X2JS
 
 class TADDocumentParser implements IDocumentParser {
     public constructor() {};
@@ -10,8 +10,7 @@ class TADDocumentParser implements IDocumentParser {
      * 解析方法
      */
     public parse(path:string, input: string, callback: Function): void {
-        var xml2json, doc, root, tad, mpt, nodes, nodeId, nodeType, nodeInArgs, nodeOutArgs, argName, argExpression, 
-            mappings, mappingPath, mapping, source, target;
+        let xml2json, doc, root, tad;
         
         // 把xml转化为json
         xml2json = new X2JS();
@@ -34,18 +33,21 @@ class TADDocumentParser implements IDocumentParser {
         
         // 主流程 MainProcess
         if(root.MainProcess != undefined) {
+            let mpt, nodes;
             mpt = root.MainProcess;
             tad.setMPTPath(mpt._path);
             nodes = mpt.Node;
             if(nodes != undefined) {
+                let nodeId, nodeType, nodeInArgs, nodeOutArgs, argName, argExpression, mappings, mappingPath, mapping, source, target;
+                
                 if(nodes instanceof Array) {
-                    for(var i = 0; i < nodes.length; i++) {
+                    for(let i = 0; i < nodes.length; i++) {
                         nodeId = nodes[i]._id;
                         nodeType = nodes[i]._type;
                         // node inArg
                         nodeInArgs = nodes[i].InArg;
                         if(nodeInArgs != undefined && nodeInArgs != "") {
-                            for(var j = 0; j < nodeInArgs.length; j++) {
+                            for(let j = 0; j < nodeInArgs.length; j++) {
                                 argName = nodeInArgs[j]._name;
                                 argExpression = nodeInArgs[j].__text;
                                 if(argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
@@ -58,7 +60,7 @@ class TADDocumentParser implements IDocumentParser {
                         // node outArg
                         nodeOutArgs = nodes[i].OutArg;
                         if(nodeOutArgs != undefined && nodeOutArgs != "") {
-                            for(var j = 0; j < nodeOutArgs.length; j++) {
+                            for(let j = 0; j < nodeOutArgs.length; j++) {
                                 argName = nodeOutArgs[j]._name;
                                 argExpression = nodeOutArgs[j].__text;
                                 if(argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
@@ -85,7 +87,7 @@ class TADDocumentParser implements IDocumentParser {
                     // node inArg
                     nodeInArgs = nodes.InArg;
                     if(nodeInArgs != undefined && nodeInArgs != "") {
-                        for(var j = 0; j < nodeInArgs.length; j++) {
+                        for(let j = 0; j < nodeInArgs.length; j++) {
                             argName = nodeInArgs[j]._name;
                             argExpression = nodeInArgs[j].__text;
                             if(argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {
@@ -98,7 +100,7 @@ class TADDocumentParser implements IDocumentParser {
                     // node outArg
                     nodeOutArgs = nodes.OutArg;
                     if(nodeOutArgs != undefined && nodeOutArgs != "") {
-                        for(var j = 0; j < nodeOutArgs.length; j++) {
+                        for(let j = 0; j < nodeOutArgs.length; j++) {
                             argName = nodeOutArgs[j]._name;
                             argExpression = nodeOutArgs[j].__text;
                             if(argExpression != undefined && argExpression.match(/^\"/) && argExpression.match(/\"$/)) {

@@ -71,10 +71,10 @@ define(["require", "exports", "../Context"], function (require, exports, Context
          * 执行任务队列
          */
         LogicRealm.prototype.runTaskQueue = function () {
-            var task, sync;
+            var task;
             // 判断当前realm是否为running状态，taskQueue里是否有任务
             while (this.isRunning() && (task = this.taskQueue.shift()) != null) {
-                sync = this.runDirectly(task);
+                var sync = this.runDirectly(task);
                 if (!sync) {
                     return;
                 }
@@ -115,12 +115,11 @@ define(["require", "exports", "../Context"], function (require, exports, Context
          * 继续执行当前任务的衍生任务以及队列里的后续任务
          */
         LogicRealm.prototype.continueExec = function () {
-            console.log("开始continue..");
+            var endTask, next;
             if (this.isDead()) {
                 return;
             }
             if (this.currentTask == undefined) {
-                console.log("没有当前任务！");
                 return;
             }
             if (this.state === "suspended") {
@@ -128,12 +127,12 @@ define(["require", "exports", "../Context"], function (require, exports, Context
             }
             this.configCurrentContext();
             //找到结束的任务，未必是currentTask，如果是它的父任务结束，那就回到父一级调度
-            var endTask = this.currentTask;
+            endTask = this.currentTask;
             if (endTask.getParent() != undefined && endTask.getParent().isEnded()) {
                 endTask = endTask.getParent();
             }
             // 从已经结束的任务继续下一个任务
-            var next = endTask.getNext();
+            next = endTask.getNext();
             console.log("下一个任务获取: " + next.getName());
             if (next != null) {
                 var sync = this.runDirectly(next);

@@ -26,25 +26,10 @@ export class Tad {
         this.path = path;
     }
 
-    public getContext():Context {
-        return this.tadContext;
-    }
-
-    public addPanel(id:string, panel:TadPanel):void {
-        this.panels[id] = panel;
-    }
-
-    public getPanel(id:string):TadPanel {
-        return this.panels[id];
-    }
-
-    public getDataModel():DataModel {
-        return this.dm;
-    }
-
     public start():void {
+        let contextId, pif;
         // 0.Context
-        var contextId = GUID();
+        contextId = GUID();
         this.tadContext = this.host.getContext().createChild("tadContext_" + contextId);
         this.tadContext.set("Tad", this);
         //1.DM
@@ -52,7 +37,7 @@ export class Tad {
 
         //3.启动流程
         Context.prototype.setCurrent(this.tadContext);
-        let pif = this.tadContext.get(ServiceObj.ProcessInstanceFactory);
+        pif = this.tadContext.get(ServiceObj.ProcessInstanceFactory);
 
         // var tadPath = "/AppFramework_2013B/trade/test/bug0041/Bug0041.tad";
 
@@ -60,7 +45,7 @@ export class Tad {
             segment.start(null, function (processResult) {
                 console.log("执行PITS回调");
 
-                var outArgMap = processResult.getOutArgMap();
+                let outArgMap = processResult.getOutArgMap();
                 //处理出参
 
                 console.log("出口信息：" + processResult.getEnd());
@@ -69,14 +54,32 @@ export class Tad {
         });
     }
 
+    public openPanel(path: string, target: string, pits: ProcessInstanceThreadSegment): void {
+        let tadPanelId, tadPanel;
+
+        tadPanelId = "Panel_" + GUID();
+        tadPanel = new TadPanel(pits, this, this.id, tadPanelId, path);
+        this.panels.put(tadPanelId, tadPanel);
+        tadPanel.start();
+    }
+
+    
+    //----------------------------------------------adder-------------------------------------------------
+    public addPanel(id:string, panel:TadPanel):void {
+        this.panels[id] = panel;
+    }
+
+    //-----------------------------------------------getter------------------------------------------------
     public getId(): string {
         return this.id;
     }
-
-    public openPanel(path: string, target: string, pits: ProcessInstanceThreadSegment): void {
-        var tadPanelId = "Panel_" + GUID();
-        var tadPanel = new TadPanel(pits, this, this.id, tadPanelId, path);
-        this.panels.put(tadPanelId, tadPanel);
-        tadPanel.start();
+    public getPanel(id:string):TadPanel {
+        return this.panels[id];
+    }
+    public getDataModel():DataModel {
+        return this.dm;
+    }
+    public getContext():Context {
+        return this.tadContext;
     }
 }

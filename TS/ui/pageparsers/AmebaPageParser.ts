@@ -13,12 +13,12 @@ import {ServiceObj} from "../../const/ServiceObj";
 export class AmebaPageParser implements IPageParser {
 
 
-    parsePage(target:string, ctx:Context) {
+    parsePage(target:string, ctx:Context): void {
         let panel:TadPanel = ctx.get(UIConst.Panel);
 
         // 0.获取html
         ResourceManager.getResourceFile(panel.getPath(), function (html) {
-            let div, domContent;
+            let div, domContent, registry:PanelCompositeFactoryRegistry;
             div = $("<div>");
             div.html(html);
 
@@ -26,17 +26,19 @@ export class AmebaPageParser implements IPageParser {
             domContent = $(div).find("#contentPanel");
 
             // 展现
-            let registry:PanelCompositeFactoryRegistry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
-            var scripts;
+            registry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
             if (target) {
-                let factory:IPanelCompositeFactory = registry.getPanelFactory(target);
-                let pane:JQuery = factory.getPanelComposite();
+                let scripts, factory:IPanelCompositeFactory, pane:JQuery;
+
+                factory = registry.getPanelFactory(target);
+                pane = factory.getPanelComposite();
                 pane.prepend(domContent);
                 scripts = $(div).find("script");
                 for (let i = 0; i < scripts.length; i++) {
                     $("body").append(scripts[i]);
                 }
             } else {
+                let scripts;
                 $("body").prepend(domContent);
                 scripts = $(div).find("script");
                 for (let i = 0; i < scripts.length; i++) {
@@ -47,14 +49,14 @@ export class AmebaPageParser implements IPageParser {
         });
     }
 
-    private static translateNormalHTML(dom:JQuery, panel:TadPanel) {
-        var id, prop, children, view;
+    private static translateNormalHTML(dom:JQuery, panel:TadPanel): void {
+        let id, prop, children;
 
         id = $(dom).attr("id");
         prop = $(dom).attr("prop");
 
         if (prop != undefined) {
-            let feature, dm, events;
+            let view, feature, dm, events;
 
             prop = JSON.parse(prop);
             feature = prop.feature;

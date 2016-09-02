@@ -17,14 +17,15 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
     }
 
     public createNodeRunnable(pits: ProcessInstanceThreadSegment, definitionBean: Object, nodeId: string): void {
-        var bean, node, varMap, keySet, endValue, pit, currentTask, ce;
+        let bean, node, pit, currentTask, ce;
 
         bean = <AgreeLogicRule> definitionBean;
         node = bean.getNode(nodeId);
         if(bean.getVarMap() != null) {
+            let varMap, keySet;
             varMap = bean.getVarMap();
             keySet = varMap.keySet();
-            for(var i = 0; i < keySet.length; i++) {
+            for(let i = 0; i < keySet.length; i++) {
                 pits.addVarMap(keySet[i], varMap.get(keySet[i]));
             }
         }
@@ -33,7 +34,7 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
             
         if(node == null) {
-            endValue = bean.getEndValue(nodeId);
+            let endValue = bean.getEndValue(nodeId);
             if(endValue != null) {
                 currentTask.end(endValue);
             } else {
@@ -52,7 +53,7 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
     }
 
     public performLogicletComponentElement(pits: ProcessInstanceThreadSegment, bean: AgreeLogicRule, nodeId: string, ce: LogicletComponentElement): void {
-        var name, pit, currentTask;
+        let name, pit, currentTask;
 
         name = ce.getName();
         pit = pits.getProcessInstanceThread();
@@ -64,9 +65,9 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
         Command.call(ce, function(result) {
             currentTask.setSuspend(false);
             // 出参处理
-            var outArgMap = ce.getOutArgMap();
+            let outArgMap = ce.getOutArgMap();
             if(outArgMap != undefined) {
-                var outArg = outArgMap.get("result");
+                let outArg = outArgMap.get("result");
                 if(outArg != undefined) {
                     Context.getCurrent().get("DefaultExpressionEngine").assign(outArg.getContent(), result.outArgs.result, pits);
                 }
@@ -81,7 +82,7 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
     }
 
     public performLfcComponentElement(pits: ProcessInstanceThreadSegment, bean: AgreeLogicRule, nodeId: string, ce: LFCComponentElement): void {
-        var path, inArgMap, context, pif, pit, currentTask;
+        let path, inArgMap, context, pif, pit, currentTask;
         
         path = ce.getPath();
             
@@ -105,7 +106,7 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
     }
 
     public performAftComponentElement(pits: ProcessInstanceThreadSegment, bean: AgreeLogicRule, nodeId: string, ace: AftComponentElement): void {
-        var pit, currentTask, path, context, pif, inArgMap;
+        let pit, currentTask, path, context, pif, inArgMap;
         
         path = ace.getPath();
 
@@ -129,51 +130,49 @@ abstract class AbstractALRProcessDefinitionAdapter implements IProcessDefinition
         
     }
 
+    //----------------------------------------------------------------------------getter--------------------------------------
     public getExceptionNext(definitionBean: Object, nodeId: string): string {
-        var bean, node, ce;
+        let bean, node;
         bean = <AgreeLogicRule> definitionBean;
         node = bean.getNode(nodeId);
         if(node instanceof ComponentElement) {
-            ce = <ComponentElement> node;
+            let ce = <ComponentElement> node;
             return ce.getExceptionNext();
         }
         return null;
     }
-
     public getNodeCaption(definitionBean: Object, nodeId: string): string {
-        var bean, node, ce, endValue;
+        let bean, node;
 
         bean = <AgreeLogicRule> definitionBean;
         node = bean.getNode(nodeId);
         if(node == null) {
-            endValue = bean.getEndValue(nodeId);
+            let endValue = bean.getEndValue(nodeId);
             return endValue + "( " + nodeId + " )";
         } else if(node instanceof ComponentElement) {
-            ce = <ComponentElement> node;
+            let ce = <ComponentElement> node;
             return ce.getCaption() + "( " + nodeId + " )" + ", showId( " + ce.getShowId() + " )";
         }
         return "节点( " + nodeId + " )";
     }
-
     public getOutNextMap(definitionBean: Object, nodeId: string): HashMap {
-        var bean, node, ce;
+        let bean, node;
         bean = <AgreeLogicRule> definitionBean;
         node = bean.getNode(nodeId);
         if(node instanceof ComponentElement) {
-            ce = <ComponentElement> node;
+            let ce = <ComponentElement> node;
             return ce.getOutNextMap();
         }
         return null;
     }
-
     public getStartNodeId(definitionBean: Object): string {
         return (<AgreeLogicRule> definitionBean).getStartNodeId();
     }
-
     public getEndValueMap(definitionBean: Object): HashMap {
         return (<AgreeLogicRule> definitionBean).getEndValueMap();
     }
 
+    //-------------------------------------------------抽象方法--------------------------------------
     abstract getFileExtension(): string;
     abstract parse(path: string, input: string, callback: Function): void;
 

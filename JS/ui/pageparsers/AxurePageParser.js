@@ -7,7 +7,7 @@ define(["require", "exports", "../../resource/ResourceManager", "../widget/ViewC
             var panel = ctx.get(UIConst_1.UIConst.Panel);
             // 0.获取html
             ResourceManager_1.ResourceManager.getResourceFile(panel.getPath(), function (html) {
-                var div, domContent;
+                var div, domContent, registry;
                 // 清除之前页面的内容
                 if ($("body").find("#base").length != 0) {
                     $("#base").remove();
@@ -16,11 +16,11 @@ define(["require", "exports", "../../resource/ResourceManager", "../widget/ViewC
                 div.html(html);
                 domContent = $(div).find("#base");
                 // 展现
-                var registry = ctx.get(ServiceObj_1.ServiceObj.PanelCompositeFactoryRegistry);
-                var scripts;
+                registry = ctx.get(ServiceObj_1.ServiceObj.PanelCompositeFactoryRegistry);
                 if (target) {
-                    var factory = registry.getPanelFactory(target);
-                    var pane = factory.getPanelComposite();
+                    var scripts = void 0, factory = void 0, pane = void 0;
+                    factory = registry.getPanelFactory(target);
+                    pane = factory.getPanelComposite();
                     pane.prepend(domContent);
                     scripts = $(div).find("script");
                     for (var i = 0; i < scripts.length; i++) {
@@ -28,6 +28,7 @@ define(["require", "exports", "../../resource/ResourceManager", "../widget/ViewC
                     }
                 }
                 else {
+                    var scripts = void 0;
                     $("body").prepend(domContent);
                     scripts = $(div).find("script");
                     for (var i = 0; i < scripts.length; i++) {

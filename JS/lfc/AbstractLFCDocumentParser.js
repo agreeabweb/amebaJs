@@ -64,7 +64,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
          * 解析LFC组件
          */
         AbstractLFCDocumentParser.prototype.parseLfcComponentElement = function (lfc, element) {
-            var ce, inArg, outArg, out, ex, mappings, mapping, target, source, argName, argText;
+            var ce, inArg, outArg, out, ex, mappings;
             ce = new LFCComponentElement_1.LFCComponentElement();
             // 保存基本信息
             ce.setId(element._id);
@@ -72,6 +72,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
             // 保存入参信息
             inArg = element.InArg;
             if (inArg != undefined) {
+                var argText = void 0;
                 if (inArg instanceof Array) {
                     for (var i = 0; i < inArg.length; i++) {
                         var ae = new ArgElement_1.ArgElement();
@@ -89,7 +90,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
                     var ae = new ArgElement_1.ArgElement();
                     ae.setCaption(inArg._caption);
                     ae.setName(inArg._name);
-                    argText = inArg[i].__text;
+                    argText = inArg.__text;
                     if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
                         argText = argText.substring(1, argText.length - 1);
                     }
@@ -137,9 +138,10 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
             mappings = element.Mappings;
             if (mappings != undefined) {
                 for (var i = 0; i < mappings.length; i++) {
-                    mapping = mappings[i].Mapping;
+                    var mapping = mappings[i].Mapping;
                     if (mapping != undefined) {
                         for (var j = 0; j < mapping.length; j++) {
+                            var target = void 0, source = void 0;
                             target = mapping[j]._target;
                             source = mapping[j]._source;
                             ce.addMapping(target, source);
@@ -154,7 +156,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
          * 解析component组件
          */
         AbstractLFCDocumentParser.prototype.parseLogicletComponentElement = function (lfc, element) {
-            var ce, inArg, outArg, out, ex, argName, argText;
+            var ce, inArg, outArg, out, ex;
             ce = new LogicletComponentElement_1.LogicletComponentElement();
             // 保存基本信息
             ce.setId(element._id);
@@ -162,6 +164,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
             // 保存入参信息
             inArg = element.InArg;
             if (inArg != undefined) {
+                var argText = void 0;
                 if (inArg instanceof Array) {
                     for (var i = 0; i < inArg.length; i++) {
                         var ae = new ArgElement_1.ArgElement();
@@ -179,7 +182,7 @@ define(["require", "exports", "./define/LFCComponentElement", "./define/Logiclet
                     var ae = new ArgElement_1.ArgElement();
                     ae.setCaption(inArg._caption);
                     ae.setName(inArg._name);
-                    argText = inArg[i].__text;
+                    argText = inArg.__text;
                     if (argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
                         argText = argText.substring(1, argText.length - 1);
                     }

@@ -30,7 +30,7 @@ class LogicRealmTask {
      * then - function 全部子任务结束后当前任务的然后逻辑
      */ 
     public startSub(then: Function): LogicRealmTask {
-        var subHead;
+        let subHead;
         
         subHead = new LogicRealmTask(this.realm, "subOf_" + this.name, function() {/**空逻辑 */});
         // 保存父任务信息
@@ -69,7 +69,7 @@ class LogicRealmTask {
         if(!this.isEnded()) {
             this.execute();
         }
-        var current = this.realm.getCurrentTask();
+        let current = this.realm.getCurrentTask();
         if(current != undefined && !current.isEnded() && !current.isSuspended()) {
             current.end(null);
         }
@@ -95,7 +95,7 @@ class LogicRealmTask {
         if(this.checkAlreadyEnd()) {
             return;
         }
-        var current = this.realm.getCurrentTask();
+        let current = this.realm.getCurrentTask();
         this.endFlag = true;
         if(this.realm.isSuspended()) {
             // 激活下一个任务
@@ -112,7 +112,7 @@ class LogicRealmTask {
         this.parent.logic = this.parentThen; // 将回调函数作为父任务的逻辑进行执行
         if(this.selectedEnd == undefined) {
             // 异常处理
-            var t = this.getLocal("Throwable");
+            let t = this.getLocal("Throwable");
             if(t != undefined) {
                 this.parent.set("Throwable", t);
             }
@@ -152,7 +152,7 @@ class LogicRealmTask {
             return this.parent;
         }
         // 2. 找到兄弟任务
-        var siblingNext;
+        let siblingNext;
         if(this.selectedEnd == undefined || this.endToNext.get(this.selectedEnd) == undefined) {
             siblingNext = this.defaultNext;
         } else {
@@ -198,7 +198,7 @@ class LogicRealmTask {
     /**
      * 获取指定类型的资源
      */
-    public get(className): any {
+    public get(className: string): any {
         return this.storage[className];
     };
 
@@ -215,7 +215,7 @@ class LogicRealmTask {
      * 判断该任务是否已经结束
      */
     public checkAlreadyEnd(): boolean {
-        var walker;
+        let walker;
         if(this.isEnded()) {
             for(walker = this; walker != null; walker = walker.parent) {
                 if(walker.endFlag) {

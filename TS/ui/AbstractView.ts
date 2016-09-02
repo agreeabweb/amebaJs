@@ -31,19 +31,6 @@ export abstract class AbstractView implements IView{
         this.host.registerEntryView(name,this);
     }
 
-    protected getMission(type:string,path:string, targetId: string):IMission{
-        return this.getHost().getContext().get(ServiceObj.MissionFactory).getMission(type,path, targetId);
-    }
-    
-    public getHost(): TadPanel {
-        return this.host;
-    }
-    public getNode(): JQuery {
-        return this.$thisNode;
-    }
-    
-    abstract bindEvent(type:string, name:string, path:string):void;
-
     modelChanged(val:any):void {
         this.$thisNode.val(val);
     }
@@ -52,4 +39,18 @@ export abstract class AbstractView implements IView{
         let dm:DataModel = this.host.getContext().get(UIConst.DataModel);
         dm.doSetWithNotify(key,val,false);
     }
+
+    //---------------------------------------------------getter-----------------------------------------------
+    public getHost(): TadPanel {
+        return this.host;
+    }
+    public getNode(): JQuery {
+        return this.$thisNode;
+    }
+    protected getMission(type:string,path:string, targetId: string):IMission{
+        return this.getHost().getContext().get(ServiceObj.MissionFactory).getMission(type,path, targetId);
+    }
+    
+    //---------------------------------------抽象方法-----------------------------------------------------------
+    abstract bindEvent(type:string, name:string, path:string):void;
 }

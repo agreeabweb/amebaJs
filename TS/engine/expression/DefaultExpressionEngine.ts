@@ -24,8 +24,8 @@ class DefaultExpressionEngine implements IExpressionEngine {
      * 取值
      */
     public evaluate(expression: string, pits: ProcessInstanceThreadSegment): any {
-        var value;
         if(expression != undefined) {
+            let value
             if(expression.match(/^varMap()./)) {
                 value = pits.getVarMap(expression);
                 console.log(pits.getCoreTask().getName() + " 中表达式：" + expression + " 的值为: " + value);

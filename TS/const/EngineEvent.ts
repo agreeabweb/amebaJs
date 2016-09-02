@@ -3,9 +3,9 @@
  */
 export class EngineEvent {
 
-    public static  ENGINE_EVENT ="engine.command.";
-    public static COMMAND_OpenPanel=EngineEvent.ENGINE_EVENT+"OpenPanel";
-    public static COMMAND_ShowMessage=EngineEvent.ENGINE_EVENT+"ShowMessage";
-    public static COMMAND_ControllerCallMethod=EngineEvent.ENGINE_EVENT+"ControllerCallMethod";
+    public static  ENGINE_EVENT: string ="engine.command.";
+    public static COMMAND_OpenPanel: string = EngineEvent.ENGINE_EVENT+"OpenPanel";
+    public static COMMAND_ShowMessage: string = EngineEvent.ENGINE_EVENT+"ShowMessage";
+    public static COMMAND_ControllerCallMethod: string = EngineEvent.ENGINE_EVENT+"ControllerCallMethod";
 
 }

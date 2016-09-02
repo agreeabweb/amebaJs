@@ -10,15 +10,18 @@ define(["require", "exports", "./ComponentElement"], function (require, exports,
         function AftComponentElement() {
             _super.apply(this, arguments);
         }
-        AftComponentElement.prototype.getMapping = function () {
-            return this.mapping;
-        };
+        //-------------------------------------------------------adder----------------------------------------
         AftComponentElement.prototype.addMapping = function (target, source) {
             this.mapping.put(target, source);
+        };
+        //------------------------------------------------------getter---------------------------------------
+        AftComponentElement.prototype.getMapping = function () {
+            return this.mapping;
         };
         AftComponentElement.prototype.getPath = function () {
             return this.path;
         };
+        //-------------------------------------------------------setter--------------------------------------
         AftComponentElement.prototype.setPath = function (path) {
             this.path = path;
         };

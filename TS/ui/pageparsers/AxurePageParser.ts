@@ -11,7 +11,7 @@ import {UIConst} from "../../const/UIConst";
  * Created by Oliver on 2016-08-23 0023.
  */
 
-declare var $axure;
+declare let $axure;
 
 export class AxurePageParser implements IPageParser {
 
@@ -19,7 +19,7 @@ export class AxurePageParser implements IPageParser {
         let panel:TadPanel = ctx.get(UIConst.Panel);
         // 0.获取html
         ResourceManager.getResourceFile(panel.getPath(), function (html) {
-            let div, domContent;
+            let div, domContent, registry:PanelCompositeFactoryRegistry;
 
             // 清除之前页面的内容
             if($("body").find("#base").length != 0) {
@@ -31,17 +31,19 @@ export class AxurePageParser implements IPageParser {
             domContent = $(div).find("#base");
 
             // 展现
-            let registry:PanelCompositeFactoryRegistry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
-            var scripts;
+            registry = ctx.get(ServiceObj.PanelCompositeFactoryRegistry);
             if (target) {
-                let factory:IPanelCompositeFactory = registry.getPanelFactory(target);
-                let pane:JQuery = factory.getPanelComposite();
+                let scripts, factory:IPanelCompositeFactory, pane:JQuery;
+
+                factory = registry.getPanelFactory(target);
+                pane = factory.getPanelComposite();
                 pane.prepend(domContent);
                 scripts = $(div).find("script");
                 for (let i = 0; i < scripts.length; i++) {
                     $("body").append(scripts[i]);
                 }
             } else {
+                let scripts;
                 $("body").prepend(domContent);
                 scripts = $(div).find("script");
                 for (let i = 0; i < scripts.length; i++) {
@@ -55,8 +57,8 @@ export class AxurePageParser implements IPageParser {
         });
     }
 
-    private static translateAxureHTML(obj, panel:TadPanel) {
-        var objs, objPaths;
+    private static translateAxureHTML(obj: any, panel:TadPanel): void {
+        let objs, objPaths;
 
         objs = obj.page.diagram.objects;
         objPaths = obj.objectPaths;

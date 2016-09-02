@@ -17,21 +17,22 @@ define(["require", "exports", "../lib/HashMap", "../const/UIConst", "../const/Se
         AbstractView.prototype.bindModel = function (name) {
             this.host.registerEntryView(name, this);
         };
-        AbstractView.prototype.getMission = function (type, path, targetId) {
-            return this.getHost().getContext().get(ServiceObj_1.ServiceObj.MissionFactory).getMission(type, path, targetId);
-        };
-        AbstractView.prototype.getHost = function () {
-            return this.host;
-        };
-        AbstractView.prototype.getNode = function () {
-            return this.$thisNode;
-        };
         AbstractView.prototype.modelChanged = function (val) {
             this.$thisNode.val(val);
         };
         AbstractView.prototype.updateModel = function (key, val) {
             var dm = this.host.getContext().get(UIConst_1.UIConst.DataModel);
             dm.doSetWithNotify(key, val, false);
+        };
+        //---------------------------------------------------getter-----------------------------------------------
+        AbstractView.prototype.getHost = function () {
+            return this.host;
+        };
+        AbstractView.prototype.getNode = function () {
+            return this.$thisNode;
+        };
+        AbstractView.prototype.getMission = function (type, path, targetId) {
+            return this.getHost().getContext().get(ServiceObj_1.ServiceObj.MissionFactory).getMission(type, path, targetId);
         };
         return AbstractView;
     }());

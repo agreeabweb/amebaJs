@@ -12,8 +12,8 @@ class ButtonView extends AbstractAxureView {
         this.bindEventToTarget($(this.$thisNode), actionName, action);
     }
 
-    public layout(obj): void {
-        var dom = $("#" + this.id);
+    public layout(obj: any): void {
+        let dom = $("#" + this.id);
         dom.css("position", "absolute")
             .css("width", obj.style.size.width).css("height", obj.style.size.height)
             .css("left", obj.style.location.x).css("top", obj.style.location.y);

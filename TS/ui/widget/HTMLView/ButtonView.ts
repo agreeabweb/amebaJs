@@ -11,7 +11,7 @@ export class ButtonView extends AbstractView {
     }
 
     bindEvent(eventType:string,flowType:string,path:string):void{
-        var view = this; //避免this指代错误
+        let view = this; //避免this指代错误
         if(eventType === "click")
         {
             view.getNode().on("click",function(){

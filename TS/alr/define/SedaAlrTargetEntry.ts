@@ -5,6 +5,7 @@ class SedaAlrTargetEntry {
     private caption: string;
     private listDataMapping: Array<SedaMappingTargetEntry>;
 
+    //--------------------------------------------------getter------------------------------------------
     public getPath(): string {
         return this.path;
     }
@@ -15,6 +16,7 @@ class SedaAlrTargetEntry {
         return this.listDataMapping;
     }
 
+    //---------------------------------------------------setter------------------------------------------
     public setPath(path: string): void {
         this.path = path;
     }

@@ -35,17 +35,14 @@ export class DeskTop {
     public static PANEL_FACTORY_DEFAULT = "";
     public static PANEL_FACTORY_WINDOW = "window";
     // private static CONTEXT_PREFIX =""
-    public getContext():Context {
-        return this.sessionCtx;
-    }
 
-    private createPanelFactoryRegistry() {
+    private createPanelFactoryRegistry(): void {
         let registry:PanelCompositeFactoryRegistry = new PanelCompositeFactoryRegistry();
         registry.addPanelFactory("", new DefaultPanelFactory());
         this.sessionCtx.set(ServiceObj.PanelCompositeFactoryRegistry, registry);
     }
 
-    public init() {
+    public init(): void {
 
         // 0.创建Context
         this.sessionCtx = Context.baseContext.createChild("Desktop_" + GUID());
@@ -56,16 +53,16 @@ export class DeskTop {
         Context.baseContext.set(ServiceObj.CommandHandlerExecutor, commandExecutor);
         EngineEventManager.init(commandExecutor, commandExecutor.handleEvent);
         // 3.资源
-        var resourceDocumentTable = new ResourceDocumentTable();
+        let resourceDocumentTable = new ResourceDocumentTable();
         Context.baseContext.set(ServiceObj.ResourceDocumentTable, resourceDocumentTable);
         // 4.表达式引擎
-        var expressionEngine = new DefaultExpressionEngine();
+        let expressionEngine = new DefaultExpressionEngine();
         Context.baseContext.set(ServiceObj.DefaultExpressionEngine, expressionEngine);
         // 5.PI
-        var pif = new ProcessInstanceFactory();
+        let pif = new ProcessInstanceFactory();
         Context.baseContext.set(ServiceObj.ProcessInstanceFactory, pif);
         // 6.MissionFactory
-        var missionFactory = new AxureMissionFactory();
+        let missionFactory = new AxureMissionFactory();
         Context.baseContext.set(ServiceObj.MissionFactory, missionFactory);
         // 7.PageParser  TODO 换成反射
         let parser = null;
@@ -99,6 +96,11 @@ export class DeskTop {
     //
     //     console.log("DM值发生了变化: "+key);
     // }
+
+    //-----------------------------------------------getter-------------------------------------------------
+    public getContext():Context {
+        return this.sessionCtx;
+    }
 }
 
 

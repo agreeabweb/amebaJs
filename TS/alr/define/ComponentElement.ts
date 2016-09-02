@@ -11,16 +11,18 @@ class ComponentElement {
     private outArgMap: HashMap = new HashMap();
     private outNextMap: HashMap = new HashMap();
 
+    //-------------------------------------------------adder-------------------------------------------------
     public addInArg(ae: ArgElement): void {
         this.inArgMap.put(ae.getName(), ae);
     }
     public addOutArg(ae: ArgElement): void {
         this.outArgMap.put(ae.getName(), ae);
     }
-    public addOutNext(id: string, next: string) {
+    public addOutNext(id: string, next: string): void {
         this.outNextMap.put(id, next);
     }
 
+    //-------------------------------------------------getter-------------------------------------------------
     public getCaption(): string {
         return this.caption;
     }
@@ -46,6 +48,7 @@ class ComponentElement {
         return this.outNextMap;
     }
 
+    //-------------------------------------------------------------setter--------------------------------------
     public setCaption(caption: string): void {
         this.caption = caption;
     }

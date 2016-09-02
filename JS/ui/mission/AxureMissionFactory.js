@@ -20,9 +20,9 @@ define(["require", "exports", "./FlowMission", "../Command", "./CommandMission",
                 missions.push(mission);
             }
             else if (type === "setFunction") {
+                var expr = void 0, exprArgs = void 0, args_1 = [];
                 inputParams = new HashMap_1.HashMap();
-                var expr = path.expr.subExprs[0];
-                var exprArgs = void 0, args_1 = [];
+                expr = path.expr.subExprs[0];
                 if (expr.exprType === "fcall") {
                     inputParams.put("methodName", expr.functionName);
                     exprArgs = expr.arguments;
@@ -40,8 +40,8 @@ define(["require", "exports", "./FlowMission", "../Command", "./CommandMission",
                             args_1.push(exprArgs[i].value);
                         }
                         else if (exprArgs[i].exprType === "fcall") {
-                            var inputParamsInside = new HashMap_1.HashMap();
-                            var exprArgsInside = void 0, argsInsid = [];
+                            var inputParamsInside = void 0, exprArgsInside = void 0, argsInside = [];
+                            inputParamsInside = new HashMap_1.HashMap();
                             inputParamsInside.put("methodName", exprArgs[i].functionName);
                             exprArgsInside = exprArgs[i].arguments;
                             for (var j = 0; j < exprArgsInside.length; j++) {
@@ -54,7 +54,7 @@ define(["require", "exports", "./FlowMission", "../Command", "./CommandMission",
                                     }
                                 }
                             }
-                            inputParamsInside.put("methodArgs", argsInsid);
+                            inputParamsInside.put("methodArgs", argsInside);
                             command = new Command_1.Command(EngineEvent_1.EngineEvent.COMMAND_ControllerCallMethod, null, null, function (result) {
                                 args_1.push(result.outArgs.result);
                                 inputParams.put("methodArgs", args_1);

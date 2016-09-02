@@ -26,9 +26,9 @@ class AEvent {
             return false;
         }
 
-        var arrayEvent = this._listeners[target][type];
+        let arrayEvent = this._listeners[target][type];
         if(arrayEvent instanceof Array) {
-            for(var i = 0; i < arrayEvent.length; i++) {
+            for(let i = 0; i < arrayEvent.length; i++) {
                 if(typeof arrayEvent[i] === "function") {
                     arrayEvent[i]({type: type});
                 }

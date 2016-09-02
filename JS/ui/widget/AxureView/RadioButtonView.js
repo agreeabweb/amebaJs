@@ -26,28 +26,30 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             return this.$thisNode.find(".text span").text();
         };
         RadioButtonView.prototype.layout = function (obj) {
-            var dom = $("#" + this.id);
+            var dom, objects;
+            dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
                 .css("left", obj.style.location.x).css("top", obj.style.location.y);
             if (obj.style.fontSize != undefined) {
                 dom.find(".text span").css("font-size", obj.style.fontSize);
             }
-            var objects = obj.objects;
+            objects = obj.objects;
             if (objects != undefined) {
                 for (var i = 0; i < objects.length; i++) {
-                    var objPaths = this.host.getAxureObjPaths();
-                    var idMap = objects[i].id;
-                    var id = objPaths[idMap].scriptId;
-                    var childDom = $("#" + id);
-                    var size = objects[i].style.size;
-                    var location = objects[i].style.location;
+                    var objPaths = void 0, idMap = void 0, id = void 0, childDom = void 0, size = void 0, location_1 = void 0;
+                    objPaths = this.host.getAxureObjPaths();
+                    idMap = objects[i].id;
+                    id = objPaths[idMap].scriptId;
+                    childDom = $("#" + id);
+                    size = objects[i].style.size;
+                    location_1 = objects[i].style.location;
                     childDom.css("position", "absolute");
                     if (size != undefined) {
                         childDom.css("width", size.width).css("height", size.height);
                     }
-                    if (location != undefined) {
-                        childDom.css("top", location.y - obj.style.location.y).css("left", location.x - obj.style.location.x);
+                    if (location_1 != undefined) {
+                        childDom.css("top", location_1.y - obj.style.location.y).css("left", location_1.x - obj.style.location.x);
                     }
                 }
             }

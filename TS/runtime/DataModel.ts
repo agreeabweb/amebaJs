@@ -9,22 +9,23 @@ export class DataModel {
     private memberMap:HashMap = new HashMap();
     private subscriptions:Array<any> = new Array<any>();
 
-    public notifyThis(callback:any, context:any) {
-        let subscribe:any = {
+    public notifyThis(callback:any, context:any): void {
+        let subscribe, v;
+
+        subscribe = {
             "callback": callback,
             "context": context
         };
 
-        let v = this.subscriptions.push(subscribe);
-        console.log("注册后长度: " + v);
+        v = this.subscriptions.push(subscribe);
+        console.log("DataModel注册后长度: " + v);
     }
-
-    private notifyChange(key:string, old:any, now:any):void {
+    private notifyChange(key: string, old: any, now: any): void {
         console.log("开始通知变化..." + this.subscriptions.length);
-        let i:number;
-        for (i = 0; i < this.subscriptions.length; i++) {
-            let v:any = this.subscriptions[i];
-            let data:any = {
+        for (let i = 0; i < this.subscriptions.length; i++) {
+            let v, data;
+            v = this.subscriptions[i];
+            data = {
                 "key": key,
                 "old": old,
                 "new": now
@@ -34,29 +35,22 @@ export class DataModel {
         }
     }
 
-    private doSetMemeber(memberName:string, memberContent:any):void {
+    private doSetMemeber(memberName: string, memberContent: any): void {
+        let dotIndex:number;
 
-        let dotIndex:number = memberName.indexOf('.');
-
+        dotIndex = memberName.indexOf('.');
         if (dotIndex > 0) {
-            let prefix:string = memberName.substring(0, memberName.lastIndexOf("."));
-            let suffix:string = memberName.substring(memberName.lastIndexOf(".") + 1);
+            let prefix:string, suffix:string, subModel:DataModel;
 
-            let subModel:DataModel = this.getLastDataModel(prefix);
+            prefix = memberName.substring(0, memberName.lastIndexOf("."));
+            suffix = memberName.substring(memberName.lastIndexOf(".") + 1);
+
+            subModel = this.getLastDataModel(prefix);
             subModel.setLocalValue(suffix, memberContent);
         } else {
             this.setLocalValue(memberName, memberContent);
         }
     }
-
-    private setLocalValue(memberName:string, memberContent:any):void {
-        this.memberMap.put(memberName, memberContent);
-    }
-
-    private getLocalValue(memberName:string):any {
-        return this.memberMap.get(memberName);
-    }
-
     public  doSetWithNotify(memberName:string, memberContent:any,notify:boolean):void {
         let old:any = this.getMember(memberName);
         if (old === memberContent) {
@@ -67,46 +61,19 @@ export class DataModel {
             setTimeout(this.notifyChange(memberName, old, memberContent), 0);
         }
     }
-
-    public  set(memberName:string, memberContent:any):void {
-        this.doSetWithNotify(memberName,memberContent,true);
+    private doGet(memberName:string):any {
+        return this.doGetMember(memberName);
     }
-
-    private getLastDataModel(memberName:string):any {
-        let dotIndex:number = memberName.indexOf('.');
-
-        if (dotIndex > 0) {
-            let prefix:string = memberName.substring(0, dotIndex);
-
-            let suffix:string = memberName.substring(dotIndex + 1);
-
-            let subModel:DataModel = this.get(prefix);
-            if (subModel == null) {
-                // if (!create)
-                // {
-                //     return null;
-                // }
-                subModel = this.createSubModelMember(prefix);
-            }
-            return subModel.getLastDataModel(suffix);
-        } else {
-            let subModel:DataModel = this.get(memberName);
-            if (subModel == null) {
-                subModel = this.createSubModelMember(memberName);
-            }
-            return subModel;
-        }
-
-    }
-
     private doGetMember(memberName:string):any {
         let dotIndex:number = memberName.indexOf('.');
 
         if (dotIndex > 0) {
-            let prefix:string = memberName.substring(0, dotIndex);
+            let prefix: string, suffix: string, subModel: DataModel;
 
-            let suffix:string = memberName.substring(dotIndex + 1);
-            let subModel:DataModel = this.get(prefix);
+            prefix = memberName.substring(0, dotIndex);
+
+            suffix = memberName.substring(dotIndex + 1);
+            subModel = this.get(prefix);
             if (subModel == null) {
                 // if (!create) {
                 //     return null;
@@ -129,16 +96,49 @@ export class DataModel {
         this.memberMap.put(memberName, null);
     }
 
-    public getMember(memberName:string):any {
-        return this.doGetMember(memberName);
+    //-----------------------------------------------------------setter---------------------------------------------
+    public  set(memberName:string, memberContent:any):void {
+        this.doSetWithNotify(memberName,memberContent,true);
+    }
+    private setLocalValue(memberName:string, memberContent:any):void {
+        this.memberMap.put(memberName, memberContent);
     }
 
-
-    private doGet(memberName:string):any {
-        return this.doGetMember(memberName);
-    }
-
+    //----------------------------------------------------------getter-----------------------------------------------
     public get(memberName:string):any {
         return this.doGet(memberName);
+    }
+    private getLocalValue(memberName:string):any {
+        return this.memberMap.get(memberName);
+    }
+    private getLastDataModel(memberName:string):any {
+        let dotIndex:number = memberName.indexOf('.');
+
+        if (dotIndex > 0) {
+            let prefix: string, suffix: string, subModel: DataModel;
+
+            prefix = memberName.substring(0, dotIndex);
+            suffix = memberName.substring(dotIndex + 1);
+
+            subModel = this.get(prefix);
+            if (subModel == null) {
+                // if (!create)
+                // {
+                //     return null;
+                // }
+                subModel = this.createSubModelMember(prefix);
+            }
+            return subModel.getLastDataModel(suffix);
+        } else {
+            let subModel:DataModel = this.get(memberName);
+            if (subModel == null) {
+                subModel = this.createSubModelMember(memberName);
+            }
+            return subModel;
+        }
+
+    }
+    public getMember(memberName:string):any {
+        return this.doGetMember(memberName);
     }
 }

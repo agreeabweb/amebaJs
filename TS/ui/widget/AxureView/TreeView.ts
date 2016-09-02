@@ -17,12 +17,14 @@ class TreeView extends AbstractAxureView {
         this.bindEventToTarget($("#" + this.eTargetId), actionName, action);
     }
 
-    public init() {
-        var tree = this;
+    public init(): void {
+        let tree = this;
         $("#" + this.id + " .image").on("click", function() {
-            var parentId = $(this).parent().attr("id");
-            var childrenContainer = $("#" + parentId + "_children");
-            var img = $(this).find("img");
+            let parentId, childrenContainer, img;
+
+            parentId = $(this).parent().attr("id");
+            childrenContainer = $("#" + parentId + "_children");
+            img = $(this).find("img");
             if(childrenContainer.css("visibility") === "visible") {
                 img.attr("src", (img.attr("src")).replace("_selected", ""));
                 childrenContainer.css("visibility", "hidden").css("display", "none");
@@ -36,32 +38,35 @@ class TreeView extends AbstractAxureView {
         });
     }
 
-    public layout(obj): void {
-        this.obj = obj;
+    public layout(obj: any): void {
+        let dom, childrenContainer, children, childNum;
 
+        this.obj = obj;
         // 整体布局
-        var dom = $("#" + this.id);
+        dom = $("#" + this.id);
         dom.css("position", "absolute")
             .css("width", obj.style.size.width).css("height", obj.style.size.height)
             .css("top", obj.style.location.y).css("left", obj.style.location.x);
 
         // 孩子节点的布局
-        var childrenContainer = $("#" + this.id + "_children");
-        var children = childrenContainer.children();
-        var childNum = 0;
-        for(var i = 0; i < children.length; i++) {
+        childrenContainer = $("#" + this.id + "_children");
+        children = childrenContainer.children();
+        childNum = 0;
+        for(let i = 0; i < children.length; i++) {
             childNum += this.layoutChild(children[i], i + childNum);
         }
     }
 
-    public layoutChild(obj, top) {
-        var id = $(obj).attr("id");
-        var dom = $("#" + id);
-        var idMap = this.getIdMap(id);
-        var size: any = this.getObjInfo(idMap, this.obj.objects, "size");
-        var location = this.getObjInfo(idMap, this.obj.objects, "location");
-        var fontSize = this.getObjInfo(idMap, this.obj.objects, "fontSize");
-        var interactionMap = this.getObjInfo(idMap, this.obj.objects, "interactionMap");
+    public layoutChild(obj: any, top: number): number {
+        let id, dom, idMap, size, location, fontSize, interactionMap, childrenContainer;
+
+        id = $(obj).attr("id");
+        dom = $("#" + id);
+        idMap = this.getIdMap(id);
+        size = this.getObjInfo(idMap, this.obj.objects, "size");
+        location = this.getObjInfo(idMap, this.obj.objects, "location");
+        fontSize = this.getObjInfo(idMap, this.obj.objects, "fontSize");
+        interactionMap = this.getObjInfo(idMap, this.obj.objects, "interactionMap");
         
         if(interactionMap != undefined) {
             this.eTargetId = id;
@@ -84,7 +89,9 @@ class TreeView extends AbstractAxureView {
         }
 
         if(dom.find(".image").length != 0) {
-            var image = dom.find(".image");
+            let image, selectiongroup;
+
+            image = dom.find(".image");
             idMap = this.getIdMap(image.attr("id"));
             size = this.getObjInfo(idMap, this.obj.objects, "size");
             location = this.getObjInfo(idMap, this.obj.objects, "location");
@@ -99,7 +106,7 @@ class TreeView extends AbstractAxureView {
                 image.css("top", 6).css("left", 0);
             }
 
-            var selectiongroup = $(image).next();
+            selectiongroup = $(image).next();
             idMap = this.getIdMap(selectiongroup.attr("id"));
             size = this.getObjInfo(idMap, this.obj.objects, "size");
             location = this.getObjInfo(idMap, this.obj.objects, "location");
@@ -114,7 +121,7 @@ class TreeView extends AbstractAxureView {
                 selectiongroup.css("top", 0).css("left", 20);
             }
         } else {
-            var selectiongroup = $(dom).children();
+            let selectiongroup = $(dom).children();
             idMap = this.getIdMap(selectiongroup.attr("id"));
             size = this.getObjInfo(idMap, this.obj.objects, "size");
             location = this.getObjInfo(idMap, this.obj.objects, "location");
@@ -131,16 +138,18 @@ class TreeView extends AbstractAxureView {
         }
 
         // 孩子节点的布局
-        var childrenContainer = $("#" + id + "_children");
+        childrenContainer = $("#" + id + "_children");
         if(childrenContainer.length != 0) {
            if(childrenContainer.css("visibility") === "hidden") {
                 childrenContainer.css("display", "none");
                 return 0; // 当作没孩子节点
             } else {
+                let children, childNum;
+
                 childrenContainer.css("display", "block");
-                var children = childrenContainer.children();
-                var childNum = 0;
-                for(var i = 0; i < children.length; i++) {
+                children = childrenContainer.children();
+                childNum = 0;
+                for(let i = 0; i < children.length; i++) {
                     childNum += this.layoutChild(children[i], i + 1 + childNum);
                 }
                 return children.length + childNum;
@@ -150,12 +159,12 @@ class TreeView extends AbstractAxureView {
         }
     }
 
-    public getObjInfo(idMap: string, objects: Array<any>, info: string): any {
+    public getObjInfo(idMap: string, objects: Array<any>, info: string): Object {
         if(idMap == undefined) {
             throw "找不到此id对应的idMap";
         }
         if(objects != undefined) {
-            for(var i = 0; i < objects.length; i++) {
+            for(let i = 0; i < objects.length; i++) {
                 if(objects[i].id === idMap) {
                     if(info === "fontSize") {
                         return objects[i].style.fontSize;
@@ -167,7 +176,7 @@ class TreeView extends AbstractAxureView {
                         return objects[i].interactionMap;
                     }
                 } else {
-                    var result = this.getObjInfo(idMap, objects[i].objects, info);
+                    let result = this.getObjInfo(idMap, objects[i].objects, info);
                     if(result != undefined) {
                         return result;
                     }
@@ -176,9 +185,9 @@ class TreeView extends AbstractAxureView {
         } 
     }
 
-    public getIdMap(id) {
-        var objPaths = this.host.getAxureObjPaths();
-        for(var idMap in objPaths) {
+    public getIdMap(id): string {
+        let objPaths = this.host.getAxureObjPaths();
+        for(let idMap in objPaths) {
             if(objPaths[idMap].scriptId === id) {
                 return idMap;
             }

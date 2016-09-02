@@ -7,7 +7,7 @@ define(["require", "exports"], function (require, exports) {
         function ControllerCallMethod() {
         }
         ControllerCallMethod.prototype.handleCommand = function (command, callback) {
-            var controllerId, methodName, method, methodArgs, tad, panel, widget;
+            var controllerId, methodName, method, methodArgs, tad, panel, widget, result, end;
             controllerId = command.getExtraData().get("controllerId");
             if (!(typeof controllerId === "string")) {
                 controllerId = controllerId.getContent();
@@ -24,8 +24,8 @@ define(["require", "exports"], function (require, exports) {
             panel = command.getContext().get("Panel");
             widget = panel.getWidget(controllerId);
             method = widget[methodName];
-            var result = method.apply(widget, methodArgs);
-            var end = "success";
+            result = method.apply(widget, methodArgs);
+            end = "success";
             if (callback != null) {
                 callback({
                     end: end,

@@ -13,6 +13,7 @@ class AgreeLogicRule {
 
     public constructor() {};
 
+    //--------------------------------------------------------adder------------------------------------------------
     public addLane(lane: Lane): void {
         this.lanes.push(lane);
     }
@@ -29,6 +30,7 @@ class AgreeLogicRule {
         this.endValueMap.put(id, value);
     }
 
+    //--------------------------------------------------------getter------------------------------------------------
     public getLanes(): Array<Lane> {
         return this.lanes;
     }
@@ -54,6 +56,7 @@ class AgreeLogicRule {
         return this.nodesList;
     }
 
+    //-------------------------------------------------------setter--------------------------------------------------
     public setPath(path: string): void {
         this.path = path;
     }

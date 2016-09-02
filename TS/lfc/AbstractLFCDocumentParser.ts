@@ -4,7 +4,7 @@ import {LFCComponentElement} from "./define/LFCComponentElement";
 import {LogicletComponentElement} from "./define/LogicletComponentElement";
 import {ArgElement} from "./define/ArgElement";
 
-declare var X2JS;
+declare let X2JS;
 
 abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements IDocumentParser {
     public constructor() {};
@@ -12,7 +12,7 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
     protected abstract createDocumentObject(): T;
 
     public parse(path: string, input: string, callback: Function): void {
-        var LFCDP, doc, lfc, root, components, end, lfcs, xml2json;
+        let LFCDP, doc, lfc, root, components, end, lfcs, xml2json;
         
         LFCDP = this;  // 避免this指代混乱
         
@@ -39,7 +39,7 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         components = root.Component;
         if(components != undefined) {
             if(components instanceof Array) {
-                for(var i = 0; i < components.length; i++) {
+                for(let i = 0; i < components.length; i++) {
                     LFCDP.parseLogicletComponentElement(lfc, components[i]);
                 }
             } else {
@@ -50,7 +50,7 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         lfcs = root.LFC;
         if(lfcs != undefined) {
             if(lfcs instanceof Array) {
-                for(var i = 0; i < lfcs.length; i++) {
+                for(let i = 0; i < lfcs.length; i++) {
                     LFCDP.parseLfcComponentElement(lfc, lfcs[i]);
                 }
             } else {
@@ -60,9 +60,9 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         
         // 处理内部变量
         if(root.InternalVars != undefined && root.InternalVars != "") {
-            var vars = root.InternalVars.Var;
+            let vars = root.InternalVars.Var;
             if(vars instanceof Array) {
-                for(var i = 0; i < vars.length; i++) {
+                for(let i = 0; i < vars.length; i++) {
                     lfc.addVarMap(vars[i]._name);
                 }
             } else {
@@ -76,8 +76,8 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
     /**
      * 解析LFC组件
      */
-    public parseLfcComponentElement(lfc, element) {
-        var ce, inArg, outArg, out, ex, mappings, mapping, target, source, argName, argText;
+    public parseLfcComponentElement(lfc: any, element: any): void {
+        let ce, inArg, outArg, out, ex, mappings;
         
         ce = new LFCComponentElement();
         // 保存基本信息
@@ -86,9 +86,10 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         // 保存入参信息
         inArg = element.InArg;
         if(inArg != undefined) {
+            let argText;
             if(inArg instanceof Array) {
-                for(var i = 0; i < inArg.length; i++) {
-                    var ae = new ArgElement();
+                for(let i = 0; i < inArg.length; i++) {
+                    let ae = new ArgElement();
                     ae.setCaption(inArg[i]._caption);
                     ae.setName(inArg[i]._name);
                     argText = inArg[i].__text;
@@ -99,10 +100,10 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
                     ce.addInArg(ae);
                 }
             } else {
-                var ae = new ArgElement();
+                let ae = new ArgElement();
                 ae.setCaption(inArg._caption);
                 ae.setName(inArg._name);
-                argText = inArg[i].__text;
+                argText = inArg.__text;
                 if(argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
                     argText = argText.substring(1, argText.length - 1);
                 }
@@ -114,15 +115,15 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         outArg = element.OutArg;
         if(outArg != undefined) {
             if(outArg instanceof Array) {
-                for(var i = 0; i < outArg.length; i++) {
-                    var ae = new ArgElement();
+                for(let i = 0; i < outArg.length; i++) {
+                    let ae = new ArgElement();
                     ae.setCaption(outArg[i]._caption);
                     ae.setName(outArg[i]._name);
                     ae.setContent(outArg[i].__text);
                     ce.addOutArg(ae);
                 }
             } else {
-                var ae = new ArgElement();
+                let ae = new ArgElement();
                 ae.setCaption(outArg._caption);
                 ae.setName(outArg._name);
                 ae.setContent(outArg.__text);
@@ -133,7 +134,7 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         out = element.Out;
         if(out != undefined) {
             if(out instanceof Array) {
-                for(var i = 0; i < out.length; i++) {
+                for(let i = 0; i < out.length; i++) {
                     ce.addOutNext(out[i]._name, out[i]._next);
                 }
             } else {
@@ -147,10 +148,12 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         // 数据映射
         mappings = element.Mappings;
         if(mappings != undefined) {
-            for (var i = 0; i < mappings.length; i++) {
-                mapping = mappings[i].Mapping;
+            for (let i = 0; i < mappings.length; i++) {
+                let mapping = mappings[i].Mapping;
                 if(mapping != undefined) {
-                    for (var j = 0; j < mapping.length; j++) {
+                    for (let j = 0; j < mapping.length; j++) {
+                        let target, source;
+
                         target = mapping[j]._target;
                         source = mapping[j]._source;
                         ce.addMapping(target, source);
@@ -164,8 +167,8 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
     /**
      * 解析component组件
      */
-    public parseLogicletComponentElement(lfc, element) {
-        var ce, inArg, outArg, out, ex, argName, argText;
+    public parseLogicletComponentElement(lfc: any, element: any): void {
+        let ce, inArg, outArg, out, ex;
         
         ce = new LogicletComponentElement();
         // 保存基本信息
@@ -174,9 +177,10 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         // 保存入参信息
         inArg = element.InArg;
         if(inArg != undefined) {
+            let argText;
             if(inArg instanceof Array) {
-                for(var i = 0; i < inArg.length; i++) {
-                    var ae = new ArgElement();
+                for(let i = 0; i < inArg.length; i++) {
+                    let ae = new ArgElement();
                     ae.setCaption(inArg[i]._caption);
                     ae.setName(inArg[i]._name);
                     argText = inArg[i].__text;
@@ -187,10 +191,10 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
                     ce.addInArg(ae);
                 }
             } else {
-                var ae = new ArgElement();
+                let ae = new ArgElement();
                 ae.setCaption(inArg._caption);
                 ae.setName(inArg._name);
-                argText = inArg[i].__text;
+                argText = inArg.__text;
                 if(argText != undefined && argText.match(/^\"/) && argText.match(/\"$/)) {
                     argText = argText.substring(1, argText.length - 1);
                 }
@@ -202,15 +206,15 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         outArg = element.OutArg;
         if(outArg != undefined) {
             if(outArg instanceof Array) {
-                for(var i = 0; i < outArg.length; i++) {
-                    var ae = new ArgElement();
+                for(let i = 0; i < outArg.length; i++) {
+                    let ae = new ArgElement();
                     ae.setCaption(outArg[i]._caption);
                     ae.setName(outArg[i]._name);
                     ae.setContent(outArg[i].__text);
                     ce.addOutArg(ae);
                 }
             } else {
-                var ae = new ArgElement();
+                let ae = new ArgElement();
                 ae.setCaption(outArg._caption);
                 ae.setName(outArg._name);
                 ae.setContent(outArg.__text);
@@ -221,7 +225,7 @@ abstract class AbstractLFCDocumentParser<T extends LogicFlowControl> implements 
         out = element.Out;
         if(out != undefined) {
             if(out instanceof Array) {
-                for(var i = 0; i < out.length; i++) {
+                for(let i = 0; i < out.length; i++) {
                     ce.addOutNext(out[i]._name, out[i]._next);
                 }
             } else {

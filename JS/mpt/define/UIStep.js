@@ -8,8 +8,9 @@ define(["require", "exports", "./MPTStep"], function (require, exports, MPTStep_
     var UIStep = (function (_super) {
         __extends(UIStep, _super);
         function UIStep() {
-            _super.apply(this, arguments);
+            _super.call(this);
         }
+        ;
         return UIStep;
     }(MPTStep_1.MPTStep));
     exports.UIStep = UIStep;

@@ -23,11 +23,12 @@ define(["require", "exports", "./AbstractAxureView"], function (require, exports
             this.$thisNode.find("input[type='text']").val(text);
         };
         TextView.prototype.layout = function (obj) {
-            var dom = $("#" + this.id);
+            var dom, input;
+            dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
                 .css("left", obj.style.location.x).css("top", obj.style.location.y);
-            var input = $("#" + this.id + "_input");
+            input = $("#" + this.id + "_input");
             input.css("width", "inherit").css("height", "inherit");
             if (obj.style.fontSize != undefined) {
                 input.css("font-szie", obj.style.fontSize);

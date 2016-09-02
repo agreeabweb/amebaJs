@@ -17,7 +17,7 @@ class ProcessDefinitionParser implements IDocumentParser {
      * -callback 回调函数
      */
     public parse(path: string, inputStream: string, callback: Function): void {
-        var fileType, adapter, definitionBean;
+        let fileType, adapter, definitionBean;
         
         fileType = path.substr(path.lastIndexOf(".") + 1, path.length - 1);
         if(fileType === "tad") {

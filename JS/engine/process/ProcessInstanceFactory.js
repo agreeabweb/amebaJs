@@ -30,8 +30,7 @@ define(["require", "exports", "./ProcessInstance", "../../lib/GUID"], function (
          * 返回的PITS对象支持在start方法启动前对其LRT进行服务对象配置。
          */
         ProcessInstanceFactory.prototype.pitsByGettingPIT = function (logicRealm, definitionPath, callback) {
-            var pit;
-            pit = logicRealm.get("ProcessInstanceThread");
+            var pit = logicRealm.get("ProcessInstanceThread");
             pit.openSegment(definitionPath, function (pits) {
                 callback(pits);
             });

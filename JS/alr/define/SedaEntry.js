@@ -3,9 +3,11 @@ define(["require", "exports"], function (require, exports) {
     var SedaEntry = (function () {
         function SedaEntry() {
         }
+        //----------------------------------------------------------getter---------------------------------------
         SedaEntry.prototype.getListAbstractEntry = function () {
             return this.listAbstractEntry;
         };
+        //----------------------------------------------------------setter----------------------------------------
         SedaEntry.prototype.setListAbstractEntry = function (listAbstractEntry) {
             this.listAbstractEntry = listAbstractEntry;
         };

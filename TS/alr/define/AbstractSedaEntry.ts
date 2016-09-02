@@ -6,6 +6,7 @@ class AbstractSedaEntry {
     private nodeId: string;
     private listAlr: Array<SedaAlrTargetEntry>;
 
+    //-------------------------------------------getter-------------------------------------------
     public getNodeId(): string {
         return this.nodeId;
     };
@@ -19,6 +20,7 @@ class AbstractSedaEntry {
         return this.listAlr;
     }
     
+    //-------------------------------------------setter-------------------------------------------
     public setNodeId(nodeId: string) {
         this.nodeId = nodeId;
     };

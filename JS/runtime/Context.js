@@ -35,8 +35,8 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
          * 往孩子中查找，向下查找
          */
         Context.prototype.downSearch = function (name) {
-            var ctx;
-            var keySet = this.childrenMap.keySet();
+            var ctx, keySet;
+            keySet = this.childrenMap.keySet();
             if (this.getName() == name) {
                 return this;
             }
@@ -68,10 +68,11 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
         };
         ;
         Context.prototype.dispose = function () {
+            var current, changeCurrent, parentContext;
             // 0. 保存父亲
-            var current = Context.getCurrent();
-            var changeCurrent = (this == current || this.isAncestorOf(current));
-            var parentContext = this.getParentContext();
+            current = Context.getCurrent();
+            changeCurrent = (this == current || this.isAncestorOf(current));
+            parentContext = this.getParentContext();
             // 1. 取消位于父节点的注册
             this.unregister();
             // 2. 执行标准操作

@@ -20,7 +20,7 @@ class Context {
     }
 
     public createChild(name: string): Context {
-        var ctx = new Context(this, name);
+        let ctx = new Context(this, name);
         this.addChild(name, ctx);
         return ctx;
     };
@@ -40,12 +40,12 @@ class Context {
      * 往孩子中查找，向下查找
      */
     public downSearch(name: string): Context {
-        var ctx;
-        var keySet = this.childrenMap.keySet();
+        let ctx, keySet;
+        keySet = this.childrenMap.keySet();
         if(this.getName() == name){
             return this;
         }
-        for(var i = 0; i < keySet.length; i++) {
+        for(let i = 0; i < keySet.length; i++) {
             ctx = this.childrenMap.get(keySet[i]).downSearch(name);
             if(ctx != null){
                 return ctx;
@@ -58,7 +58,7 @@ class Context {
      * 往父亲中查找，向上查找
      */
     public upSearch(name: string): Context {
-        var ctx, par;
+        let ctx, par;
         if(this.getName() == name) {
             return this;
         }
@@ -71,10 +71,11 @@ class Context {
         return null;	
     };
     public dispose(): void {
+        let current, changeCurrent, parentContext;
         // 0. 保存父亲
-        var current = Context.getCurrent();
-        var changeCurrent = (this == current || this.isAncestorOf(current));
-        var parentContext = this.getParentContext();
+        current = Context.getCurrent();
+        changeCurrent = (this == current || this.isAncestorOf(current));
+        parentContext = this.getParentContext();
         // 1. 取消位于父节点的注册
         this.unregister();
         // 2. 执行标准操作
@@ -86,7 +87,7 @@ class Context {
         }
     };
     public unregister(): void {
-        var parentContext = this.getParentContext();
+        let parentContext = this.getParentContext();
         if(parentContext != undefined) {
             parentContext.removeChild(this);
         }
@@ -101,7 +102,7 @@ class Context {
      * 往当前context的localValues里找值，找不到则不断往上向父亲找
      */
     public get(name: string): any {
-        var result = this.localValues.get(name);
+        let result = this.localValues.get(name);
         if(result != null) {
             return result;
         }
@@ -142,14 +143,14 @@ class Context {
         if(this.disposed) {
             return true;
         }
-        var parent = this.getParentContext();
+        let parent = this.getParentContext();
         if(parent != undefined) {
             return parent.isDisposed();
         }
         return false;
     };
     public isAncestorOf(context): boolean {
-        var cParent = context.getParentContext();
+        let cParent = context.getParentContext();
         if(cParent == null) {
             return false;
         }

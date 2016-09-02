@@ -18,9 +18,8 @@ class TradeAssemblyDefine {
         if(argExpression == undefined) {
             return;
         }
-        var map;
         
-        map = this.nodeInArgExpressionMap.get(nodeId);
+        let map = this.nodeInArgExpressionMap.get(nodeId);
         if(map == null) {
             this.nodeInArgExpressionMap.put(nodeId, new HashMap());
             map = this.nodeInArgExpressionMap.get(nodeId);
@@ -31,8 +30,7 @@ class TradeAssemblyDefine {
         if(argExpression == undefined) {
             return;
         }
-        var map;
-        map = this.nodeOutArgExpressionMap.get(nodeId);
+        let map = this.nodeOutArgExpressionMap.get(nodeId);
         if(map == null) {
             this.nodeOutArgExpressionMap.put(nodeId, new HashMap());
             map = this.nodeOutArgExpressionMap.get(nodeId);
@@ -40,8 +38,7 @@ class TradeAssemblyDefine {
         map.put(argName, argExpression);
     };
     public addNodeMapping(nodeId: string, target: string, source: string): void {
-        var map;
-        map = this.nodeMapping.get(nodeId);
+        let map = this.nodeMapping.get(nodeId);
         if(map == null) {
             this.nodeMapping.put(nodeId, new HashMap());
             map = this.nodeMapping.get(nodeId);

@@ -22,7 +22,6 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
     };
 
     public parse(path: string, inputStream: string, callback: Function): void {
-        
         Context.getCurrent().get("ResourceDocumentTable").getDocument(path, "TradeAssemblyDefine", function(tad) {
             Context.getCurrent().get("ResourceDocumentTable").getDocument(tad.getMPTPath(), "MainProcessTemplate", function(mpt) {
                 tad.setMPT(mpt);
@@ -30,13 +29,13 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
             });
             
         });
-        
     };
+
     public createInitRunnable(): void {
-        
     };
+
     public createNodeRunnable(pits: ProcessInstanceThreadSegment, definitionBean: Object, nodeId: string): void {
-        var tadBean, mptBean, node, varMap;
+        let tadBean, mptBean, node, varMap;
         if(nodeId == undefined) {
             console.log("no nodeId");
             return;
@@ -48,13 +47,13 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         // tadVarMap处理
         if (mptBean.getVarMap() != null) {
             varMap = mptBean.getVarMap();
-            for(var i = 0; i < varMap.length; i++) {
+            for(let i = 0; i < varMap.length; i++) {
                 Context.getCurrent().get("DefaultExpressionEngine").addTadVarMap("tadVarMap()." + varMap[i]);
             }
         }
         if (tadBean.getVarMap() != null) {
             varMap = tadBean.getVarMap();
-            for(var i = 0; i < varMap.length; i++) {
+            for(let i = 0; i < varMap.length; i++) {
                 Context.getCurrent().get("DefaultExpressionEngine").addTadVarMap("tadVarMap()." + varMap[i]);
             }
         }
@@ -76,7 +75,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
     };
 
     public performLfc(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep): void {
-        var context, pif, pit, currentTask, inArgMap, path;
+        let context, pif, pit, currentTask, inArgMap, path;
         
         path = (<LFCFile>step).getPath();
         
@@ -102,16 +101,17 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
     };
 
     public performLogicStep(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep): void {
-        var context, pif, pit, currentTask, inArgMap, inArgExprMap, path;
+        let context, pif, pit, currentTask, inArgMap, inArgExprMap, keySet, path;
         
         // 1. 出入参表达式
         inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
         inArgMap = new HashMap();
-        var keySet = inArgExprMap.keySet();
-        for(var i = 0; i < keySet.length; i++) {
-            var name = keySet[i];
-            var expr = inArgExprMap.get(keySet[i]);
-            var value = Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
+        keySet = inArgExprMap.keySet();
+        for(let i = 0; i < keySet.length; i++) {
+            let name, expr, value;
+            name = keySet[i];
+            expr = inArgExprMap.get(keySet[i]);
+            value = Context.getCurrent().get("DefaultExpressionEngine").evaluate(expr);
             inArgMap.put(name, value);
         }
 
@@ -139,12 +139,12 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
     };
 
     public performSedaStep(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep) {
-        var tadPath, temp, sedaPath, pit, currentTask, listAse, abstractEntryList;
+        let tadPath, temp, sedaPath, pit, currentTask;
 
         tadPath = tadBean.getPath();
         temp = tadPath.split("/");
         sedaPath = "";
-        for(var i = 0; i < temp.length - 1; i++) {
+        for(let i = 0; i < temp.length - 1; i++) {
             sedaPath += temp[i] + "/";
         }
         sedaPath += "seda.conf";
@@ -156,15 +156,17 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         currentTask.setSuspend(true);
 
         Context.getCurrent().get("ResourceDocumentTable").getDocument(sedaPath, "SedaEntry", function(sedaEntry) {
+            let listAse, abstractEntryList, pass;
+
             currentTask.setSuspend(false);
             if(sedaEntry == null) {
                 return;
             }
-            var pass = true;
-
+            
+            pass = true;
             listAse = new Array<AbstractSedaEntry>();
             abstractEntryList = sedaEntry.getListAbstractEntry();
-            for(var i = 0; i < abstractEntryList.length; i++) {
+            for(let i = 0; i < abstractEntryList.length; i++) {
                 if(tadBean.getMPTPath() === abstractEntryList[i].getPath() && step.getId() === abstractEntryList[i].getNodeId()) {
                     listAse.push(abstractEntryList[i]);
                 }
@@ -172,17 +174,19 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
                     listAse.push(abstractEntryList);
                 }
             }
-            for(var i = 0; i < listAse.length; i++) {
+            for(let i = 0; i < listAse.length; i++) {
                 if(listAse[i] != null && listAse[i].getListAlr() != null && listAse[i].getListAlr().length > 0) {
+                    let mapping, alrList;
+
                     pass = true;
-                    var mapping = new HashMap();
-                    var alrList = listAse[i].getListAlr();
+                    mapping = new HashMap();
+                    alrList = listAse[i].getListAlr();
                     
                     for(let j = alrList.length - 1; j >= 0; j--) {
-                        var alrPath = alrList[j].getPath();
+                        let alrPath = alrList[j].getPath();
                         if(alrList[j].getListDataMapping() != null && alrList[i].getListDataMapping().length > 0) {
-                            var listDataMapping = alrList[i].getListDataMapping();
-                            for(var k = 0; k < listDataMapping.length; k++) {
+                            let listDataMapping = alrList[i].getListDataMapping();
+                            for(let k = 0; k < listDataMapping.length; k++) {
                                 mapping = listDataMapping[k].getMapping();
                             }
                         }
@@ -221,7 +225,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
 
     public performUI(pits: ProcessInstanceThreadSegment, mptBean: MainProcessTemplate, step: MPTStep): void {
         console.log("此节点为UIStep");
-        var uiFile, path, inArgExprMap, inArgMap, inArgExprMapKeySet, 
+        let uiFile, path, inArgExprMap, inArgMap, inArgExprMapKeySet, pit, 
             mapping, target, currentTask;
 
         uiFile = <UIFile> step;
@@ -229,7 +233,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         inArgExprMap = uiFile.getInArgMap();
         inArgMap = new HashMap();
         inArgExprMapKeySet = inArgExprMap.keySet();
-        for(var i = 0; i < inArgExprMapKeySet.length; i++) {
+        for(let i = 0; i < inArgExprMapKeySet.length; i++) {
             let name, expr, value;
             name = inArgExprMapKeySet[i];
             expr = inArgExprMap.get(name);
@@ -248,7 +252,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         target = Context.getCurrent().get("DefaultExpressionEngine").evaluate(uiFile.getTarget());
         inArgMap.put("target", target);
 
-        var pit = pits.getProcessInstanceThread();
+        pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
             
         pit.getLogicRealm().setState("suspended");
@@ -263,12 +267,12 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
     };
 
     public performUIStep(pits: ProcessInstanceThreadSegment, tadBean: TradeAssemblyDefine, mptBean: MainProcessTemplate, step: MPTStep): void {
-        var inArgExprMap, inArgExprMapKeySet, inArgMap, mapping, currentTask;
+        let inArgExprMap, inArgExprMapKeySet, inArgMap, mapping, currentTask, pit;
 
         inArgExprMap = tadBean.getNodeInArgExpressionMap(step.getId());
         inArgMap = new HashMap();
         inArgExprMapKeySet = inArgExprMap.keySet();
-        for(var i = 0; i < inArgExprMapKeySet.length; i++) {
+        for(let i = 0; i < inArgExprMapKeySet.length; i++) {
             let name, expr, value;
             name = inArgExprMapKeySet[i];
             expr = inArgExprMap.get(name);
@@ -284,7 +288,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
             inArgMap.put("mapping", mapping);
         }
 
-        var pit = pits.getProcessInstanceThread();
+        pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
             
         pit.getLogicRealm().setState("suspended");
@@ -307,7 +311,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         return <TradeAssemblyDefine>definitionBean;
     };
     public getExceptionNext(definitionBean: Object, nodeId: string): string {
-        var step;
+        let step;
 
         step = this.getMPT(definitionBean).getStep(nodeId);
         if(step == null) {
@@ -317,7 +321,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         return step.getExceptionNext();
     };
     public getNodeCaption(definitionBean: Object, nodeId: string): string {
-        var bean, node;
+        let bean, node;
 
         // 1. 获取node
         bean = this.getMPT(definitionBean);
@@ -325,7 +329,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
         if (node == null)
         {
             // 2.a 是一个结束，返回
-            var endValue = bean.getEndValue(nodeId);
+            let endValue = bean.getEndValue(nodeId);
             return "End:" + nodeId + "->" + endValue;
         }
         // 2.b 是一个普通节点
@@ -335,7 +339,7 @@ class TADProcessDefinitionAdapter implements IProcessDefinitionAdapter {
     };
 
     public getOutNextMap(definitionBean: Object, nodeId: string): HashMap {
-        var step = this.getMPT(definitionBean).getStep(nodeId);
+        let step = this.getMPT(definitionBean).getStep(nodeId);
         if (step == null)
         {
             return null;

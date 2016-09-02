@@ -6,19 +6,20 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
             this.subscriptions = new Array();
         }
         DataModel.prototype.notifyThis = function (callback, context) {
-            var subscribe = {
+            var subscribe, v;
+            subscribe = {
                 "callback": callback,
                 "context": context
             };
-            var v = this.subscriptions.push(subscribe);
-            console.log("注册后长度: " + v);
+            v = this.subscriptions.push(subscribe);
+            console.log("DataModel注册后长度: " + v);
         };
         DataModel.prototype.notifyChange = function (key, old, now) {
             console.log("开始通知变化..." + this.subscriptions.length);
-            var i;
-            for (i = 0; i < this.subscriptions.length; i++) {
-                var v = this.subscriptions[i];
-                var data = {
+            for (var i = 0; i < this.subscriptions.length; i++) {
+                var v = void 0, data = void 0;
+                v = this.subscriptions[i];
+                data = {
                     "key": key,
                     "old": old,
                     "new": now
@@ -28,22 +29,18 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
             }
         };
         DataModel.prototype.doSetMemeber = function (memberName, memberContent) {
-            var dotIndex = memberName.indexOf('.');
+            var dotIndex;
+            dotIndex = memberName.indexOf('.');
             if (dotIndex > 0) {
-                var prefix = memberName.substring(0, memberName.lastIndexOf("."));
-                var suffix = memberName.substring(memberName.lastIndexOf(".") + 1);
-                var subModel = this.getLastDataModel(prefix);
+                var prefix = void 0, suffix = void 0, subModel = void 0;
+                prefix = memberName.substring(0, memberName.lastIndexOf("."));
+                suffix = memberName.substring(memberName.lastIndexOf(".") + 1);
+                subModel = this.getLastDataModel(prefix);
                 subModel.setLocalValue(suffix, memberContent);
             }
             else {
                 this.setLocalValue(memberName, memberContent);
             }
-        };
-        DataModel.prototype.setLocalValue = function (memberName, memberContent) {
-            this.memberMap.put(memberName, memberContent);
-        };
-        DataModel.prototype.getLocalValue = function (memberName) {
-            return this.memberMap.get(memberName);
         };
         DataModel.prototype.doSetWithNotify = function (memberName, memberContent, notify) {
             var old = this.getMember(memberName);
@@ -55,38 +52,16 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
                 setTimeout(this.notifyChange(memberName, old, memberContent), 0);
             }
         };
-        DataModel.prototype.set = function (memberName, memberContent) {
-            this.doSetWithNotify(memberName, memberContent, true);
-        };
-        DataModel.prototype.getLastDataModel = function (memberName) {
-            var dotIndex = memberName.indexOf('.');
-            if (dotIndex > 0) {
-                var prefix = memberName.substring(0, dotIndex);
-                var suffix = memberName.substring(dotIndex + 1);
-                var subModel = this.get(prefix);
-                if (subModel == null) {
-                    // if (!create)
-                    // {
-                    //     return null;
-                    // }
-                    subModel = this.createSubModelMember(prefix);
-                }
-                return subModel.getLastDataModel(suffix);
-            }
-            else {
-                var subModel = this.get(memberName);
-                if (subModel == null) {
-                    subModel = this.createSubModelMember(memberName);
-                }
-                return subModel;
-            }
+        DataModel.prototype.doGet = function (memberName) {
+            return this.doGetMember(memberName);
         };
         DataModel.prototype.doGetMember = function (memberName) {
             var dotIndex = memberName.indexOf('.');
             if (dotIndex > 0) {
-                var prefix = memberName.substring(0, dotIndex);
-                var suffix = memberName.substring(dotIndex + 1);
-                var subModel = this.get(prefix);
+                var prefix = void 0, suffix = void 0, subModel = void 0;
+                prefix = memberName.substring(0, dotIndex);
+                suffix = memberName.substring(dotIndex + 1);
+                subModel = this.get(prefix);
                 if (subModel == null) {
                     // if (!create) {
                     //     return null;
@@ -106,14 +81,46 @@ define(["require", "exports", "../lib/HashMap"], function (require, exports, Has
             // let result = new Object();
             this.memberMap.put(memberName, null);
         };
-        DataModel.prototype.getMember = function (memberName) {
-            return this.doGetMember(memberName);
+        //-----------------------------------------------------------setter---------------------------------------------
+        DataModel.prototype.set = function (memberName, memberContent) {
+            this.doSetWithNotify(memberName, memberContent, true);
         };
-        DataModel.prototype.doGet = function (memberName) {
-            return this.doGetMember(memberName);
+        DataModel.prototype.setLocalValue = function (memberName, memberContent) {
+            this.memberMap.put(memberName, memberContent);
         };
+        //----------------------------------------------------------getter-----------------------------------------------
         DataModel.prototype.get = function (memberName) {
             return this.doGet(memberName);
+        };
+        DataModel.prototype.getLocalValue = function (memberName) {
+            return this.memberMap.get(memberName);
+        };
+        DataModel.prototype.getLastDataModel = function (memberName) {
+            var dotIndex = memberName.indexOf('.');
+            if (dotIndex > 0) {
+                var prefix = void 0, suffix = void 0, subModel = void 0;
+                prefix = memberName.substring(0, dotIndex);
+                suffix = memberName.substring(dotIndex + 1);
+                subModel = this.get(prefix);
+                if (subModel == null) {
+                    // if (!create)
+                    // {
+                    //     return null;
+                    // }
+                    subModel = this.createSubModelMember(prefix);
+                }
+                return subModel.getLastDataModel(suffix);
+            }
+            else {
+                var subModel = this.get(memberName);
+                if (subModel == null) {
+                    subModel = this.createSubModelMember(memberName);
+                }
+                return subModel;
+            }
+        };
+        DataModel.prototype.getMember = function (memberName) {
+            return this.doGetMember(memberName);
         };
         return DataModel;
     }());

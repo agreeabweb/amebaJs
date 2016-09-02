@@ -27,8 +27,6 @@ define(["require", "exports", "../configure/config", "../lib/cache-1.0.js"], fun
                         callback(file);
                     }
                 };
-                // xmlhttp.open("GET", "http://192.168.11.112:50002/servlets/downloadResource/AppFramework_2013B/business/commonComponent/ClearAll.lfc", true);
-                var seePath = config_1.default.TradeIP + path;
                 xmlhttp.open("GET", config_1.default.TradeIP + path, true);
                 xmlhttp.setRequestHeader("Content-type", "application/octet-stream");
                 xmlhttp.send();

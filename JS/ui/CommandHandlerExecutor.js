@@ -4,7 +4,7 @@ define(["require", "exports", "../lib/HashMap", "./commandhandlers/OpenPanel", "
         function CommandHandlerExecutor() {
             this.handlers = new HashMap_1.HashMap();
             this.handleEvent = function (command) {
-                // var ctx : Context = data.context;
+                // let ctx : Context = data.context;
                 if (command.getContext() == null) {
                     return;
                 }

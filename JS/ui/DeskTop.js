@@ -13,9 +13,6 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashM
             this.panelCompositeFactoryRegistry = new HashMap_1.HashMap();
         }
         // private static CONTEXT_PREFIX =""
-        DeskTop.prototype.getContext = function () {
-            return this.sessionCtx;
-        };
         DeskTop.prototype.createPanelFactoryRegistry = function () {
             var registry = new PanelCompositeFactoryRegistry_1.PanelCompositeFactoryRegistry();
             registry.addPanelFactory("", new DefaultPanelFactory());
@@ -64,6 +61,16 @@ define(["require", "exports", "../runtime/Context", "../lib/GUID", "../lib/HashM
             // dm.set("t1","aaa");
             // console.log("DM取值: "+dm.get("a.b"));
             // console.log("DM取值: "+dm.get("t1"));
+        };
+        //
+        // public modelchanged(key,old,now)
+        // {
+        //
+        //     console.log("DM值发生了变化: "+key);
+        // }
+        //-----------------------------------------------getter-------------------------------------------------
+        DeskTop.prototype.getContext = function () {
+            return this.sessionCtx;
         };
         DeskTop.PANEL_FACTORY_DEFAULT = "";
         DeskTop.PANEL_FACTORY_WINDOW = "window";

@@ -4,6 +4,7 @@ class SedaMappingTargetEntry {
     private path: string;
     private mapping: HashMap;
 
+    //----------------------------------------getter----------------------------------
     public getPath(): string {
         return this.path;
     }
@@ -11,6 +12,7 @@ class SedaMappingTargetEntry {
         return this.mapping;
     }
 
+    //-----------------------------------------setter-----------------------------------
     public setPath(path: string): void {
         this.path = path;
     }

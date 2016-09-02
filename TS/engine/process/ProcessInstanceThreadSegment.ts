@@ -14,8 +14,8 @@ class ProcessInstanceThreadSegment {
     private currentNodeEndId: string;
     private definitionPath: string;
     private definition: ProcessDefinition;
-    private inArgMap: Array<HashMap> = [];  // 入参容器
-    private outArgMap: Array<HashMap> = []; // 出参容器
+    private inArgMap: HashMap;  // 入参容器
+    private outArgMap: HashMap; // 出参容器
     private varMap: HashMap = new HashMap();
     private exceptionStack: Array<string> = [];
     private currentNodeEndName: string;
@@ -39,20 +39,18 @@ class ProcessInstanceThreadSegment {
      */
     public start(inArgMap: HashMap, callback: Function): LogicRealmTask {
         console.log("启动PITS： " + this.id);
-        var PITS, controlTask;
+        let PITS, controlTask;
         
         PITS = this;  // 避免this指代混乱
         
         // 处理入参
         if(inArgMap != undefined) {
-            this.inArgMap.push(inArgMap);
+            this.inArgMap = inArgMap;
         }
         
         // 构造控制任务
         controlTask = new LogicRealmTask(PITS.coreTask.getRealm(), "Control(" + PITS.coreTask.getName() + ")", /* LRT的具体逻辑实现 */function() {
-            var subHead;
-            
-            subHead = controlTask.startSub(function() {
+            let subHead = controlTask.startSub(function() {
                 PITS.stepControlFinal(callback);  // 该分支执行完之后的逻辑控制
             });
             subHead.hook(PITS.coreTask); //将coreTask核心任务挂接到controlTask任务下
@@ -66,7 +64,7 @@ class ProcessInstanceThreadSegment {
      * 用于控制整个lfc执行完之后的走向
      */
     public stepControlFinal(callback: Function): void {
-        var current, processResult, endValueMap, endName;
+        let current, endValueMap, endName;
         
         this.currentNodeId = undefined;
         current = this.pit.getLogicRealm().getCurrentTask();
@@ -81,7 +79,7 @@ class ProcessInstanceThreadSegment {
         if(this.exceptionStack.length != 0) {
             //处理异常
         } else {
-            processResult = new ProcessResult();
+            let processResult = new ProcessResult();
             processResult.setEnd(this.coreTask.getParent().getSelectedEnd());
             processResult.setOutArgMap(this.outArgMap);
             callback(processResult);
@@ -91,7 +89,7 @@ class ProcessInstanceThreadSegment {
      * 开始执行流程
      */
     public stepCoreStart(): void {
-        var PITS, currentTask, sub;
+        let PITS, currentTask, sub;
         
         PITS = this;  // 避免this指代混乱
         // 1. 本地执行
@@ -115,7 +113,7 @@ class ProcessInstanceThreadSegment {
      * 处理节点完结后的逻辑去向
      */
     public stepCoreLogic(): void {
-        var PITS, currentTask, subHead;
+        let PITS;
         
         PITS = this;  // 避免this指代混乱
         
@@ -123,6 +121,7 @@ class ProcessInstanceThreadSegment {
             console.log("流程结束");
             console.log("----------------------------");
         } else {
+            let currentTask, subHead;
             // 创建下一个节点任务
             currentTask = PITS.pit.getLogicRealm().getCurrentTask();
             subHead = currentTask.startSub(function() {
@@ -135,7 +134,7 @@ class ProcessInstanceThreadSegment {
      * 创建初始化任务
      */
     public createInitTask(): LogicRealmTask {
-        var PITS = this;  // 避免this指代混乱
+        let PITS = this;  // 避免this指代混乱
         
         return new LogicRealmTask(PITS.coreTask.getRealm(), "init", function() {
             PITS.definition.createInitRunnable(PITS);
@@ -145,7 +144,7 @@ class ProcessInstanceThreadSegment {
      * 创建节点任务
      */
     public createNodeTask(nodeId: string): LogicRealmTask {
-        var PITS, nodeLRT, outs;
+        let PITS, nodeLRT, outs;
         
         PITS = this;  // 避免this指代混乱
         // 创建节点任务
@@ -156,11 +155,13 @@ class ProcessInstanceThreadSegment {
         // 获取节点出口，给节点后续进行挂钩
         outs = PITS.definition.getOutNextMap(nodeId);
         if(outs != undefined) {
-            var keySet = outs.keySet();
+            let keySet = outs.keySet();
             for(let i = 0; i < keySet.length; i++) {
                 (function(i) {
-                    let endName = keySet[i];
-                    let endId = outs.get(keySet[i]);
+                    let endName, endId;
+
+                    endName = keySet[i];
+                    endId = outs.get(keySet[i]);
                     nodeLRT.hook(new LogicRealmTask(nodeLRT.realm, "StepNodeOut-" + endName, function() {
                         PITS.stepNodeOut(endName, endId);
                     }), endName);
@@ -221,7 +222,7 @@ class ProcessInstanceThreadSegment {
      * 获取流程的内部变量
      */
     public getVarMap(expression: string): any {
-        var value = this.varMap.get(expression);
+        let value = this.varMap.get(expression);
         if(value == null) {
             return "";
         } else {

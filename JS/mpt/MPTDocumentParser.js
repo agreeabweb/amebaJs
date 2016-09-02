@@ -90,7 +90,7 @@ define(["require", "exports", "../lib/HashMap", "./define/MainProcessTemplate", 
         };
         ;
         MPTDocumentParser.prototype.parseStepElement = function (step, element) {
-            var outs, ex, inArg, inArgMap, inArgName, inArgText, outArg, outArgMap, outArgName, outArgText, mappings;
+            var outs, ex;
             step.setId(element._id);
             step.setShowId(element._showId === undefined ? "" : element._showId);
             step.setCaption(element._caption);
@@ -107,6 +107,7 @@ define(["require", "exports", "../lib/HashMap", "./define/MainProcessTemplate", 
             ex = element.Exception;
             step.setExceptionNext(ex._next);
             if (step instanceof MPTFile_1.MPTFile) {
+                var inArg = void 0, inArgMap = void 0, inArgName = void 0, inArgText = void 0, outArg = void 0, outArgMap = void 0, outArgName = void 0, outArgText = void 0, mappings = void 0;
                 step.setPath(element._path);
                 inArg = element.InArg;
                 if (inArg != undefined) {

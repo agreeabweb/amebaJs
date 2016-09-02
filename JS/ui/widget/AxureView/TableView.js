@@ -52,15 +52,13 @@ define(["require", "exports", "./AbstractAxureView", "../../eventpub/Event"], fu
         TableView.prototype.GetWidgetText = function () {
             return $("#" + this.eTargetId + " .text span").text();
         };
-        TableView.prototype.setETargetId = function (eTargetId) {
-            this.eTargetId = eTargetId;
-        };
         TableView.prototype.layout = function (obj) {
-            var dom = $("#" + this.id);
+            var dom, objects;
+            dom = $("#" + this.id);
             dom.css("position", "absolute")
                 .css("width", obj.style.size.width).css("height", obj.style.size.height)
                 .css("left", obj.style.location.x).css("top", obj.style.location.y);
-            var objects = obj.objects;
+            objects = obj.objects;
             if (objects != undefined) {
                 for (var i = 0; i < objects.length; i++) {
                     this.layoutChild(objects[i]);
@@ -68,7 +66,7 @@ define(["require", "exports", "./AbstractAxureView", "../../eventpub/Event"], fu
             }
         };
         TableView.prototype.layoutChild = function (obj) {
-            var objPaths, idMap, id, childDom, size, location, interactionMap;
+            var objPaths, idMap, id, childDom, size, location, interactionMap, objects;
             objPaths = this.host.getAxureObjPaths();
             idMap = obj.id;
             id = objPaths[idMap].scriptId;
@@ -96,7 +94,7 @@ define(["require", "exports", "./AbstractAxureView", "../../eventpub/Event"], fu
             if (obj.style.fontSize != undefined) {
                 childDom.find(".text span").css("font-size", obj.style.fontSize);
             }
-            var objects = obj.objects;
+            objects = obj.objects;
             if (objects != undefined) {
                 for (var i = 0; i < objects.length; i++) {
                     this.layoutChild(objects[i]);

@@ -3,6 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var AbstractSedaEntry = (function () {
         function AbstractSedaEntry() {
         }
+        //-------------------------------------------getter-------------------------------------------
         AbstractSedaEntry.prototype.getNodeId = function () {
             return this.nodeId;
         };
@@ -16,6 +17,7 @@ define(["require", "exports"], function (require, exports) {
         AbstractSedaEntry.prototype.getListAlr = function () {
             return this.listAlr;
         };
+        //-------------------------------------------setter-------------------------------------------
         AbstractSedaEntry.prototype.setNodeId = function (nodeId) {
             this.nodeId = nodeId;
         };

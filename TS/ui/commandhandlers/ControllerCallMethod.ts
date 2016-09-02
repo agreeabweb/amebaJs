@@ -8,7 +8,7 @@ import {EventHub} from "../../runtime/EventHub";
 export class ControllerCallMethod implements ICommandHandler {
 
     handleCommand(command:Command,callback :any):void {
-        var controllerId, methodName, method, methodArgs, tad, panel, widget;
+        let controllerId, methodName, method, methodArgs, tad, panel, widget, result, end;
 
         controllerId = command.getExtraData().get("controllerId");
         if(!(typeof controllerId === "string")) {
@@ -27,9 +27,9 @@ export class ControllerCallMethod implements ICommandHandler {
         panel = command.getContext().get("Panel");
         widget = panel.getWidget(controllerId);
         method = widget[methodName];
-        var result = method.apply(widget, methodArgs);
+        result = method.apply(widget, methodArgs);
 
-        var end = "success";
+        end = "success";
 
         if(callback != null) {
             callback({

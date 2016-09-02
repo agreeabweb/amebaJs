@@ -11,8 +11,8 @@ class HeadingView extends AbstractAxureView {
     public bindEvent(actionName: string, action: any): void {
     }
 
-    public layout(obj): void {
-        var dom = $("#" + this.id);
+    public layout(obj: any): void {
+        let dom = $("#" + this.id);
         dom.css("position", "absolute")
             .css("width", obj.style.size.width).css("height", obj.style.size.height)
             .css("left", obj.style.location.x).css("top", obj.style.location.y)

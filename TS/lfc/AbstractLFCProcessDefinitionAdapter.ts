@@ -26,19 +26,19 @@ abstract class AbstractLFCProcessDefinitionAdapter implements IProcessDefinition
     /**
      * 创建指定节点的执行对象
      */
-    public createNodeRunnable(pits: ProcessInstanceThreadSegment, definitionBean: Object, nodeId: string) {
-        var bean, node;
+    public createNodeRunnable(pits: ProcessInstanceThreadSegment, definitionBean: Object, nodeId: string): void {
+        let bean, node, inArgMap;
         
         // 获取节点信息
         bean = <LogicFlowControl>definitionBean;
         node = bean.getNode(nodeId);
         
-        var inArgMap = node.inArgMap;
+        inArgMap = node.inArgMap;
         if(inArgMap != undefined) {
-            for(var inArg in inArgMap.map) {
-                var arg = inArgMap.get(inArg);
+            for(let inArg in inArgMap.map) {
+                let arg = inArgMap.get(inArg);
                 if(arg != undefined) {
-                    var value = Context.getCurrent().get("DefaultExpressionEngine").evaluate(arg.getContent(), pits);
+                    let value = Context.getCurrent().get("DefaultExpressionEngine").evaluate(arg.getContent(), pits);
                     arg.setContent(value);
                 }
             }
@@ -57,7 +57,7 @@ abstract class AbstractLFCProcessDefinitionAdapter implements IProcessDefinition
      * 处理指令形式的技术组件
      */
     public performLogicletComponentElement(pits: ProcessInstanceThreadSegment, componentElement: LogicletComponentElement): void {
-        var outArgMap, currentTask, pit;
+        let currentTask, pit;
         
         pit = pits.getProcessInstanceThread();
         currentTask = pit.getLogicRealm().getCurrentTask();  // 取得父流程的当前节点
@@ -69,9 +69,9 @@ abstract class AbstractLFCProcessDefinitionAdapter implements IProcessDefinition
             currentTask.setSuspend(false);
             // 出参处理
             console.log("执行callback："+result.end);
-            outArgMap = componentElement.getOutArgMap();
+            let outArgMap = componentElement.getOutArgMap();
             if(outArgMap != undefined) {
-                var outArg = outArgMap.get("result");
+                let outArg = outArgMap.get("result");
                 if(outArg != undefined) {
                     Context.getCurrent().get("DefaultExpressionEngine").assign(outArg.getContent(), result.outArgs.result, pits);
                 }
@@ -87,7 +87,7 @@ abstract class AbstractLFCProcessDefinitionAdapter implements IProcessDefinition
      * 处理LFC逻辑技术组件
      */
     public performLfcComponentElement(pits: ProcessInstanceThreadSegment, componentElement: LFCComponentElement): void {
-        var path, inArgMap, context, pif, pit, currentTask;
+        let path, inArgMap, context, pif, pit, currentTask;
         
         path = componentElement.getPath();
             
@@ -116,22 +116,16 @@ abstract class AbstractLFCProcessDefinitionAdapter implements IProcessDefinition
         return (<LogicFlowControl>definitionBean).getStartNodeId();
     };
     public getOutNextMap(definitionBean: Object, nodeId: string): HashMap {
-        var node;
-        
-        node = (<LogicFlowControl>definitionBean).getNode(nodeId);
+        let node = (<LogicFlowControl>definitionBean).getNode(nodeId);
         return node.getOutNextMap();
     };
     public getExceptionNext(definitionBean: Object, nodeId: string): string {
-        var node;
-
-        node = (<LogicFlowControl>definitionBean).getNode(nodeId);
+        let node = (<LogicFlowControl>definitionBean).getNode(nodeId);
         return node.getExceptionNext();
     };
     public getNodeCaption(definitionBean: Object, nodeId: string): string {
-        var node;
-
-        node = (<LogicFlowControl>definitionBean).getNode(nodeId);
-        return node.getNodeCaption();
+        let node = (<LogicFlowControl>definitionBean).getNode(nodeId);
+        return node.getCaption();
     };
     public getEndValueMap(definitionBean: Object): HashMap {
         return (<LogicFlowControl>definitionBean).getEndValueMap();

@@ -4,6 +4,7 @@ class ArgElement {
     private content: string;
     private name: string;
     
+    //----------------------------------------getter------------------------------------------
     public getName(): string {
         return this.name;
     }
@@ -14,6 +15,7 @@ class ArgElement {
         return this.content;
     }
 
+    //-------------------------------------------setter---------------------------------------
     public setName(name: string): void {
         this.name = name;
     }

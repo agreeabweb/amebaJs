@@ -8,7 +8,7 @@ define(["require", "exports", "./define/TradeAssemblyDefine"], function (require
          * 解析方法
          */
         TADDocumentParser.prototype.parse = function (path, input, callback) {
-            var xml2json, doc, root, tad, mpt, nodes, nodeId, nodeType, nodeInArgs, nodeOutArgs, argName, argExpression, mappings, mappingPath, mapping, source, target;
+            var xml2json, doc, root, tad;
             // 把xml转化为json
             xml2json = new X2JS();
             doc = xml2json.xml_str2json(input);
@@ -24,10 +24,12 @@ define(["require", "exports", "./define/TradeAssemblyDefine"], function (require
             }
             // 主流程 MainProcess
             if (root.MainProcess != undefined) {
+                var mpt = void 0, nodes = void 0;
                 mpt = root.MainProcess;
                 tad.setMPTPath(mpt._path);
                 nodes = mpt.Node;
                 if (nodes != undefined) {
+                    var nodeId = void 0, nodeType = void 0, nodeInArgs = void 0, nodeOutArgs = void 0, argName = void 0, argExpression = void 0, mappings = void 0, mappingPath = void 0, mapping = void 0, source = void 0, target = void 0;
                     if (nodes instanceof Array) {
                         for (var i = 0; i < nodes.length; i++) {
                             nodeId = nodes[i]._id;

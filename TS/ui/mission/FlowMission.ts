@@ -16,7 +16,7 @@ export class FlowMission implements  IMission {
 
     execute(panel: TadPanel, callback:any):void{
         console.log("execute flow mission");
-        var mission, pits, logicRealm, currentTask, pif;
+        let mission, pits, logicRealm, currentTask, pif;
 
         mission = this;
 

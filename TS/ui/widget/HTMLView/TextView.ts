@@ -10,7 +10,7 @@ export class TextView extends AbstractView {
     constructor(id:string, host:TadPanel,dmEntry:string, thisNode:JQuery) {
         super(id, host,dmEntry, thisNode);
 
-        var view = this;
+        let view = this;
         if(this.dmEntry!=null)
         {
             this.$thisNode.on("change",function(){
@@ -20,7 +20,7 @@ export class TextView extends AbstractView {
     }
 
     bindEvent(eventType:string, flowType:string, path:string):void {
-        var view = this;
+        let view = this;
         if (eventType === "click") {
             view.getNode().on("click", function () {
                 alert("click");

@@ -19,11 +19,11 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
          * 创建指定节点的执行对象
          */
         AbstractLFCProcessDefinitionAdapter.prototype.createNodeRunnable = function (pits, definitionBean, nodeId) {
-            var bean, node;
+            var bean, node, inArgMap;
             // 获取节点信息
             bean = definitionBean;
             node = bean.getNode(nodeId);
-            var inArgMap = node.inArgMap;
+            inArgMap = node.inArgMap;
             if (inArgMap != undefined) {
                 for (var inArg in inArgMap.map) {
                     var arg = inArgMap.get(inArg);
@@ -48,7 +48,7 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
          * 处理指令形式的技术组件
          */
         AbstractLFCProcessDefinitionAdapter.prototype.performLogicletComponentElement = function (pits, componentElement) {
-            var outArgMap, currentTask, pit;
+            var currentTask, pit;
             pit = pits.getProcessInstanceThread();
             currentTask = pit.getLogicRealm().getCurrentTask(); // 取得父流程的当前节点
             pit.getLogicRealm().setState("suspended");
@@ -58,7 +58,7 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
                 currentTask.setSuspend(false);
                 // 出参处理
                 console.log("执行callback：" + result.end);
-                outArgMap = componentElement.getOutArgMap();
+                var outArgMap = componentElement.getOutArgMap();
                 if (outArgMap != undefined) {
                     var outArg = outArgMap.get("result");
                     if (outArg != undefined) {
@@ -101,21 +101,18 @@ define(["require", "exports", "../runtime/Context", "./define/LogicletComponentE
         };
         ;
         AbstractLFCProcessDefinitionAdapter.prototype.getOutNextMap = function (definitionBean, nodeId) {
-            var node;
-            node = definitionBean.getNode(nodeId);
+            var node = definitionBean.getNode(nodeId);
             return node.getOutNextMap();
         };
         ;
         AbstractLFCProcessDefinitionAdapter.prototype.getExceptionNext = function (definitionBean, nodeId) {
-            var node;
-            node = definitionBean.getNode(nodeId);
+            var node = definitionBean.getNode(nodeId);
             return node.getExceptionNext();
         };
         ;
         AbstractLFCProcessDefinitionAdapter.prototype.getNodeCaption = function (definitionBean, nodeId) {
-            var node;
-            node = definitionBean.getNode(nodeId);
-            return node.getNodeCaption();
+            var node = definitionBean.getNode(nodeId);
+            return node.getCaption();
         };
         ;
         AbstractLFCProcessDefinitionAdapter.prototype.getEndValueMap = function (definitionBean) {

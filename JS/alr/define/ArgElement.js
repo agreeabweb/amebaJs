@@ -3,6 +3,7 @@ define(["require", "exports"], function (require, exports) {
     var ArgElement = (function () {
         function ArgElement() {
         }
+        //----------------------------------------getter------------------------------------------
         ArgElement.prototype.getName = function () {
             return this.name;
         };
@@ -12,6 +13,7 @@ define(["require", "exports"], function (require, exports) {
         ArgElement.prototype.getContent = function () {
             return this.content;
         };
+        //-------------------------------------------setter---------------------------------------
         ArgElement.prototype.setName = function (name) {
             this.name = name;
         };

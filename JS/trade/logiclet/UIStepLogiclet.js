@@ -26,22 +26,10 @@ define(["require", "exports", "../../runtime/Context", "../../runtime/EventHub",
         UIStepLogiclet.prototype.callHTML = function (pits, inputParams, callback) {
             inputParams.put("ProcessInstanceThreadSegment", pits);
             var command = new Command_1.Command(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, Context_1.Context.getCurrent(), null, callback, inputParams);
-            // let data = {
-            //     msg:EngineEvent.COMMAND_OpenPanel,
-            //     param: inputParams,
-            //     callback: callback,
-            //     context: Context.getCurrent()
-            // };
             EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, command);
         };
         UIStepLogiclet.prototype.callABF = function (pits, inputParams, callback) {
             var command = new Command_1.Command(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, Context_1.Context.getCurrent(), null, callback, inputParams);
-            // let data = {
-            //     msg: EngineEvent.ENGINE_EVENT + "OpenPanel",
-            //     param: inputParams,
-            //     callback: callback,
-            //     context: Context.getCurrent()
-            // };
             EventHub_1.EventHub.publish(EngineEvent_1.EngineEvent.COMMAND_OpenPanel, command);
         };
         UIStepLogiclet.prototype.callAUF = function (pits, uiPath, mapping, inputParams, callback) {

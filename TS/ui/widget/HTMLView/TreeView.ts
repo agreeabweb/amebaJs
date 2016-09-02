@@ -14,7 +14,7 @@ export class TreeView extends AbstractView {
     }
 
     bindEvent(eventType:string,flowType:string,path:string):void{
-        var view = this; //避免this指代错误
+        let view = this; //避免this指代错误
         // if(eventType === "click")
         // {
         //     view.getNode().on("click",function(){
@@ -28,13 +28,12 @@ export class TreeView extends AbstractView {
     }
 
     public addNode(level: number, parentId: string, id:string, title: string, href: string, icon: string): void {
-        var node, ul, li, a, i, span, mainMenu, parent, parentUL;
-
         // 检查节点id是否已存在
-        node = $("#" + this.id + " #" + id);
+        let node = $("#" + this.id + " #" + id);
         if(node.length != 0) {
             throw "此id已被占用！";
         } else {
+            let ul, li, a, i, span;
             // 创建新菜单节点
             li = $("<li>");
             li.attr("id", id);
@@ -60,7 +59,7 @@ export class TreeView extends AbstractView {
             // 添加一级菜单
             if(level === 1) {
                 // 一开始没有任何节点的情况
-                mainMenu = $("#" + this.id + " #main-menu");
+                let mainMenu = $("#" + this.id + " #main-menu");
                 if(mainMenu.length === 0) {
                     ul = $("<ul>");
                     ul.attr("class", "nav");
@@ -71,6 +70,7 @@ export class TreeView extends AbstractView {
                     mainMenu.append(li);
                 }
             } else {
+                let parent, parentUL;
                 parent = $("#" + this.id + " #" + parentId);
                 parentUL = parent.find("ul");
                 // 父节点下无其他节点
@@ -111,19 +111,17 @@ export class TreeView extends AbstractView {
     }
 
     public deleteNode(id: string): void {
-        var selector, ul, lis;
-
-        selector = "#" + this.id + " #main-menu #" + id;
-
+        let selector = "#" + this.id + " #main-menu #" + id;
         if($(selector).length != 0) {
+            let ul, lis;
             // 检查该节点的父节点是否还有其他孩子节点
             ul = $(selector).parent();
             $(selector).remove(); // 删除该节点
             // 无其他孩子节点
             lis = $(ul).find("li");
             if(lis.length === 0) {
-                var test = $(ul).prev().find("span")[0];
-                $(test).remove(); //删除下拉箭头
+                let arrow = $(ul).prev().find("span")[0];
+                $(arrow).remove(); //删除下拉箭头
                 $(ul).remove(); // 删除其父容器
             }
             // 还有其他孩子节点，则直接删除该节点 

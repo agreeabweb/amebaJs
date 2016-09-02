@@ -1,1 +1,1 @@
-{"version":3,"file":"LFCFile.js","sourceRoot":"","sources":["../../../TS/mpt/define/LFCFile.ts"],"names":[],"mappings":";;;;;;;IAEA;QAAsB,2BAAO;QAA7B;YAAsB,8BAAO;QAE7B,CAAC;QAAD,cAAC;IAAD,CAAC,AAFD,CAAsB,iBAAO,GAE5B;IAEO,eAAO,WAFd;IAEgB"}
+{"version":3,"file":"LFCFile.js","sourceRoot":"","sources":["../../../TS/mpt/define/LFCFile.ts"],"names":[],"mappings":";;;;;;;IAEA;QAAsB,2BAAO;QACzB;YACI,iBAAO,CAAC;QACZ,CAAC;;QACL,cAAC;IAAD,CAAC,AAJD,CAAsB,iBAAO,GAI5B;IAEO,eAAO,WAFd;IAEgB"}
